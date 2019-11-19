@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9B1C4964238405A7002CDC4B /* ParagraphStyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */; };
+		9B1C49662384065D002CDC4B /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1C49652384065D002CDC4B /* AttachmentViewController.swift */; };
 		9B6E898A23823F47009EBEBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E898923823F47009EBEBE /* AppDelegate.swift */; };
 		9B6E898C23823F47009EBEBE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E898B23823F47009EBEBE /* SceneDelegate.swift */; };
 		9B6E898E23823F47009EBEBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E898D23823F47009EBEBE /* ViewController.swift */; };
@@ -51,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyleViewController.swift; sourceTree = "<group>"; };
+		9B1C49652384065D002CDC4B /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		9B6E898623823F47009EBEBE /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6E898923823F47009EBEBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B6E898B23823F47009EBEBE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */,
 				9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */,
 				9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */,
+				9B1C49652384065D002CDC4B /* AttachmentViewController.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				9BD90F1223840540000DBD29 /* StrokeViewController.swift in Sources */,
 				9B6E898A23823F47009EBEBE /* AppDelegate.swift in Sources */,
 				9BD90F1A2384056F000DBD29 /* WritingDirectionViewController.swift in Sources */,
+				9B1C49662384065D002CDC4B /* AttachmentViewController.swift in Sources */,
 				9BD90F00238404C9000DBD29 /* ForegroundColorViewController.swift in Sources */,
 				9BD90F1023840534000DBD29 /* ShadowViewController.swift in Sources */,
 				9BD90F142384054A000DBD29 /* TextEffectViewController.swift in Sources */,
