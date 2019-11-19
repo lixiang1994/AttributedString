@@ -904,10 +904,88 @@
                     <view key="view" contentMode="scaleToFill" id="ty4-sG-tSN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a9c-kB-JEn">
+                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="frx-zg-V3Z">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="345"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xg0-77-Qde">
+                                        <rect key="frame" x="0.0" y="345" width="375" height="345"/>
+                                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <mutableString key="text">"""
+        
+        \(" backgroundColor ", .background(.white))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.7952535152, green: 0.7952535152, blue: 0.7952535152, alpha: 1)))
+
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.5723067522, green: 0.5723067522, blue: 0.5723067522, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.3179988265, green: 0.3179988265, blue: 0.3179988265, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.9995340705, green: 0.988355577, blue: 0.4726552367, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.8321695924, green: 0.985483706, blue: 0.4733308554, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.4500938654, green: 0.9813225865, blue: 0.4743030667, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.4508578777, green: 0.9882974029, blue: 0.8376303315, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.4513868093, green: 0.9930960536, blue: 1, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.4620226622, green: 0.8382837176, blue: 1, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.476841867, green: 0.5048075914, blue: 1, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 0.8446564078, green: 0.5145705342, blue: 1, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 1, green: 0.5212053061, blue: 1, alpha: 1)))
+        
+        \(" backgroundColor ", .background(#colorLiteral(red: 1, green: 0.5409764051, blue: 0.8473142982, alpha: 1)))
+        
+"""</mutableString>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="frx-zg-V3Z" firstAttribute="leading" secondItem="a9c-kB-JEn" secondAttribute="leading" id="3Cm-7E-NcT"/>
+                                    <constraint firstAttribute="trailing" secondItem="frx-zg-V3Z" secondAttribute="trailing" id="FeX-AI-0xb"/>
+                                    <constraint firstItem="frx-zg-V3Z" firstAttribute="height" secondItem="a9c-kB-JEn" secondAttribute="height" multiplier="0.5" id="Gah-4i-Hyu"/>
+                                    <constraint firstItem="xg0-77-Qde" firstAttribute="top" secondItem="frx-zg-V3Z" secondAttribute="bottom" id="Hp0-9c-a4E"/>
+                                    <constraint firstItem="frx-zg-V3Z" firstAttribute="top" secondItem="a9c-kB-JEn" secondAttribute="top" id="Z5d-ja-YWA"/>
+                                    <constraint firstAttribute="trailing" secondItem="xg0-77-Qde" secondAttribute="trailing" id="fl3-z5-XCw"/>
+                                    <constraint firstItem="xg0-77-Qde" firstAttribute="leading" secondItem="a9c-kB-JEn" secondAttribute="leading" id="uhM-tg-lYs"/>
+                                    <constraint firstAttribute="bottom" secondItem="xg0-77-Qde" secondAttribute="bottom" id="xqh-oV-5fV"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="a9c-kB-JEn" firstAttribute="leading" secondItem="U30-HB-KHQ" secondAttribute="leading" id="9Ar-6Z-v0W"/>
+                            <constraint firstItem="U30-HB-KHQ" firstAttribute="trailing" secondItem="a9c-kB-JEn" secondAttribute="trailing" id="ExI-69-Ql8"/>
+                            <constraint firstItem="U30-HB-KHQ" firstAttribute="bottom" secondItem="a9c-kB-JEn" secondAttribute="bottom" id="Q9Z-QB-0Rc"/>
+                            <constraint firstItem="a9c-kB-JEn" firstAttribute="top" secondItem="U30-HB-KHQ" secondAttribute="top" id="hhh-5u-zMN"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="U30-HB-KHQ"/>
                     </view>
                     <navigationItem key="navigationItem" title="BackgroundColor" id="uOT-9Q-6be"/>
+                    <connections>
+                        <outlet property="textView" destination="frx-zg-V3Z" id="Ok3-Uh-02I"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2bP-79-398" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
