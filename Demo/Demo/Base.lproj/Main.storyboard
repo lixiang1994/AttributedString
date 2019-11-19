@@ -592,10 +592,60 @@
                     <view key="view" contentMode="scaleToFill" id="kSu-6D-wW3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F4N-br-w3e">
+                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GCZ-CR-opC">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="345"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="1do-7X-5Yn">
+                                        <rect key="frame" x="0.0" y="345" width="375" height="345"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <string key="text">"""
+        
+\("fontSize: 13", .font(.systemFont(ofSize: 13)))
+
+\("fontSize: 20", .font(.systemFont(ofSize: 20)))
+        
+\("fontSize: 22 weight: semibold", .font(.systemFont(ofSize: 22, weight: .semibold)))
+        
+"""</string>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="1do-7X-5Yn" firstAttribute="leading" secondItem="F4N-br-w3e" secondAttribute="leading" id="113-Pf-b08"/>
+                                    <constraint firstAttribute="bottom" secondItem="1do-7X-5Yn" secondAttribute="bottom" id="6WJ-Vg-EAd"/>
+                                    <constraint firstAttribute="trailing" secondItem="GCZ-CR-opC" secondAttribute="trailing" id="Ab4-6M-NG6"/>
+                                    <constraint firstItem="1do-7X-5Yn" firstAttribute="top" secondItem="GCZ-CR-opC" secondAttribute="bottom" id="Ayt-1F-3M0"/>
+                                    <constraint firstItem="GCZ-CR-opC" firstAttribute="top" secondItem="F4N-br-w3e" secondAttribute="top" id="L0U-ei-1VF"/>
+                                    <constraint firstItem="GCZ-CR-opC" firstAttribute="height" secondItem="F4N-br-w3e" secondAttribute="height" multiplier="0.5" id="VGh-fT-hkV"/>
+                                    <constraint firstItem="GCZ-CR-opC" firstAttribute="leading" secondItem="F4N-br-w3e" secondAttribute="leading" id="nJH-wx-XBS"/>
+                                    <constraint firstAttribute="trailing" secondItem="1do-7X-5Yn" secondAttribute="trailing" id="wqF-ru-bmP"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="F4N-br-w3e" firstAttribute="leading" secondItem="wMo-UO-chr" secondAttribute="leading" id="Cyt-YZ-esf"/>
+                            <constraint firstItem="wMo-UO-chr" firstAttribute="trailing" secondItem="F4N-br-w3e" secondAttribute="trailing" id="D3E-x7-1Gp"/>
+                            <constraint firstItem="F4N-br-w3e" firstAttribute="top" secondItem="wMo-UO-chr" secondAttribute="top" id="R0L-Sm-Sij"/>
+                            <constraint firstItem="wMo-UO-chr" firstAttribute="bottom" secondItem="F4N-br-w3e" secondAttribute="bottom" id="wgl-dB-3Pp"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="wMo-UO-chr"/>
                     </view>
                     <navigationItem key="navigationItem" title="Font" id="FHm-Mt-Uhf"/>
+                    <connections>
+                        <outlet property="textView" destination="GCZ-CR-opC" id="bBA-fK-evd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iWg-va-TqK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
