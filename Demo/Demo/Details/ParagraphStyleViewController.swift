@@ -10,21 +10,49 @@ import UIKit
 
 class ParagraphStyleViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributedString = """
+        
+        \(
+        """
+        lineSpacing: 10, lineSpacing: 10
+        lineSpacing: 10, lineSpacing: 10
+        lineSpacing: 10
+        """, .paragraph(.lineSpacing(10))
+        )
+        
+        ------------------------
+        
+        \("alignment: center", .paragraph(.alignment(.center)))
+        
+        ------------------------
+        
+        \(
+        """
+        firstLineHeadIndent: 20, firstLineHeadIndent: 20, firstLineHeadIndent: 20, firstLineHeadIndent: 20, firstLineHeadIndent: 20, firstLineHeadIndent: 20, firstLineHeadIndent: 20, firstLineHeadIndent: 20
+        """, .paragraph(.firstLineHeadIndent(20))
+        )
+        
+        ------------------------
+        
+        \(
+        """
+        headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20, headIndent: 20
+        """, .paragraph(.headIndent(20))
+        )
+        
+        ------------------------
+        
+        \(
+        """
+        baseWritingDirection: rightToLeft
+        """, .paragraph(.baseWritingDirection(.rightToLeft))
+        )
+        
+        """
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
