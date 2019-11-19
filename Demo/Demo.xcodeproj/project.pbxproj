@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B1C4964238405A7002CDC4B /* ParagraphStyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */; };
 		9B6E898A23823F47009EBEBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E898923823F47009EBEBE /* AppDelegate.swift */; };
 		9B6E898C23823F47009EBEBE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E898B23823F47009EBEBE /* SceneDelegate.swift */; };
 		9B6E898E23823F47009EBEBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E898D23823F47009EBEBE /* ViewController.swift */; };
@@ -16,6 +17,22 @@
 		9B6E89D223827D14009EBEBE /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89D123827D14009EBEBE /* TableViewCell.swift */; };
 		9B6E89D523828178009EBEBE /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B6E89D423828178009EBEBE /* AttributedString.framework */; };
 		9B6E89D623828178009EBEBE /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B6E89D423828178009EBEBE /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9BD90EFE23840402000DBD29 /* FontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90EFD23840402000DBD29 /* FontViewController.swift */; };
+		9BD90F00238404C9000DBD29 /* ForegroundColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */; };
+		9BD90F02238404D5000DBD29 /* BackgroundColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F01238404D5000DBD29 /* BackgroundColorViewController.swift */; };
+		9BD90F04238404EA000DBD29 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F03238404EA000DBD29 /* LinkViewController.swift */; };
+		9BD90F06238404F4000DBD29 /* KernViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F05238404F4000DBD29 /* KernViewController.swift */; };
+		9BD90F0823840501000DBD29 /* LigatureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F0723840501000DBD29 /* LigatureViewController.swift */; };
+		9BD90F0A23840510000DBD29 /* StrikethroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F0923840510000DBD29 /* StrikethroughViewController.swift */; };
+		9BD90F0C2384051C000DBD29 /* UnderlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F0B2384051C000DBD29 /* UnderlineViewController.swift */; };
+		9BD90F0E23840529000DBD29 /* BaselineOffsetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F0D23840529000DBD29 /* BaselineOffsetViewController.swift */; };
+		9BD90F1023840534000DBD29 /* ShadowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F0F23840534000DBD29 /* ShadowViewController.swift */; };
+		9BD90F1223840540000DBD29 /* StrokeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F1123840540000DBD29 /* StrokeViewController.swift */; };
+		9BD90F142384054A000DBD29 /* TextEffectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F132384054A000DBD29 /* TextEffectViewController.swift */; };
+		9BD90F1623840556000DBD29 /* ObliquenessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F1523840556000DBD29 /* ObliquenessViewController.swift */; };
+		9BD90F1823840563000DBD29 /* ExpansionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F1723840563000DBD29 /* ExpansionViewController.swift */; };
+		9BD90F1A2384056F000DBD29 /* WritingDirectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */; };
+		9BD90F1C23840581000DBD29 /* VerticalGlyphFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +50,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyleViewController.swift; sourceTree = "<group>"; };
 		9B6E898623823F47009EBEBE /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6E898923823F47009EBEBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B6E898B23823F47009EBEBE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,6 +61,22 @@
 		9B6E899723823F48009EBEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B6E89D123827D14009EBEBE /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		9B6E89D423828178009EBEBE /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BD90EFD23840402000DBD29 /* FontViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontViewController.swift; sourceTree = "<group>"; };
+		9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundColorViewController.swift; sourceTree = "<group>"; };
+		9BD90F01238404D5000DBD29 /* BackgroundColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundColorViewController.swift; sourceTree = "<group>"; };
+		9BD90F03238404EA000DBD29 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
+		9BD90F05238404F4000DBD29 /* KernViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KernViewController.swift; sourceTree = "<group>"; };
+		9BD90F0723840501000DBD29 /* LigatureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LigatureViewController.swift; sourceTree = "<group>"; };
+		9BD90F0923840510000DBD29 /* StrikethroughViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrikethroughViewController.swift; sourceTree = "<group>"; };
+		9BD90F0B2384051C000DBD29 /* UnderlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineViewController.swift; sourceTree = "<group>"; };
+		9BD90F0D23840529000DBD29 /* BaselineOffsetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaselineOffsetViewController.swift; sourceTree = "<group>"; };
+		9BD90F0F23840534000DBD29 /* ShadowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowViewController.swift; sourceTree = "<group>"; };
+		9BD90F1123840540000DBD29 /* StrokeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeViewController.swift; sourceTree = "<group>"; };
+		9BD90F132384054A000DBD29 /* TextEffectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEffectViewController.swift; sourceTree = "<group>"; };
+		9BD90F1523840556000DBD29 /* ObliquenessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObliquenessViewController.swift; sourceTree = "<group>"; };
+		9BD90F1723840563000DBD29 /* ExpansionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpansionViewController.swift; sourceTree = "<group>"; };
+		9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingDirectionViewController.swift; sourceTree = "<group>"; };
+		9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalGlyphFormViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +111,7 @@
 		9B6E898823823F47009EBEBE /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				9BD90EFC2383FA57000DBD29 /* Details */,
 				9B6E89D023827CE2009EBEBE /* Cell */,
 				9B6E898923823F47009EBEBE /* AppDelegate.swift */,
 				9B6E898B23823F47009EBEBE /* SceneDelegate.swift */,
@@ -103,6 +138,30 @@
 				9B6E89D423828178009EBEBE /* AttributedString.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9BD90EFC2383FA57000DBD29 /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				9BD90EFD23840402000DBD29 /* FontViewController.swift */,
+				9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */,
+				9BD90F01238404D5000DBD29 /* BackgroundColorViewController.swift */,
+				9BD90F03238404EA000DBD29 /* LinkViewController.swift */,
+				9BD90F05238404F4000DBD29 /* KernViewController.swift */,
+				9BD90F0723840501000DBD29 /* LigatureViewController.swift */,
+				9BD90F0923840510000DBD29 /* StrikethroughViewController.swift */,
+				9BD90F0B2384051C000DBD29 /* UnderlineViewController.swift */,
+				9BD90F0D23840529000DBD29 /* BaselineOffsetViewController.swift */,
+				9BD90F0F23840534000DBD29 /* ShadowViewController.swift */,
+				9BD90F1123840540000DBD29 /* StrokeViewController.swift */,
+				9BD90F132384054A000DBD29 /* TextEffectViewController.swift */,
+				9BD90F1523840556000DBD29 /* ObliquenessViewController.swift */,
+				9BD90F1723840563000DBD29 /* ExpansionViewController.swift */,
+				9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */,
+				9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */,
+				9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */,
+			);
+			path = Details;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,9 +236,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BD90F04238404EA000DBD29 /* LinkViewController.swift in Sources */,
+				9BD90F0A23840510000DBD29 /* StrikethroughViewController.swift in Sources */,
+				9BD90F0E23840529000DBD29 /* BaselineOffsetViewController.swift in Sources */,
 				9B6E898E23823F47009EBEBE /* ViewController.swift in Sources */,
 				9B6E89D223827D14009EBEBE /* TableViewCell.swift in Sources */,
+				9BD90F1623840556000DBD29 /* ObliquenessViewController.swift in Sources */,
+				9BD90F02238404D5000DBD29 /* BackgroundColorViewController.swift in Sources */,
+				9B1C4964238405A7002CDC4B /* ParagraphStyleViewController.swift in Sources */,
+				9BD90F1223840540000DBD29 /* StrokeViewController.swift in Sources */,
 				9B6E898A23823F47009EBEBE /* AppDelegate.swift in Sources */,
+				9BD90F1A2384056F000DBD29 /* WritingDirectionViewController.swift in Sources */,
+				9BD90F00238404C9000DBD29 /* ForegroundColorViewController.swift in Sources */,
+				9BD90F1023840534000DBD29 /* ShadowViewController.swift in Sources */,
+				9BD90F142384054A000DBD29 /* TextEffectViewController.swift in Sources */,
+				9BD90F1C23840581000DBD29 /* VerticalGlyphFormViewController.swift in Sources */,
+				9BD90F06238404F4000DBD29 /* KernViewController.swift in Sources */,
+				9BD90F0823840501000DBD29 /* LigatureViewController.swift in Sources */,
+				9BD90F1823840563000DBD29 /* ExpansionViewController.swift in Sources */,
+				9BD90F0C2384051C000DBD29 /* UnderlineViewController.swift in Sources */,
+				9BD90EFE23840402000DBD29 /* FontViewController.swift in Sources */,
 				9B6E898C23823F47009EBEBE /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

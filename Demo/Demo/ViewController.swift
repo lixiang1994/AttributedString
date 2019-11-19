@@ -69,8 +69,10 @@ class ViewController: UIViewController {
             \("alignment:center\nlineSpacing:10", .paragraph(.lineSpacing(10), .alignment(.center)))
             
             Wrap:
+            -----------
             \(wrap: .embedding(
                 """
+                Embedding
                 This is attributed text -> \("abc", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
                 This is attributed text -> \("xyz", .underline(.single))
                 \(wrap: .embedding(
@@ -79,7 +81,19 @@ class ViewController: UIViewController {
                 """
                 ), .font(.systemFont(ofSize: 16))
             )
-            
+            -----------
+            \(wrap: .override(
+                """
+                Override
+                This is attributed text -> \("abc", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
+                This is attributed text -> \("xyz", .underline(.single))
+                \(wrap: .override(
+                    "Test w\("rap", .font(.systemFont(ofSize: 40, weight: .medium)))"
+                ), .font(.systemFont(ofSize: 20)), .color(.red))
+                """
+                ), .font(.systemFont(ofSize: 16))
+            )
+
             """
         ]
         
