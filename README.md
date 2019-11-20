@@ -15,9 +15,9 @@
 
 ## Screenshot
 
-<img src="Resources/simple.png" alt="Simple" width="600" />
+<img src="Resources/simple.png" alt="Simple" width="80%" />
 
-<img src="Resources/coding.gif" alt="Coding" width="600" />
+<img src="Resources/coding.gif" alt="Coding" width="80%" />
 
 <div align="center">
 <img src="Resources/all.png" alt="All" width="300" />
