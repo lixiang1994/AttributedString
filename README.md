@@ -15,20 +15,20 @@
 
 ## Screenshot
 
-<img src="Resources/simple.png" alt="Simple" width="400" />
+<img src="Resources/simple.png" alt="Simple" width="600" />
 
-<img src="Resources/coding.gif" alt="Coding" width="400" />
+<img src="Resources/coding.gif" alt="Coding" width="600" />
 
-<!-- <div align="center"> -->
-<img src="Resources/all.png" alt="All" width="200" />
-<img src="Resources/font.png" alt="Font" width="200" />
-<!-- </div> -->
+<div align="center">
+<img src="Resources/all.png" alt="All" width="300" />
+<img src="Resources/font.png" alt="Font" width="300" />
+</div>
 
 
-<!-- <div align="center"> -->
-<img src="Resources/kern.png" alt="Kern" width="200" />
-<img src="Resources/stroke.png" alt="Stroke" width="200" />
-<!-- </div> -->
+<div align="center">
+<img src="Resources/kern.png" alt="Kern" width="300" />
+<img src="Resources/stroke.png" alt="Stroke" width="300" />
+</div>
 
 
 ## Installation
