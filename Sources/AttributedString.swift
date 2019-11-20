@@ -27,6 +27,8 @@ public typealias Font = UIFont
 
 public struct AttributedString {
     
+    public typealias Style = AttributedStringInterpolation.Style
+    
     public let value: NSAttributedString
     
     init(_ value: NSAttributedString) {

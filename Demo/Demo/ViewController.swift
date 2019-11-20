@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         let array: [AttributedString] = [
             """
             \(wrap: .embedding(

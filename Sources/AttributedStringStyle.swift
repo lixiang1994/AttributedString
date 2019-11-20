@@ -64,24 +64,16 @@ extension AttributedStringInterpolation {
 
 extension AttributedStringInterpolation.Style {
     
-    public static func color(_ value: Color) -> Self {
-        return .init(attributes: [.foregroundColor: value])
-    }
-    
     public static func font(_ value: Font) -> Self {
         return .init(attributes: [.font: value])
     }
     
-    public static func background(_ value: Color) -> Self {
-        return .init(attributes: [.backgroundColor: value])
+    public static func color(_ value: Color) -> Self {
+        return .init(attributes: [.foregroundColor: value])
     }
     
-    public static func link(_ value: String) -> Self {
-        guard let url = URL(string: value) else { return .init(attributes: [:])}
-        return link(url)
-    }
-    public static func link(_ value: URL) -> Self {
-        return .init(attributes: [.link: value])
+    public static func background(_ value: Color) -> Self {
+        return .init(attributes: [.backgroundColor: value])
     }
     
     public static func ligature(_ value: Bool) -> Self {
@@ -106,7 +98,15 @@ extension AttributedStringInterpolation.Style {
         return .init(attributes: temp)
     }
     
-    public static func baselineOffset(_ value: Int) -> Self {
+    public static func link(_ value: String) -> Self {
+        guard let url = URL(string: value) else { return .init(attributes: [:])}
+        return link(url)
+    }
+    public static func link(_ value: URL) -> Self {
+        return .init(attributes: [.link: value])
+    }
+    
+    public static func baselineOffset(_ value: CGFloat) -> Self {
         return .init(attributes: [.baselineOffset: value])
     }
     
