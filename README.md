@@ -15,19 +15,19 @@
 
 ## Screenshot
 
-<img src="Resources/simple.png" alt="Simple" style="width:400px;" />
+<img src="Resources/simple.png" alt="Simple" width="400" />
 
-<img src="Resources/coding.gif" alt="Coding" style="width:400px;" />
+<img src="Resources/coding.gif" alt="Coding" width="400" />
 
 <!-- <div align="center"> -->
-<img src="Resources/all.png" alt="All" style="width:200px;" />
-<img src="Resources/font.png" alt="Font" style="width:200px;" />
+<img src="Resources/all.png" alt="All" width="200" />
+<img src="Resources/font.png" alt="Font" width="200" />
 <!-- </div> -->
 
 
 <!-- <div align="center"> -->
-<img src="Resources/kern.png" alt="Kern" style="width:200px;" />
-<img src="Resources/stroke.png" alt="Stroke" style="width:200px;" />
+<img src="Resources/kern.png" alt="Kern" width="200" />
+<img src="Resources/stroke.png" alt="Stroke" width="200" />
 <!-- </div> -->
 
 
