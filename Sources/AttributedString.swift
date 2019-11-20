@@ -39,6 +39,16 @@ public struct AttributedString {
         guard let value = value else { return nil }
         self.value = value
     }
+    
+    public init(_ string: AttributedString, _ styles: Style...) {
+        let temp: AttributedString = "\(wrap: .embedding(string), with: styles)"
+        self.value = temp.value
+    }
+    
+    public init(_ string: AttributedString, with styles: [Style]) {
+        let temp: AttributedString = "\(wrap: .embedding(string), with: styles)"
+        self.value = temp.value
+    }
 }
 
 extension AttributedString: ExpressibleByStringLiteral {

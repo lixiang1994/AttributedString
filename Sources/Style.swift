@@ -19,18 +19,34 @@ extension AttributedStringInterpolation {
         let attributes: [NSAttributedString.Key: Any]
     }
     
-    public mutating func appendInterpolation(_ value: String, _ styles: Style...) {
-        var temp: [NSAttributedString.Key: Any] = [:]
-        styles.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
-        self.value.append(.init(string: value, attributes: temp))
+    public mutating func appendInterpolation<T>(_ value: T, _ styles: Style...) {
+        appendInterpolation(value, with: styles)
     }
     
+    public mutating func appendInterpolation<T>(_ value: T, with styles: [Style]) {
+        var temp: [NSAttributedString.Key: Any] = [:]
+        styles.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        self.value.append(.init(string: "\(value)", attributes: temp))
+    }
+    
+    public mutating func appendInterpolation(html string: Any) {
+        
+    }
+    
+    // 包装模式
     public enum WrapMode {
         case embedding(AttributedString)
         case override(AttributedString)
     }
     
+    // 嵌套包装
+    public mutating func appendInterpolation(wrap string: AttributedString, _ styles: Style...) {
+        appendInterpolation(wrap: .embedding(string), with: styles)
+    }
     public mutating func appendInterpolation(wrap mode: WrapMode, _ styles: Style...) {
+        appendInterpolation(wrap: mode, with: styles)
+    }
+    mutating func appendInterpolation(wrap mode: WrapMode, with styles: [Style]) {
         // 获取通用属性
         var temp: [NSAttributedString.Key: Any] = [:]
         styles.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }

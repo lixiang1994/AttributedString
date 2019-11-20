@@ -11,7 +11,7 @@
 		9B0A2A3A238524E1003D8A55 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */; };
 		9B6E895123823C40009EBEBE /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B6E899E23823FFD009EBEBE /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E899D23823FFD009EBEBE /* AttributedString.swift */; };
-		9B6E89A223826D8E009EBEBE /* AttributedStringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* AttributedStringInterpolation.swift */; };
+		9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* Interpolation.swift */; };
 		9B6E89A8238273E4009EBEBE /* UITextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A7238273E4009EBEBE /* UITextViewExtension.swift */; };
 		9B6E89AA2382742F009EBEBE /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A92382742F009EBEBE /* UITextFieldExtension.swift */; };
 		9B6E89AC238274CB009EBEBE /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AB238274CB009EBEBE /* UILabelExtension.swift */; };
@@ -19,9 +19,9 @@
 		9B6E89B12382766F009EBEBE /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B02382766F009EBEBE /* CGRectExtension.swift */; };
 		9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B2238276B0009EBEBE /* CGPointExtension.swift */; };
 		9B6E89DF23828F7C009EBEBE /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
-		9B6E89E12382C301009EBEBE /* AttributedStringStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E02382C301009EBEBE /* AttributedStringStyle.swift */; };
-		9B6E89E32382C392009EBEBE /* AttributedStringParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* AttributedStringParagraphStyle.swift */; };
-		9B6E89E52382C488009EBEBE /* AttributedStringAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* AttributedStringAttachment.swift */; };
+		9B6E89E12382C301009EBEBE /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E02382C301009EBEBE /* Style.swift */; };
+		9B6E89E32382C392009EBEBE /* ParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */; };
+		9B6E89E52382C488009EBEBE /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* Attachment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +31,7 @@
 		9B6E894F23823C40009EBEBE /* AttributedString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedString.h; sourceTree = "<group>"; };
 		9B6E895023823C40009EBEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B6E899D23823FFD009EBEBE /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
-		9B6E89A123826D8E009EBEBE /* AttributedStringInterpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringInterpolation.swift; sourceTree = "<group>"; };
+		9B6E89A123826D8E009EBEBE /* Interpolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpolation.swift; sourceTree = "<group>"; };
 		9B6E89A7238273E4009EBEBE /* UITextViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextViewExtension.swift; sourceTree = "<group>"; };
 		9B6E89A92382742F009EBEBE /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
 		9B6E89AB238274CB009EBEBE /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
@@ -39,9 +39,9 @@
 		9B6E89B02382766F009EBEBE /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		9B6E89B2238276B0009EBEBE /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
 		9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShadowExtension.swift; sourceTree = "<group>"; };
-		9B6E89E02382C301009EBEBE /* AttributedStringStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringStyle.swift; sourceTree = "<group>"; };
-		9B6E89E22382C392009EBEBE /* AttributedStringParagraphStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringParagraphStyle.swift; sourceTree = "<group>"; };
-		9B6E89E42382C488009EBEBE /* AttributedStringAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringAttachment.swift; sourceTree = "<group>"; };
+		9B6E89E02382C301009EBEBE /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
+		9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyle.swift; sourceTree = "<group>"; };
+		9B6E89E42382C488009EBEBE /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,10 +78,10 @@
 				9B6E894F23823C40009EBEBE /* AttributedString.h */,
 				9B6E895023823C40009EBEBE /* Info.plist */,
 				9B6E899D23823FFD009EBEBE /* AttributedString.swift */,
-				9B6E89A123826D8E009EBEBE /* AttributedStringInterpolation.swift */,
-				9B6E89E02382C301009EBEBE /* AttributedStringStyle.swift */,
-				9B6E89E22382C392009EBEBE /* AttributedStringParagraphStyle.swift */,
-				9B6E89E42382C488009EBEBE /* AttributedStringAttachment.swift */,
+				9B6E89A123826D8E009EBEBE /* Interpolation.swift */,
+				9B6E89E02382C301009EBEBE /* Style.swift */,
+				9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */,
+				9B6E89E42382C488009EBEBE /* Attachment.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -214,10 +214,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B6E89E32382C392009EBEBE /* AttributedStringParagraphStyle.swift in Sources */,
+				9B6E89E32382C392009EBEBE /* ParagraphStyle.swift in Sources */,
 				9B6E89AA2382742F009EBEBE /* UITextFieldExtension.swift in Sources */,
-				9B6E89E52382C488009EBEBE /* AttributedStringAttachment.swift in Sources */,
-				9B6E89A223826D8E009EBEBE /* AttributedStringInterpolation.swift in Sources */,
+				9B6E89E52382C488009EBEBE /* Attachment.swift in Sources */,
+				9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */,
 				9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */,
 				9B6E89DF23828F7C009EBEBE /* NSShadowExtension.swift in Sources */,
 				9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */,
@@ -226,7 +226,7 @@
 				9B0A2A3823851EB6003D8A55 /* Extension.swift in Sources */,
 				9B6E89AC238274CB009EBEBE /* UILabelExtension.swift in Sources */,
 				9B0A2A3A238524E1003D8A55 /* UIButtonExtension.swift in Sources */,
-				9B6E89E12382C301009EBEBE /* AttributedStringStyle.swift in Sources */,
+				9B6E89E12382C301009EBEBE /* Style.swift in Sources */,
 				9B6E899E23823FFD009EBEBE /* AttributedString.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
