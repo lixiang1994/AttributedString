@@ -107,10 +107,7 @@ class ViewController: UIViewController {
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        guard let traitCollection = previousTraitCollection else {
-            super.traitCollectionDidChange(previousTraitCollection)
-            return
-        }
+        super.traitCollectionDidChange(previousTraitCollection)
         
         list = list.map { .init($0.content) }
         tableView.reloadData()
