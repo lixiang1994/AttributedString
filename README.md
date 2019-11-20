@@ -19,10 +19,10 @@
 
 <img src="Resources/coding.gif" alt="Coding" style="width:400px;" />
 
-<div align="center">
+<p align="center">
 <img src="Resources/all.png" alt="All" style="width:200px;" />
 <img src="Resources/font.png" alt="Font" style="width:200px;" />
-</div>
+</p>
 
 
 <div align="center">
