@@ -15,7 +15,7 @@ class LigatureViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributed.string = """
+        textView.attributed.text = """
         
         \("ligature: 1", .ligature(true))
 

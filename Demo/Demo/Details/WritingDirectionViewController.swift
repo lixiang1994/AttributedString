@@ -15,7 +15,7 @@ class WritingDirectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributed.string = """
+        textView.attributed.text = """
         
         writingDirection: none
         

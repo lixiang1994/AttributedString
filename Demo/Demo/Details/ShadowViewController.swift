@@ -15,7 +15,7 @@ class ShadowViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributed.string = """
+        textView.attributed.text = """
         
         shadow: none
         

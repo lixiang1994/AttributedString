@@ -19,7 +19,7 @@ extension UITextView: AttributedStringCompatible {
 
 extension AttributedStringWrapper where Base: UITextView {
 
-    public var string: AttributedString {
+    public var text: AttributedString {
         get { .init(base.attributedText) }
         set { base.attributedText = newValue.value }
     }

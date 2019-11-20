@@ -15,7 +15,7 @@ class StrokeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributed.string = """
+        textView.attributed.text = """
         
         stroke: none
         

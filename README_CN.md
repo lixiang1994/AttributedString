@@ -59,7 +59,7 @@ import AttributedString
 #### 字体:
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \("fontSize: 13", .font(.systemFont(ofSize: 13)))
 
@@ -73,7 +73,7 @@ textView.attributed.string = """
 #### 字色:
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \("foregroundColor", .color(.white))
 
@@ -85,7 +85,7 @@ textView.attributed.string = """
 #### 删除线: 
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \("strikethrough: single", .strikethrough(.single))
 
@@ -97,7 +97,7 @@ textView.attributed.string = """
 #### 图片:
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \(.image(UIImage(named: "xxxx")))
 

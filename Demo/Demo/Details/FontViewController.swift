@@ -16,7 +16,7 @@ class FontViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        textView.attributed.string = """
+        textView.attributed.text = """
         
         \("fontSize: 13", .font(.systemFont(ofSize: 13)))
 

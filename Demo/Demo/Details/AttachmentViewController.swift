@@ -15,7 +15,7 @@ class AttachmentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributed.string = """
+        textView.attributed.text = """
         
         This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"))) -> Displayed in original size.
         

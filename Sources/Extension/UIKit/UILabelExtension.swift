@@ -19,7 +19,7 @@ extension UILabel: AttributedStringCompatible {
 
 extension AttributedStringWrapper where Base: UILabel {
 
-    public var string: AttributedString? {
+    public var text: AttributedString? {
         get { AttributedString(base.attributedText) }
         set { base.attributedText = newValue?.value }
     }

@@ -15,7 +15,7 @@ class VerticalGlyphFormViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributed.string = """
+        textView.attributed.text = """
         
         verticalGlyphForm: none
         

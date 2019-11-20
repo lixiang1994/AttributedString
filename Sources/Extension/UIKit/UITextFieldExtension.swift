@@ -19,7 +19,7 @@ extension UITextField: AttributedStringCompatible {
 
 extension AttributedStringWrapper where Base: UITextField {
 
-    public var string: AttributedString? {
+    public var text: AttributedString? {
         get { AttributedString(base.attributedText) }
         set { base.attributedText = newValue?.value }
     }

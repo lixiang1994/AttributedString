@@ -59,7 +59,7 @@ Here are some usage examples. All devices are also available as simulators:
 #### font:
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \("fontSize: 13", .font(.systemFont(ofSize: 13)))
 
@@ -73,7 +73,7 @@ textView.attributed.string = """
 #### foregroundColor:
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \("foregroundColor", .color(.white))
 
@@ -85,7 +85,7 @@ textView.attributed.string = """
 #### strikethrough: 
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \("strikethrough: single", .strikethrough(.single))
 
@@ -97,7 +97,7 @@ textView.attributed.string = """
 #### image:
 
 ```swift
-textView.attributed.string = """
+textView.attributed.text = """
 
 \(.image(UIImage(named: "xxxx")))
 
