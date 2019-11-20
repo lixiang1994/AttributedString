@@ -20,14 +20,14 @@
 <img src="Resources/coding.gif" alt="Coding" width="80%" />
 
 <div align="center">
-<img src="Resources/all.png" alt="All" width="300" />
-<img src="Resources/font.png" alt="Font" width="300" />
+<img src="Resources/all.png" alt="All" width="40%" />
+<img src="Resources/font.png" alt="Font" width="40%" />
 </div>
 
 
 <div align="center">
-<img src="Resources/kern.png" alt="Kern" width="300" />
-<img src="Resources/stroke.png" alt="Stroke" width="300" />
+<img src="Resources/kern.png" alt="Kern" width="40%" />
+<img src="Resources/stroke.png" alt="Stroke" width="40%" />
 </div>
 
 
