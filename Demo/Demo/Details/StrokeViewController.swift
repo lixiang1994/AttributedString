@@ -10,21 +10,29 @@ import UIKit
 
 class StrokeViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributed.string = """
+        
+        stroke: none
+        
+        \("stroke: 0", .stroke())
+
+        \("stroke: 1", .stroke(1))
+        
+        \("stroke: 2", .stroke(2))
+        
+        \("stroke: 3", .stroke(3))
+        
+        \("stroke: 3 color: .black", .stroke(3, color: .black))
+        
+        \("stroke: 3 color: .blue", .stroke(3, color: .blue))
+        
+        \("stroke: 3 color: .red", .stroke(3, color: .red))
+        
+        """
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

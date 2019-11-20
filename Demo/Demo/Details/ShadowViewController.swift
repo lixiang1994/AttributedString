@@ -10,21 +10,29 @@ import UIKit
 
 class ShadowViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributed.string = """
+        
+        shadow: none
+        
+        \("shadow: defalut", .shadow(.init()))
+
+        \("shadow: offset 0 radius: 4 color: nil", .shadow(.init(offset: .zero, radius: 4)))
+        
+        \("shadow: offset 0 radius: 4 color: .gray", .shadow(.init(offset: .zero, radius: 4, color: .gray)))
+        
+        \("shadow: offset 3 radius: 4 color: .gray", .shadow(.init(offset: .init(width: 0, height: 3), radius: 4, color: .gray)))
+        
+        \("shadow: offset 3 radius: 10 color: .gray", .shadow(.init(offset: .init(width: 0, height: 3), radius: 10, color: .gray)))
+        
+        \("shadow: offset 10 radius: 1 color: .gray", .shadow(.init(offset: .init(width: 0, height: 10), radius: 1, color: .gray)))
+        
+        \("shadow: offset 4 radius: 3 color: .red", .shadow(.init(offset: .init(width: 0, height: 4), radius: 3, color: .red)))
+        
+        """
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

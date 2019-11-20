@@ -15,9 +15,9 @@ class KernViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributedString = """
+        textView.attributed.string = """
         
-        "kern: default"
+        kern: default
         
         \("kern: 0", .kern(0))
 

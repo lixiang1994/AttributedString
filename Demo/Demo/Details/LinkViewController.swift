@@ -10,9 +10,17 @@ import UIKit
 
 class LinkViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributed.string = """
+        
+        link: none
+        
+        \("link: https://www.apple.com", .link("https://www.apple.com"))
+        
+        """
     }
 }

@@ -13,10 +13,14 @@
 
 import UIKit
 
-public extension UITextView {
+extension UITextView: AttributedStringCompatible {
     
-    var attributedString: AttributedString {
-        get { .init(attributedText) }
-        set { attributedText = newValue.value }
+}
+
+extension AttributedStringWrapper where Base: UITextView {
+
+    public var string: AttributedString {
+        get { .init(base.attributedText) }
+        set { base.attributedText = newValue.value }
     }
 }

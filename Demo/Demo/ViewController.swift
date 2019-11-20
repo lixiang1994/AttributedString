@@ -20,34 +20,32 @@ class ViewController: UIViewController {
         
         let array: [AttributedString] = [
             """
-            1. This is a \("dog 🐕", .color(.brown)).
+            \(wrap: .embedding(
+                """
+                \(.image(#imageLiteral(resourceName: "swift-icon"), .custom(size: .init(width: 64, height: 64))))
+                \("Swift", .font(.systemFont(ofSize: 48, weight: .semibold)))
+                
+                \("The powerful programming language that is also easy to learn.", .font(.systemFont(ofSize: 32, weight: .medium)))
+                
+                \("Swift is a powerful and intuitive programming language for macOS, iOS, watchOS, tvOS and beyond. Writing Swift code is interactive and fun, the syntax is concise yet expressive, and Swift includes modern features developers love. Swift code is safe by design, yet also produces software that runs lightning-fast.", .font(.systemFont(ofSize: 21)))
+                
+                """
+            ), .paragraph(.alignment(.center)))
+            """,
+            
+            """
+            \("Great First Language", .font(.systemFont(ofSize: 40, weight: .semibold)))
+            
+            \(
+            """
+            Swift can open doors to the world of coding. In fact, it was designed to be anyone’s first programming language, whether you’re still in school or exploring new career paths. For educators, Apple created free curriculum to teach Swift both in and out of the classroom. First-time coders can download Swift Playgrounds—an app for iPad that makes getting started with Swift code interactive and fun.
+            """, .font(.systemFont(ofSize: 17))
+            )
+            
+            \(.image(#imageLiteral(resourceName: "swift-image-1")))
             """,
             """
-            2. This is a \("big dog 🐶", .color(.red), .font(.boldSystemFont(ofSize: 18))).
-            """,
-            """
-            3. This is a \("kitten 🐱", .color(.red), .font(.boldSystemFont(ofSize: 8))).
-            """,
-            """
-            4. This is a \(" monkey 🐒", .color(.white), .background(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)), .font(.systemFont(ofSize: 20))).
-            """,
-            """
-            5. This is a \(" apple 🍎", .color(.red), .kern(8), .font(.systemFont(ofSize: 20))).
-            """,
-            """
-            6. This is a \(" gorilla 🦍", .color(.white), .background(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)), .font(.systemFont(ofSize: 20))).
-            """,
-            """
-            7. This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .original())) -> Displayed in original size.
-            """,
-            """
-            8. This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 200, height: 200)))) -> Displayed in custom size.
-            """,
-            """
-            9. This is the recommended size image -> \(.image(#imageLiteral(resourceName: "huaji"), .proposed(.center))).
-            """,
-            """
-            Features:
+            \("Features:", .font(.systemFont(ofSize: 30, weight: .semibold)))
             \("foregroundColor", .color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
             \("backgroundColor", .background(#colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1)))
             \("font", .font(.systemFont(ofSize: 18, weight: .semibold)))
@@ -65,18 +63,23 @@ class ViewController: UIViewController {
             \("writingDirection", .writingDirection(.RLO)) RLO
             \("verticalGlyphForm. Currently on iOS, it's always horizontal.", .verticalGlyphForm(true))
             
-            Paragraph:
+            
+            \("Paragraph:", .font(.systemFont(ofSize: 30, weight: .semibold)))
             \("alignment:center\nlineSpacing:10", .paragraph(.lineSpacing(10), .alignment(.center)))
             
-            Wrap:
+            
+            
+            \("Wrap:", .font(.systemFont(ofSize: 30, weight: .semibold)))
             -----------
             \(wrap: .embedding(
                 """
                 Embedding
-                This is attributed text -> \("abc", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
-                This is attributed text -> \("xyz", .underline(.single))
+                
+                fontSize: 16
+                This is attributed text -> \("fontSize: 30", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
+                This is attributed text -> \("underline: single", .underline(.single))
                 \(wrap: .embedding(
-                    "Test w\("rap", .font(.systemFont(ofSize: 40, weight: .medium)))"
+                    "Test wrap color red \("fontSize: 40 medium", .font(.systemFont(ofSize: 40, weight: .medium)))"
                 ), .font(.systemFont(ofSize: 20)), .color(.red))
                 """
                 ), .font(.systemFont(ofSize: 16))
@@ -85,10 +88,12 @@ class ViewController: UIViewController {
             \(wrap: .override(
                 """
                 Override
-                This is attributed text -> \("abc", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
-                This is attributed text -> \("xyz", .underline(.single))
+                
+                fontSize: 16
+                This is attributed text -> \("fontSize: 30", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
+                This is attributed text -> \("underline: single", .underline(.single))
                 \(wrap: .override(
-                    "Test w\("rap", .font(.systemFont(ofSize: 40, weight: .medium)))"
+                    "Test wrap color red \("fontSize: 40 medium", .font(.systemFont(ofSize: 40, weight: .medium)))"
                 ), .font(.systemFont(ofSize: 20)), .color(.red))
                 """
                 ), .font(.systemFont(ofSize: 16))
@@ -98,6 +103,16 @@ class ViewController: UIViewController {
         ]
         
         list = array.map { .init($0) }
+        tableView.reloadData()
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        guard let traitCollection = previousTraitCollection else {
+            super.traitCollectionDidChange(previousTraitCollection)
+            return
+        }
+        
+        list = list.map { .init($0.content) }
         tableView.reloadData()
     }
 }

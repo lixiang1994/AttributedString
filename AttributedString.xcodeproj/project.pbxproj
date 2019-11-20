@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B0A2A3823851EB6003D8A55 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A3723851EB6003D8A55 /* Extension.swift */; };
+		9B0A2A3A238524E1003D8A55 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */; };
 		9B6E895123823C40009EBEBE /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B6E899E23823FFD009EBEBE /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E899D23823FFD009EBEBE /* AttributedString.swift */; };
 		9B6E89A223826D8E009EBEBE /* AttributedStringInterpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* AttributedStringInterpolation.swift */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9B0A2A3723851EB6003D8A55 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 		9B6E894C23823C40009EBEBE /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6E894F23823C40009EBEBE /* AttributedString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedString.h; sourceTree = "<group>"; };
 		9B6E895023823C40009EBEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,6 +93,7 @@
 				9B6E89A6238273CD009EBEBE /* WatchKit */,
 				9B6E89A5238273B2009EBEBE /* AppKit */,
 				9B6E89A42382739C009EBEBE /* UIKit */,
+				9B0A2A3723851EB6003D8A55 /* Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -100,6 +105,7 @@
 				9B6E89A92382742F009EBEBE /* UITextFieldExtension.swift */,
 				9B6E89AB238274CB009EBEBE /* UILabelExtension.swift */,
 				9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */,
+				9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -217,7 +223,9 @@
 				9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */,
 				9B6E89B12382766F009EBEBE /* CGRectExtension.swift in Sources */,
 				9B6E89A8238273E4009EBEBE /* UITextViewExtension.swift in Sources */,
+				9B0A2A3823851EB6003D8A55 /* Extension.swift in Sources */,
 				9B6E89AC238274CB009EBEBE /* UILabelExtension.swift in Sources */,
+				9B0A2A3A238524E1003D8A55 /* UIButtonExtension.swift in Sources */,
 				9B6E89E12382C301009EBEBE /* AttributedStringStyle.swift in Sources */,
 				9B6E899E23823FFD009EBEBE /* AttributedString.swift in Sources */,
 			);

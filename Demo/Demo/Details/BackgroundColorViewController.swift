@@ -15,7 +15,7 @@ class BackgroundColorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributedString = """
+        textView.attributed.string = """
         
         \(" backgroundColor ", .background(.white))
         

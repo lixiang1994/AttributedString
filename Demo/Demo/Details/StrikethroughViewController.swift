@@ -15,7 +15,7 @@ class StrikethroughViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributedString = """
+        textView.attributed.string = """
         
         strikethrough: none
         

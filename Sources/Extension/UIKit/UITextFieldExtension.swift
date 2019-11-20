@@ -13,10 +13,19 @@
 
 import UIKit
 
-public extension UITextField {
+extension UITextField: AttributedStringCompatible {
     
-    var attributedString: AttributedString? {
-        get { AttributedString(attributedText) }
-        set { attributedText = newValue?.value }
+}
+
+extension AttributedStringWrapper where Base: UITextField {
+
+    public var string: AttributedString? {
+        get { AttributedString(base.attributedText) }
+        set { base.attributedText = newValue?.value }
+    }
+    
+    public var placeholder: AttributedString? {
+        get { AttributedString(base.attributedPlaceholder) }
+        set { base.attributedPlaceholder = newValue?.value }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  UILabelExtension.swift
+//  UIButtonExtension.swift
 //  ┌─┐      ┌───────┐ ┌───────┐
 //  │ │      │ ┌─────┘ │ ┌─────┘
 //  │ │      │ └─────┐ │ └─────┐
@@ -13,14 +13,17 @@
 
 import UIKit
 
-extension UILabel: AttributedStringCompatible {
+extension UIButton: AttributedStringCompatible {
     
 }
 
-extension AttributedStringWrapper where Base: UILabel {
+extension AttributedStringWrapper where Base: UIButton {
 
-    public var string: AttributedString? {
-        get { AttributedString(base.attributedText) }
-        set { base.attributedText = newValue?.value }
+    public func setTitle(_ title: AttributedString?, for state: UIControl.State) {
+        base.setAttributedTitle(title?.value, for: state)
+    }
+    
+    public func title(for state: UIControl.State) -> AttributedString? {
+        AttributedString(base.attributedTitle(for: state))
     }
 }

@@ -1,5 +1,5 @@
 //
-//  UILabelExtension.swift
+//  Extension.swift
 //  ┌─┐      ┌───────┐ ┌───────┐
 //  │ │      │ ┌─────┘ │ ┌─────┘
 //  │ │      │ └─────┐ │ └─────┐
@@ -11,16 +11,23 @@
 //  Copyright © 2019 LEE. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-extension UILabel: AttributedStringCompatible {
-    
+public class AttributedStringWrapper<Base> {
+   let base: Base
+   init(_ base: Base) {
+        self.base = base
+    }
 }
 
-extension AttributedStringWrapper where Base: UILabel {
+public protocol AttributedStringCompatible {
+    associatedtype AttributedStringCompatibleType
+    var attributed: AttributedStringCompatibleType { get }
+}
 
-    public var string: AttributedString? {
-        get { AttributedString(base.attributedText) }
-        set { base.attributedText = newValue?.value }
+extension AttributedStringCompatible {
+    
+    public var attributed: AttributedStringWrapper<Self> {
+        get { return AttributedStringWrapper(self) }
     }
 }

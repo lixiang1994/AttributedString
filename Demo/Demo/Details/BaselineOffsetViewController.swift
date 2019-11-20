@@ -10,21 +10,43 @@ import UIKit
 
 class BaselineOffsetViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributed.string = """
+        
+        baseline offset: none
+        
+        ---------------------
+        
+        baseline \("offset: 0", .baselineOffset(0))
+        
+        ---------------------
+        
+        baseline \("offset: 1", .baselineOffset(1))
+        
+        ---------------------
+        
+        baseline \("offset: 3", .baselineOffset(3))
+        
+        ---------------------
+        
+        baseline \("offset: 5", .baselineOffset(5))
+        
+        ---------------------
+        
+        baseline \("offset: -1", .baselineOffset(-1))
+        
+        ---------------------
+        
+        baseline \("offset: -3", .baselineOffset(-3))
+        
+        ---------------------
+        
+        baseline \("offset: -5", .baselineOffset(-5))
+        
+        """
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

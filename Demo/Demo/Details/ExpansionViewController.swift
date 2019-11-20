@@ -10,21 +10,29 @@ import UIKit
 
 class ExpansionViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributed.string = """
+        
+        expansion: none
+        
+        \("expansion: 0", .expansion(0))
+        
+        \("expansion: 0.1", .expansion(0.1))
+        
+        \("expansion: 0.3", .expansion(0.3))
+        
+        \("expansion: 0.5", .expansion(0.5))
+        
+        \("expansion: -0.1", .expansion(-0.1))
+        
+        \("expansion: -0.3", .expansion(-0.3))
+        
+        \("expansion: -0.5", .expansion(-0.5))
+        
+        """
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

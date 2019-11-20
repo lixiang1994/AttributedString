@@ -15,7 +15,7 @@ class ParagraphStyleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textView.attributedString = """
+        textView.attributed.string = """
         
         \(
         """

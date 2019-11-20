@@ -10,21 +10,22 @@ import UIKit
 
 class VerticalGlyphFormViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+   
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributed.string = """
+        
+        verticalGlyphForm: none
+        
+        \("verticalGlyphForm: 1", .verticalGlyphForm(true))
+        
+        \("verticalGlyphForm: 0", .verticalGlyphForm(false))
+        
+        
+        \("Currently on iOS, it's always horizontal.", .color(.lightGray))
+        
+        """
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
