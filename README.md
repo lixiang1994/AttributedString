@@ -19,16 +19,16 @@
 
 <img src="Resources/coding.gif" alt="Coding" style="width:400px;" />
 
-<p align="center">
+<!-- <div align="center"> -->
 <img src="Resources/all.png" alt="All" style="width:200px;" />
 <img src="Resources/font.png" alt="Font" style="width:200px;" />
-</p>
+<!-- </div> -->
 
 
-<div align="center">
+<!-- <div align="center"> -->
 <img src="Resources/kern.png" alt="Kern" style="width:200px;" />
 <img src="Resources/stroke.png" alt="Stroke" style="width:200px;" />
-</div>
+<!-- </div> -->
 
 
 ## Installation
