@@ -29,10 +29,6 @@ extension AttributedStringInterpolation {
         self.value.append(.init(string: "\(value)", attributes: temp))
     }
     
-    public mutating func appendInterpolation(html string: Any) {
-        
-    }
-    
     // 包装模式
     public enum WrapMode {
         case embedding(AttributedString)
