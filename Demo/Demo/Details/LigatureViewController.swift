@@ -10,21 +10,17 @@ import UIKit
 
 class LigatureViewController: UIViewController {
 
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        textView.attributedString = """
+        
+        \("ligature: 1", .ligature(true))
+
+        \("ligature: 0", .ligature(false))
+        
+        """
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

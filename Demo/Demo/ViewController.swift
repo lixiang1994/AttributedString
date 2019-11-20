@@ -53,7 +53,7 @@ class ViewController: UIViewController {
             \("font", .font(.systemFont(ofSize: 18, weight: .semibold)))
             \("link", .link("https://www.apple.com/"))
             \("kern", .kern(5))
-            \("ligature", .ligature(0))
+            \("ligature", .ligature(true))
             \("strikethrough", .strikethrough(.single, color: .darkGray))
             \("underline", .underline(.double, color: .black))
             \("baselineOffset", .baselineOffset(5)) +5

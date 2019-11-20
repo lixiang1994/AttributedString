@@ -84,11 +84,11 @@ extension AttributedStringInterpolation.Style {
         return .init(attributes: [.link: value])
     }
     
-    public static func ligature(_ value: Int) -> Self {
-        return .init(attributes: [.ligature: value])
+    public static func ligature(_ value: Bool) -> Self {
+        return .init(attributes: [.ligature: value ? 1 : 0])
     }
     
-    public static func kern(_ value: Int) -> Self {
+    public static func kern(_ value: CGFloat) -> Self {
         return .init(attributes: [.kern: value])
     }
     

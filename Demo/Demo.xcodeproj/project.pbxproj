@@ -146,23 +146,23 @@
 			isa = PBXGroup;
 			children = (
 				9BD90EFD23840402000DBD29 /* FontViewController.swift */,
+				9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */,
 				9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */,
 				9BD90F01238404D5000DBD29 /* BackgroundColorViewController.swift */,
-				9BD90F03238404EA000DBD29 /* LinkViewController.swift */,
-				9BD90F05238404F4000DBD29 /* KernViewController.swift */,
 				9BD90F0723840501000DBD29 /* LigatureViewController.swift */,
+				9BD90F05238404F4000DBD29 /* KernViewController.swift */,
 				9BD90F0923840510000DBD29 /* StrikethroughViewController.swift */,
 				9BD90F0B2384051C000DBD29 /* UnderlineViewController.swift */,
-				9BD90F0D23840529000DBD29 /* BaselineOffsetViewController.swift */,
-				9BD90F0F23840534000DBD29 /* ShadowViewController.swift */,
 				9BD90F1123840540000DBD29 /* StrokeViewController.swift */,
+				9BD90F0F23840534000DBD29 /* ShadowViewController.swift */,
 				9BD90F132384054A000DBD29 /* TextEffectViewController.swift */,
+				9B1C49652384065D002CDC4B /* AttachmentViewController.swift */,
+				9BD90F03238404EA000DBD29 /* LinkViewController.swift */,
+				9BD90F0D23840529000DBD29 /* BaselineOffsetViewController.swift */,
 				9BD90F1523840556000DBD29 /* ObliquenessViewController.swift */,
 				9BD90F1723840563000DBD29 /* ExpansionViewController.swift */,
 				9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */,
 				9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */,
-				9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */,
-				9B1C49652384065D002CDC4B /* AttachmentViewController.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
