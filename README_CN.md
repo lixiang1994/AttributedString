@@ -138,6 +138,14 @@ textView.attributed.string = """
 
 
 
+## 要做的
+
+- 支持 macOS
+- 支持 watchOS
+- 支持 tvOS
+
+
+
 
 ## 贡献
 

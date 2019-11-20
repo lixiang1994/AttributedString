@@ -136,6 +136,13 @@ The following properties are available:
 
 
 
+## Todo
+
+- Support macOS
+- Support watchOS
+- Support tvOS
+
+
 
 ## Contributing
 
