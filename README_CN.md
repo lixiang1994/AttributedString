@@ -15,19 +15,19 @@ AttributedString - 基于Swift插值方式优雅的构建富文本
 
 ## 截屏
 
-<img src="Resources/simple.png" alt="Simple" style="width:80%;" />
+<img src="Resources/simple.png" alt="Simple" width="80%" />
 
-<img src="Resources/coding.gif" alt="Coding" style="width:80%;" />
+<img src="Resources/coding.gif" alt="Coding" width="80%" />
 
 <div align="center">
-<img src="Resources/all.png" alt="All" style="width:40%;" />
-<img src="Resources/font.png" alt="Font" style="width:40%;" />
+<img src="Resources/all.png" alt="All" width="40%" />
+<img src="Resources/font.png" alt="Font" width="40%" />
 </div>
 
 
 <div align="center">
-<img src="Resources/kern.png" alt="Kern" style="width:40%;" />
-<img src="Resources/stroke.png" alt="Stroke" style="width:40%;" />
+<img src="Resources/kern.png" alt="Kern" width="40%" />
+<img src="Resources/stroke.png" alt="Stroke" width="40%" />
 </div>
 
 
