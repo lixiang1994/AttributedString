@@ -1,3 +1,5 @@
+![Logo](Resources/logo.png)
+
 AttributedString - 基于Swift插值方式优雅的构建富文本
 
 [![](https://img.shields.io/cocoapods/l/AttributedString.svg)](LICENSE)&nbsp;
