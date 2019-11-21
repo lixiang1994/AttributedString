@@ -108,7 +108,7 @@ textView.attributed.text = """
 """
 ```
 
-#### rap:
+#### Wrap:
 
 ```swift
 let a: AttributedString = .init("123", .background(.blue))
