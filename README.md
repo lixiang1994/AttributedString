@@ -56,7 +56,7 @@ import AttributedString
 Here are some usage examples. All devices are also available as simulators:
 
 
-#### font:
+#### Font:
 
 ```swift
 textView.attributed.text = """
@@ -70,7 +70,7 @@ textView.attributed.text = """
 """
 ```
 
-#### foregroundColor:
+#### ForegroundColor:
 
 ```swift
 textView.attributed.text = """
@@ -82,7 +82,7 @@ textView.attributed.text = """
 """
 ```
 
-#### strikethrough: 
+#### Strikethrough: 
 
 ```swift
 textView.attributed.text = """
@@ -94,7 +94,7 @@ textView.attributed.text = """
 """
 ```
 
-#### image:
+#### Image:
 
 ```swift
 textView.attributed.text = """
@@ -108,7 +108,7 @@ textView.attributed.text = """
 """
 ```
 
-#### Wrap:
+#### rap:
 
 ```swift
 let a: AttributedString = .init("123", .background(.blue))
@@ -122,6 +122,16 @@ textView.attributed.text = "\(wrap: .embedding(a), .paragraph(.alignment(.center
 textView.attributed.text = "\(wrap: .override(a), .paragraph(.alignment(.center)))"
 ```
 
+#### Append:
+
+```swift
+let a: AttributedString = .init("123", .background(.blue))
+let b: AttributedString = .init("456", .background(.red))
+let c: AttributedString = .init("789", .background(.gray))
+textView.attributed.text = a + b
+textView.attributed.text += c
+```
+
 
 
 ## Properties available via `Style` class
@@ -130,15 +140,15 @@ The following properties are available:
 
 | PROPERTY          | TYPE                                 | DESCRIPTION                                                  |
 | ----------------- | ------------------------------------ | ------------------------------------------------------------ |
-| font              | `UIFont`                             | 字体                                                         |
+| font              | `UIFont`                             | font                                                         |
 | color             | `UIColor`                            | foreground color                                             |
-| background        | `UIColor`                            | 背景色                                                       |
+| background        | `UIColor`                            | background color                                             |
 | paragraph         | `ParagraphStyle`                     | paragraph attributes                                         |
 | ligature          | `Bool`                               | Ligatures cause specific character combinations to be rendered using a single custom glyph that corresponds to those characters |
 | kern              | `CGFloat`                            | kerning                                                      |
 | strikethrough     | `NSUnderlineStyle` . `UIColor`       | strikethrough style and color (if color is nil foreground is used) |
 | underline         | `NSUnderlineStyle` , `UIColor`       | underline style and color (if color is nil foreground is used) |
-| link              | `String` / `URL`                     | 链接                                                         |
+| link              | `String` / `URL`                     | URL                                                          |
 | baselineOffset    | `CGFloat`                            | character’s offset from the baseline, in point               |
 | shadow            | `NSShadow`                           | shadow effect of the text                                    |
 | stroke            | `CGFloat`, `UIColor`                 | stroke width and color                                       |

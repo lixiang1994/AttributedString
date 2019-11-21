@@ -122,6 +122,16 @@ textView.attributed.text = "\(wrap: .embedding(a), .paragraph(.alignment(.center
 textView.attributed.text = "\(wrap: .override(a), .paragraph(.alignment(.center)))"
 ```
 
+#### 拼接:
+
+```swift
+let a: AttributedString = .init("123", .background(.blue))
+let b: AttributedString = .init("456", .background(.red))
+let c: AttributedString = .init("789", .background(.gray))
+textView.attributed.text = a + b
+textView.attributed.text += c
+```
+
 更多示例请查看工程应用.
 
 
