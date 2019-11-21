@@ -108,6 +108,20 @@ textView.attributed.text = """
 """
 ```
 
+#### 包装:
+
+```swift
+let a: AttributedString = .init("123", .background(.blue))
+let b: AttributedString = .init("456", .background(.red))
+textView.attributed.text = "\(wrap: a) \(wrap: b, .paragraph(.alignment(.center)))"
+
+// 默认为嵌入模式, 嵌套的内部样式优先于外部样式
+textView.attributed.text = "\(wrap: a, .paragraph(.alignment(.center)))"
+textView.attributed.text = "\(wrap: .embedding(a), .paragraph(.alignment(.center)))"
+// 覆盖模式, 嵌套的外部样式优先于内部样式
+textView.attributed.text = "\(wrap: .override(a), .paragraph(.alignment(.center)))"
+```
+
 更多示例请查看工程应用.
 
 

@@ -108,6 +108,20 @@ textView.attributed.text = """
 """
 ```
 
+#### Wrap:
+
+```swift
+let a: AttributedString = .init("123", .background(.blue))
+let b: AttributedString = .init("456", .background(.red))
+textView.attributed.text = "\(wrap: a) \(wrap: b, .paragraph(.alignment(.center)))"
+
+// Defalut embedding mode, Nested internal styles take precedence over external styles
+textView.attributed.text = "\(wrap: a, .paragraph(.alignment(.center)))"
+textView.attributed.text = "\(wrap: .embedding(a), .paragraph(.alignment(.center)))"
+// Override mode, Nested outer style takes precedence over inner style
+textView.attributed.text = "\(wrap: .override(a), .paragraph(.alignment(.center)))"
+```
+
 
 
 ## Properties available via `Style` class
