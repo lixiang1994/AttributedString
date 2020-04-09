@@ -12,7 +12,8 @@
 - [x] Constructing rich text using interpolation, Smooth coding, Elegant and natural style.
 - [x] More control extension support.
 - [x] Support for multi-level rich text cascading and provide other style priority strategies.
-- [x] Support for all `NSAttributedString.Key` functions
+- [x] Support for all `NSAttributedString.Key` functions.
+- [x] Support iOS and macOS.
 - [x] Continue to add more new features.
 
 ## Screenshot
@@ -164,7 +165,6 @@ The following properties are available:
 
 ## Todo
 
-- Support macOS
 - Support watchOS
 - Support tvOS
 
