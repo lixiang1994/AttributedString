@@ -9,6 +9,18 @@
 /* Begin PBXBuildFile section */
 		9B0A2A3823851EB6003D8A55 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A3723851EB6003D8A55 /* Extension.swift */; };
 		9B0A2A3A238524E1003D8A55 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */; };
+		9B34BD3F243DBE7500932E6C /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9B34BD40243DBEA900932E6C /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AE238275D2009EBEBE /* CGSizeExtension.swift */; };
+		9B34BD41243DBEA900932E6C /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B02382766F009EBEBE /* CGRectExtension.swift */; };
+		9B34BD42243DBEA900932E6C /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B2238276B0009EBEBE /* CGPointExtension.swift */; };
+		9B34BD43243DBEA900932E6C /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A3723851EB6003D8A55 /* Extension.swift */; };
+		9B34BD44243DBEA900932E6C /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E899D23823FFD009EBEBE /* AttributedString.swift */; };
+		9B34BD45243DBEA900932E6C /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* Interpolation.swift */; };
+		9B34BD46243DBEA900932E6C /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E02382C301009EBEBE /* Style.swift */; };
+		9B34BD47243DBEA900932E6C /* ParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */; };
+		9B34BD48243DBEA900932E6C /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* Attachment.swift */; };
+		9B34BD65243DFACE00932E6C /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B34BD63243DFAA600932E6C /* NSShadowExtension.swift */; };
+		9B34BD68243DFCBB00932E6C /* NSTextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */; };
 		9B6E895123823C40009EBEBE /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B6E899E23823FFD009EBEBE /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E899D23823FFD009EBEBE /* AttributedString.swift */; };
 		9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* Interpolation.swift */; };
@@ -27,6 +39,9 @@
 /* Begin PBXFileReference section */
 		9B0A2A3723851EB6003D8A55 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
+		9B34BD37243DBC8100932E6C /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B34BD63243DFAA600932E6C /* NSShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShadowExtension.swift; sourceTree = "<group>"; };
+		9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextFieldExtension.swift; sourceTree = "<group>"; };
 		9B6E894C23823C40009EBEBE /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6E894F23823C40009EBEBE /* AttributedString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedString.h; sourceTree = "<group>"; };
 		9B6E895023823C40009EBEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,6 +60,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9B34BD34243DBC8100932E6C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B6E894923823C40009EBEBE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -67,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				9B6E894C23823C40009EBEBE /* AttributedString.framework */,
+				9B34BD37243DBC8100932E6C /* AttributedString.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,6 +136,8 @@
 		9B6E89A5238273B2009EBEBE /* AppKit */ = {
 			isa = PBXGroup;
 			children = (
+				9B34BD63243DFAA600932E6C /* NSShadowExtension.swift */,
+				9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */,
 			);
 			path = AppKit;
 			sourceTree = "<group>";
@@ -137,6 +162,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		9B34BD32243DBC8100932E6C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B34BD3F243DBE7500932E6C /* AttributedString.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B6E894723823C40009EBEBE /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -148,6 +181,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		9B34BD36243DBC8100932E6C /* AttributedString-MacOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B34BD3E243DBC8100932E6C /* Build configuration list for PBXNativeTarget "AttributedString-MacOS" */;
+			buildPhases = (
+				9B34BD32243DBC8100932E6C /* Headers */,
+				9B34BD33243DBC8100932E6C /* Sources */,
+				9B34BD34243DBC8100932E6C /* Frameworks */,
+				9B34BD35243DBC8100932E6C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AttributedString-MacOS";
+			productName = "AttributedString-MacOS";
+			productReference = 9B34BD37243DBC8100932E6C /* AttributedString.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		9B6E894B23823C40009EBEBE /* AttributedString */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9B6E895423823C40009EBEBE /* Build configuration list for PBXNativeTarget "AttributedString" */;
@@ -175,6 +226,9 @@
 				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = LEE;
 				TargetAttributes = {
+					9B34BD36243DBC8100932E6C = {
+						CreatedOnToolsVersion = 11.4;
+					};
 					9B6E894B23823C40009EBEBE = {
 						CreatedOnToolsVersion = 11.1;
 						LastSwiftMigration = 1110;
@@ -195,11 +249,19 @@
 			projectRoot = "";
 			targets = (
 				9B6E894B23823C40009EBEBE /* AttributedString */,
+				9B34BD36243DBC8100932E6C /* AttributedString-MacOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9B34BD35243DBC8100932E6C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B6E894A23823C40009EBEBE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -210,6 +272,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9B34BD33243DBC8100932E6C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B34BD68243DFCBB00932E6C /* NSTextFieldExtension.swift in Sources */,
+				9B34BD65243DFACE00932E6C /* NSShadowExtension.swift in Sources */,
+				9B34BD40243DBEA900932E6C /* CGSizeExtension.swift in Sources */,
+				9B34BD41243DBEA900932E6C /* CGRectExtension.swift in Sources */,
+				9B34BD42243DBEA900932E6C /* CGPointExtension.swift in Sources */,
+				9B34BD43243DBEA900932E6C /* Extension.swift in Sources */,
+				9B34BD44243DBEA900932E6C /* AttributedString.swift in Sources */,
+				9B34BD45243DBEA900932E6C /* Interpolation.swift in Sources */,
+				9B34BD46243DBEA900932E6C /* Style.swift in Sources */,
+				9B34BD47243DBEA900932E6C /* ParagraphStyle.swift in Sources */,
+				9B34BD48243DBEA900932E6C /* Attachment.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B6E894823823C40009EBEBE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -234,6 +314,58 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		9B34BD3C243DBC8100932E6C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
+				PRODUCT_NAME = AttributedString;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9B34BD3D243DBC8100932E6C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
+				PRODUCT_NAME = AttributedString;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		9B6E895223823C40009EBEBE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -372,7 +504,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -400,7 +532,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -412,6 +544,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9B34BD3E243DBC8100932E6C /* Build configuration list for PBXNativeTarget "AttributedString-MacOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B34BD3C243DBC8100932E6C /* Debug */,
+				9B34BD3D243DBC8100932E6C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9B6E894623823C40009EBEBE /* Build configuration list for PBXProject "AttributedString" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

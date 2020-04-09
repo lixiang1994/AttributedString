@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "AttributedString"
-s.version      = "1.1.2"
+s.version      = "1.2.0"
 s.summary      = "基于Swift字符串插值快速构建你想要的富文本"
 
 s.homepage     = "https://github.com/lixiang1994/AttributedString"
@@ -10,16 +10,21 @@ s.license      = { :type => "MIT", :file => "LICENSE" }
 
 s.author       = { "LEE" => "18611401994@163.com" }
 
-s.platform     = :ios, "9.0"
-
 s.source       = { :git => "https://github.com/lixiang1994/AttributedString.git", :tag => s.version }
-
-s.source_files  = "Sources/**/*.swift"
 
 s.requires_arc = true
 
-s.frameworks = "UIKit", "Foundation"
-
 s.swift_versions = ["5.0"]
+
+s.frameworks = "Foundation"
+s.ios.frameworks = "UIKit"
+s.osx.frameworks = "AppKit"
+
+s.ios.deployment_target = '9.0'
+s.osx.deployment_target = "10.13"
+
+s.source_files  = ["Sources/*.swift", "Sources/Extension/*.swift", "Sources/Extension/CoreGraphics/*.swift"]
+s.ios.source_files = ["Sources/Extension/UIKit/*.swift"]
+s.osx.source_files = ["Sources/Extension/AppKit/*.swift"]
 
 end

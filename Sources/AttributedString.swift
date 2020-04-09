@@ -11,8 +11,6 @@
 //  Copyright © 2019 LEE. All rights reserved.
 //
 
-import Foundation
-
 #if os(macOS)
 import AppKit
 public typealias Image = NSImage

@@ -11,7 +11,11 @@
 //  Copyright © 2019 LEE. All rights reserved.
 //
 
+#if os(macOS)
+import AppKit
+#else
 import UIKit
+#endif
 
 extension AttributedString: ExpressibleByStringInterpolation {
     
