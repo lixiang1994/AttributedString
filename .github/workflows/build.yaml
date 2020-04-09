@@ -7,7 +7,7 @@ jobs:
     runs-on: macOS-latest
     strategy:
       matrix:
-        destination: ['macOS', 'iOS Simulator,name=iPhone 8', 'tvOS Simulator,name=Apple TV']
+        destination: ['macOS', 'iOS Simulator,name=iPhone 8']
         swift-version: [5.0]
     steps:
       - uses: actions/checkout@v1
