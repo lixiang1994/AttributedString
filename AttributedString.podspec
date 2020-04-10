@@ -19,12 +19,18 @@ s.swift_versions = ["5.0"]
 s.frameworks = "Foundation"
 s.ios.frameworks = "UIKit"
 s.osx.frameworks = "AppKit"
+s.tvos.frameworks = "UIKit"
+s.watchos.frameworks = "WatchKit"
 
 s.ios.deployment_target = '9.0'
 s.osx.deployment_target = "10.13"
+s.tvos.deployment_target = "10.0"
+s.watchos.deployment_target = "6.0"
 
 s.source_files  = ["Sources/*.swift", "Sources/Extension/*.swift", "Sources/Extension/CoreGraphics/*.swift"]
 s.ios.source_files = ["Sources/Extension/UIKit/*.swift"]
 s.osx.source_files = ["Sources/Extension/AppKit/*.swift"]
+s.tvos.source_files = ["Sources/Extension/UIKit/*.swift"]
+s.watchos.source_files = ["Sources/Extension/WatchKit/*.swift"]
 
 end
