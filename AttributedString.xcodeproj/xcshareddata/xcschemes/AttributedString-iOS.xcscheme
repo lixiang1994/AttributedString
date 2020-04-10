@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9B6E894B23823C40009EBEBE"
-               BuildableName = "AttributedString_iOS.framework"
+               BuildableName = "AttributedString.framework"
                BlueprintName = "AttributedString-iOS"
                ReferencedContainer = "container:AttributedString.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9B6E894B23823C40009EBEBE"
-            BuildableName = "AttributedString_iOS.framework"
+            BuildableName = "AttributedString.framework"
             BlueprintName = "AttributedString-iOS"
             ReferencedContainer = "container:AttributedString.xcodeproj">
          </BuildableReference>
