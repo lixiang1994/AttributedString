@@ -507,7 +507,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios;
 				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -535,7 +535,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios;
 				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
