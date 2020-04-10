@@ -17,6 +17,8 @@ import AppKit
 import UIKit
 #endif
 
+#if !os(watchOS)
+
 extension AttributedStringInterpolation {
     
     public enum Attachment {
@@ -152,3 +154,5 @@ extension AttributedStringInterpolation {
         self.value.append(.init(attachment: value.value))
     }
 }
+
+#endif
