@@ -12,7 +12,7 @@ AttributedString - 基于Swift插值方式优雅的构建富文本
 - [x] 丰富的控件扩展支持.
 - [x] 支持多层富文本嵌套并提供嵌套样式优先级策略.
 - [x] 支持全部`NSAttributedString.Key`特性.
-- [x] 支持 iOS 和 macOS.
+- [x] 支持 iOS & macOS & watchOS & tvOS.
 - [x] 更多新特性的不断加入.
 
 
@@ -164,11 +164,6 @@ textView.attributed.text += c
 | verticalGlyphForm | `Bool`                               | 垂直排版 (当前在iOS上, 它始终是水平的)       |
 
 
-
-## 要做的
-
-- 支持 watchOS
-- 支持 tvOS
 
 
 

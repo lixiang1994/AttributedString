@@ -13,7 +13,7 @@
 - [x] More control extension support.
 - [x] Support for multi-level rich text cascading and provide other style priority strategies.
 - [x] Support for all `NSAttributedString.Key` functions.
-- [x] Support iOS and macOS.
+- [x] Support iOS & macOS & watchOS & tvOS.
 - [x] Continue to add more new features.
 
 ## Screenshot
@@ -163,10 +163,6 @@ The following properties are available:
 
 
 
-## Todo
-
-- Support watchOS
-- Support tvOS
 
 
 
