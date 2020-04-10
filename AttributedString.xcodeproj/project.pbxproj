@@ -181,9 +181,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		9B34BD36243DBC8100932E6C /* AttributedString-MacOS */ = {
+		9B34BD36243DBC8100932E6C /* AttributedString-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9B34BD3E243DBC8100932E6C /* Build configuration list for PBXNativeTarget "AttributedString-MacOS" */;
+			buildConfigurationList = 9B34BD3E243DBC8100932E6C /* Build configuration list for PBXNativeTarget "AttributedString-macOS" */;
 			buildPhases = (
 				9B34BD32243DBC8100932E6C /* Headers */,
 				9B34BD33243DBC8100932E6C /* Sources */,
@@ -194,14 +194,14 @@
 			);
 			dependencies = (
 			);
-			name = "AttributedString-MacOS";
+			name = "AttributedString-macOS";
 			productName = "AttributedString-MacOS";
 			productReference = 9B34BD37243DBC8100932E6C /* AttributedString.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		9B6E894B23823C40009EBEBE /* AttributedString */ = {
+		9B6E894B23823C40009EBEBE /* AttributedString-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9B6E895423823C40009EBEBE /* Build configuration list for PBXNativeTarget "AttributedString" */;
+			buildConfigurationList = 9B6E895423823C40009EBEBE /* Build configuration list for PBXNativeTarget "AttributedString-iOS" */;
 			buildPhases = (
 				9B6E894723823C40009EBEBE /* Headers */,
 				9B6E894823823C40009EBEBE /* Sources */,
@@ -212,7 +212,7 @@
 			);
 			dependencies = (
 			);
-			name = AttributedString;
+			name = "AttributedString-iOS";
 			productName = AttributedString;
 			productReference = 9B6E894C23823C40009EBEBE /* AttributedString.framework */;
 			productType = "com.apple.product-type.framework";
@@ -248,8 +248,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9B6E894B23823C40009EBEBE /* AttributedString */,
-				9B34BD36243DBC8100932E6C /* AttributedString-MacOS */,
+				9B6E894B23823C40009EBEBE /* AttributedString-iOS */,
+				9B34BD36243DBC8100932E6C /* AttributedString-macOS */,
 			);
 		};
 /* End PBXProject section */
@@ -332,6 +332,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = macosx;
@@ -358,6 +359,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = macosx;
@@ -506,7 +508,7 @@
 				);
 				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -534,7 +536,7 @@
 				);
 				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -544,7 +546,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9B34BD3E243DBC8100932E6C /* Build configuration list for PBXNativeTarget "AttributedString-MacOS" */ = {
+		9B34BD3E243DBC8100932E6C /* Build configuration list for PBXNativeTarget "AttributedString-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9B34BD3C243DBC8100932E6C /* Debug */,
@@ -562,7 +564,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9B6E895423823C40009EBEBE /* Build configuration list for PBXNativeTarget "AttributedString" */ = {
+		9B6E895423823C40009EBEBE /* Build configuration list for PBXNativeTarget "AttributedString-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9B6E895523823C40009EBEBE /* Debug */,
