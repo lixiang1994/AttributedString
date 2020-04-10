@@ -27,6 +27,23 @@
 		9B267B8C24406B2F002F571E /* WKInterfaceLabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B8A24406B2F002F571E /* WKInterfaceLabelExtension.swift */; };
 		9B267B8E24406D71002F571E /* WKInterfaceTextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B8D24406D71002F571E /* WKInterfaceTextFieldExtension.swift */; };
 		9B267B95244072BE002F571E /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B94244072BE002F571E /* NSShadowExtension.swift */; };
+		9B267BA424408072002F571E /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B267B9B24408072002F571E /* AttributedString.framework */; };
+		9B267BB2244080FC002F571E /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9B267BB32440811F002F571E /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AE238275D2009EBEBE /* CGSizeExtension.swift */; };
+		9B267BB42440811F002F571E /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B02382766F009EBEBE /* CGRectExtension.swift */; };
+		9B267BB52440811F002F571E /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B2238276B0009EBEBE /* CGPointExtension.swift */; };
+		9B267BB62440811F002F571E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A3723851EB6003D8A55 /* Extension.swift */; };
+		9B267BB72440811F002F571E /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E899D23823FFD009EBEBE /* AttributedString.swift */; };
+		9B267BB82440811F002F571E /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* Interpolation.swift */; };
+		9B267BB92440811F002F571E /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E02382C301009EBEBE /* Style.swift */; };
+		9B267BBA2440811F002F571E /* ParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */; };
+		9B267BBB2440811F002F571E /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* Attachment.swift */; };
+		9B267BC0244081BB002F571E /* AttributedString_tvOS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267BBF244081BB002F571E /* AttributedString_tvOS_Tests.swift */; };
+		9B267BE424408357002F571E /* UITextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A7238273E4009EBEBE /* UITextViewExtension.swift */; };
+		9B267BE524408357002F571E /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A92382742F009EBEBE /* UITextFieldExtension.swift */; };
+		9B267BE624408357002F571E /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AB238274CB009EBEBE /* UILabelExtension.swift */; };
+		9B267BE724408357002F571E /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
+		9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */; };
 		9B34BD3F243DBE7500932E6C /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B34BD40243DBEA900932E6C /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AE238275D2009EBEBE /* CGSizeExtension.swift */; };
 		9B34BD41243DBEA900932E6C /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B02382766F009EBEBE /* CGRectExtension.swift */; };
@@ -69,6 +86,13 @@
 			remoteGlobalIDString = 9B34BD36243DBC8100932E6C;
 			remoteInfo = "AttributedString-macOS";
 		};
+		9B267BA524408072002F571E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B6E894323823C40009EBEBE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9B267B9A24408072002F571E;
+			remoteInfo = "AttributedString-tvOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +108,9 @@
 		9B267B8A24406B2F002F571E /* WKInterfaceLabelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKInterfaceLabelExtension.swift; sourceTree = "<group>"; };
 		9B267B8D24406D71002F571E /* WKInterfaceTextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKInterfaceTextFieldExtension.swift; sourceTree = "<group>"; };
 		9B267B94244072BE002F571E /* NSShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShadowExtension.swift; sourceTree = "<group>"; };
+		9B267B9B24408072002F571E /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B267BA324408072002F571E /* AttributedString-tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AttributedString-tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B267BBF244081BB002F571E /* AttributedString_tvOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString_tvOS_Tests.swift; sourceTree = "<group>"; };
 		9B34BD37243DBC8100932E6C /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B34BD63243DFAA600932E6C /* NSShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShadowExtension.swift; sourceTree = "<group>"; };
 		9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextFieldExtension.swift; sourceTree = "<group>"; };
@@ -128,6 +155,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B267B9824408072002F571E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B267BA024408072002F571E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B267BA424408072002F571E /* AttributedString.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B34BD34243DBC8100932E6C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -149,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				9B267B1C24404124002F571E /* AttributedString_iOS_Tests.swift */,
+				9B267BBF244081BB002F571E /* AttributedString_tvOS_Tests.swift */,
 				9B267B2B2440433F002F571E /* AttributedString_macOS_Tests.swift */,
 				9B267B1E24404124002F571E /* Info.plist */,
 			);
@@ -183,6 +226,8 @@
 				9B267B1A24404124002F571E /* AttributedString-iOS Tests.xctest */,
 				9B267B292440433F002F571E /* AttributedString-macOS Tests.xctest */,
 				9B267B3B24404922002F571E /* AttributedString.framework */,
+				9B267B9B24408072002F571E /* AttributedString.framework */,
+				9B267BA324408072002F571E /* AttributedString-tvOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -253,6 +298,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B267B76244066B0002F571E /* AttributedString.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B267B9624408072002F571E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B267BB2244080FC002F571E /* AttributedString.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +382,42 @@
 			productReference = 9B267B3B24404922002F571E /* AttributedString.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		9B267B9A24408072002F571E /* AttributedString-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B267BAC24408072002F571E /* Build configuration list for PBXNativeTarget "AttributedString-tvOS" */;
+			buildPhases = (
+				9B267B9624408072002F571E /* Headers */,
+				9B267B9724408072002F571E /* Sources */,
+				9B267B9824408072002F571E /* Frameworks */,
+				9B267B9924408072002F571E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AttributedString-tvOS";
+			productName = "AttributedString-tvOS";
+			productReference = 9B267B9B24408072002F571E /* AttributedString.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9B267BA224408072002F571E /* AttributedString-tvOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B267BAF24408072002F571E /* Build configuration list for PBXNativeTarget "AttributedString-tvOS Tests" */;
+			buildPhases = (
+				9B267B9F24408072002F571E /* Sources */,
+				9B267BA024408072002F571E /* Frameworks */,
+				9B267BA124408072002F571E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B267BA624408072002F571E /* PBXTargetDependency */,
+			);
+			name = "AttributedString-tvOS Tests";
+			productName = "AttributedString-tvOSTests";
+			productReference = 9B267BA324408072002F571E /* AttributedString-tvOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		9B34BD36243DBC8100932E6C /* AttributedString-macOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9B34BD3E243DBC8100932E6C /* Build configuration list for PBXNativeTarget "AttributedString-macOS" */;
@@ -384,6 +473,13 @@
 					9B267B3A24404922002F571E = {
 						CreatedOnToolsVersion = 11.4;
 					};
+					9B267B9A24408072002F571E = {
+						CreatedOnToolsVersion = 11.4;
+					};
+					9B267BA224408072002F571E = {
+						CreatedOnToolsVersion = 11.4;
+						LastSwiftMigration = 1140;
+					};
 					9B34BD36243DBC8100932E6C = {
 						CreatedOnToolsVersion = 11.4;
 					};
@@ -411,6 +507,8 @@
 				9B267B3A24404922002F571E /* AttributedString-watchOS */,
 				9B267B1924404124002F571E /* AttributedString-iOS Tests */,
 				9B267B282440433F002F571E /* AttributedString-macOS Tests */,
+				9B267B9A24408072002F571E /* AttributedString-tvOS */,
+				9B267BA224408072002F571E /* AttributedString-tvOS Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -431,6 +529,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9B267B3924404922002F571E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B267B9924408072002F571E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B267BA124408072002F571E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -490,6 +602,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B267B9724408072002F571E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B267BE424408357002F571E /* UITextViewExtension.swift in Sources */,
+				9B267BE524408357002F571E /* UITextFieldExtension.swift in Sources */,
+				9B267BE624408357002F571E /* UILabelExtension.swift in Sources */,
+				9B267BE724408357002F571E /* NSShadowExtension.swift in Sources */,
+				9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */,
+				9B267BB32440811F002F571E /* CGSizeExtension.swift in Sources */,
+				9B267BB42440811F002F571E /* CGRectExtension.swift in Sources */,
+				9B267BB52440811F002F571E /* CGPointExtension.swift in Sources */,
+				9B267BB62440811F002F571E /* Extension.swift in Sources */,
+				9B267BB72440811F002F571E /* AttributedString.swift in Sources */,
+				9B267BB82440811F002F571E /* Interpolation.swift in Sources */,
+				9B267BB92440811F002F571E /* Style.swift in Sources */,
+				9B267BBA2440811F002F571E /* ParagraphStyle.swift in Sources */,
+				9B267BBB2440811F002F571E /* Attachment.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B267B9F24408072002F571E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B267BC0244081BB002F571E /* AttributedString_tvOS_Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B34BD33243DBC8100932E6C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -541,6 +682,11 @@
 			isa = PBXTargetDependency;
 			target = 9B34BD36243DBC8100932E6C /* AttributedString-macOS */;
 			targetProxy = 9B267B2F2440433F002F571E /* PBXContainerItemProxy */;
+		};
+		9B267BA624408072002F571E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9B267B9A24408072002F571E /* AttributedString-tvOS */;
+			targetProxy = 9B267BA524408072002F571E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -678,6 +824,105 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Release;
+		};
+		9B267BAD24408072002F571E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
+				PRODUCT_NAME = AttributedString;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.4;
+			};
+			name = Debug;
+		};
+		9B267BAE24408072002F571E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
+				PRODUCT_NAME = AttributedString;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.4;
+			};
+			name = Release;
+		};
+		9B267BB024408072002F571E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.4;
+			};
+			name = Debug;
+		};
+		9B267BB124408072002F571E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.4;
 			};
 			name = Release;
 		};
@@ -936,6 +1181,24 @@
 			buildConfigurations = (
 				9B267B4124404922002F571E /* Debug */,
 				9B267B4224404922002F571E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9B267BAC24408072002F571E /* Build configuration list for PBXNativeTarget "AttributedString-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B267BAD24408072002F571E /* Debug */,
+				9B267BAE24408072002F571E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9B267BAF24408072002F571E /* Build configuration list for PBXNativeTarget "AttributedString-tvOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B267BB024408072002F571E /* Debug */,
+				9B267BB124408072002F571E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

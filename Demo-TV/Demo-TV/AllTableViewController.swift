@@ -1,56 +1,59 @@
 //
-//  AllViewController.swift
-//  Demo-Mac
+//  AllTableViewController.swift
+//  Demo-TV
 //
-//  Created by Lee on 2020/4/9.
+//  Created by Lee on 2020/4/10.
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
-import Cocoa
+import UIKit
 import AttributedString
 
-class AllViewController: NSViewController {
+class AllTableViewController: UITableViewController {
 
-    @IBOutlet weak var tableView: NSTableView!
-    @IBOutlet weak var content: NSTextField!
-    @IBOutlet weak var code: NSTextField!
-    
     private var list: [Item] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         loadData()
+        
+        // 默认选择第一个
+        tableView.selectRow(at: .init(row: 0, section: 0), animated: true, scrollPosition: .none)
+        tableView(tableView, didSelectRowAt: .init(row: 0, section: 0))
     }
 }
 
-extension AllViewController: NSTableViewDelegate {
+extension AllTableViewController {
     
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeView(
-            withIdentifier: .init(rawValue: "TableViewCell"),
-            owner: self
-        ) as? TableViewCell
-        cell?.text.stringValue = list[row].title.0 + " - " + list[row].title.1
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return list.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let item = list[indexPath.row]
+        cell.textLabel?.text = item.title.0
+        cell.detailTextLabel?.text = item.title.1
         return cell
     }
     
-    func tableViewSelectionDidChange(_ notification: Notification) {
-        guard tableView.selectedRow >= 0, tableView.selectedRow < list.count else { return }
-        
-        let item = list[tableView.selectedRow]
-        content.attributed.string = item.content
-        code.stringValue = item.code
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard
+            let split = splitViewController,
+            let detail = split.viewControllers.last as? AllDetailViewController else {
+            return
+        }
+        detail.set(item: list[indexPath.row])
+        split.showDetailViewController(detail, sender: self)
     }
 }
 
-extension AllViewController: NSTableViewDataSource {
-    
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        return list.count
-    }
-}
-
-extension AllViewController {
+extension AllTableViewController {
     
     struct Item {
         let title: (String, String)
@@ -873,8 +876,6 @@ extension AllViewController {
                 """#
             )
         ]
-        
         tableView.reloadData()
-        tableView.selectRowIndexes(.init(integer: 0), byExtendingSelection: true)
     }
 }
