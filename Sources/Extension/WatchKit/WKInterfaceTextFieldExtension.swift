@@ -8,10 +8,12 @@
 
 import WatchKit
 
+@available(watchOS 6.0, *)
 extension WKInterfaceTextField: AttributedStringCompatible {
     
 }
 
+@available(watchOS 6.0, *)
 extension AttributedStringWrapper where Base: WKInterfaceTextField {
     
     public func set(text: AttributedString?) {
