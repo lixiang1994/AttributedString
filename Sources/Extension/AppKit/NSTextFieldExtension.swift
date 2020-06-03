@@ -16,7 +16,7 @@ extension AttributedStringWrapper where Base: NSTextField {
 
     public var string: AttributedString {
         get { AttributedString(base.attributedStringValue) }
-        set { base.attributedStringValue = newValue.value }
+        set { base.attributedStringValue = newValue.value; NSTextView }
     }
     
     public var placeholder: AttributedString? {

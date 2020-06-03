@@ -69,6 +69,10 @@
 		9B6E89E12382C301009EBEBE /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E02382C301009EBEBE /* Style.swift */; };
 		9B6E89E32382C392009EBEBE /* ParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */; };
 		9B6E89E52382C488009EBEBE /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* Attachment.swift */; };
+		9B8765A024850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
+		9B8765A124850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
+		9B8765A224850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
+		9B8765A324850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +133,7 @@
 		9B6E89E02382C301009EBEBE /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyle.swift; sourceTree = "<group>"; };
 		9B6E89E42382C488009EBEBE /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		9B87659F24850742009C51C2 /* ObjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +260,7 @@
 				9B6E89A5238273B2009EBEBE /* AppKit */,
 				9B6E89A42382739C009EBEBE /* UIKit */,
 				9B0A2A3723851EB6003D8A55 /* Extension.swift */,
+				9B87659F24850742009C51C2 /* ObjectExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -596,6 +602,7 @@
 				9B267B7B244066C1002F571E /* AttributedString.swift in Sources */,
 				9B267B7C244066C1002F571E /* Interpolation.swift in Sources */,
 				9B267B7D244066C1002F571E /* Style.swift in Sources */,
+				9B8765A224850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B267B7E244066C1002F571E /* ParagraphStyle.swift in Sources */,
 				9B267B7F244066C1002F571E /* Attachment.swift in Sources */,
 				9B267B8E24406D71002F571E /* WKInterfaceTextFieldExtension.swift in Sources */,
@@ -611,6 +618,7 @@
 				9B267BE624408357002F571E /* UILabelExtension.swift in Sources */,
 				9B267BE724408357002F571E /* NSShadowExtension.swift in Sources */,
 				9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */,
+				9B8765A324850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B267BB32440811F002F571E /* CGSizeExtension.swift in Sources */,
 				9B267BB42440811F002F571E /* CGRectExtension.swift in Sources */,
 				9B267BB52440811F002F571E /* CGPointExtension.swift in Sources */,
@@ -643,6 +651,7 @@
 				9B34BD43243DBEA900932E6C /* Extension.swift in Sources */,
 				9B34BD44243DBEA900932E6C /* AttributedString.swift in Sources */,
 				9B34BD45243DBEA900932E6C /* Interpolation.swift in Sources */,
+				9B8765A124850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B34BD46243DBEA900932E6C /* Style.swift in Sources */,
 				9B34BD47243DBEA900932E6C /* ParagraphStyle.swift in Sources */,
 				9B34BD48243DBEA900932E6C /* Attachment.swift in Sources */,
@@ -658,6 +667,7 @@
 				9B6E89E52382C488009EBEBE /* Attachment.swift in Sources */,
 				9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */,
 				9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */,
+				9B8765A024850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B6E89DF23828F7C009EBEBE /* NSShadowExtension.swift in Sources */,
 				9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */,
 				9B6E89B12382766F009EBEBE /* CGRectExtension.swift in Sources */,

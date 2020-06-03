@@ -34,6 +34,7 @@
 		9BD90F1823840563000DBD29 /* ExpansionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F1723840563000DBD29 /* ExpansionViewController.swift */; };
 		9BD90F1A2384056F000DBD29 /* WritingDirectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */; };
 		9BD90F1C23840581000DBD29 /* VerticalGlyphFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */; };
+		9BE7D4BF2487B93500DE1176 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4BE2487B93500DE1176 /* ActionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,6 +80,7 @@
 		9BD90F1723840563000DBD29 /* ExpansionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpansionViewController.swift; sourceTree = "<group>"; };
 		9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingDirectionViewController.swift; sourceTree = "<group>"; };
 		9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalGlyphFormViewController.swift; sourceTree = "<group>"; };
+		9BE7D4BE2487B93500DE1176 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 				9BD90F1723840563000DBD29 /* ExpansionViewController.swift */,
 				9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */,
 				9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */,
+				9BE7D4BE2487B93500DE1176 /* ActionViewController.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 				9BD90F0C2384051C000DBD29 /* UnderlineViewController.swift in Sources */,
 				9BD90EFE23840402000DBD29 /* FontViewController.swift in Sources */,
 				9B6E898C23823F47009EBEBE /* SceneDelegate.swift in Sources */,
+				9BE7D4BF2487B93500DE1176 /* ActionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -128,6 +128,15 @@ extension AttributedString {
     /// - Parameters:
     ///   - lhs: AttributedString to add to.
     ///   - rhs: AttributedString.Style to add.
+    public static func += (lhs: inout AttributedString, rhs: [AttributedString.Style]) {
+        lhs += (rhs, .init(location: 0, length: lhs.value.string.count))
+    }
+    
+    /// Add a AttributedString.Style to another AttributedString.
+    ///
+    /// - Parameters:
+    ///   - lhs: AttributedString to add to.
+    ///   - rhs: AttributedString.Style to add.
     public static func += (lhs: inout AttributedString, rhs: (AttributedString.Style, NSRange)) {
         lhs += ([rhs.0], rhs.1)
     }

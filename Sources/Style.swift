@@ -116,10 +116,15 @@ extension AttributedStringInterpolation.Style {
     
     public static func link(_ value: String) -> Self {
         guard let url = URL(string: value) else { return .init(attributes: [:])}
+        
         return link(url)
     }
     public static func link(_ value: URL) -> Self {
         return .init(attributes: [.link: value])
+    }
+    
+    public static func action(_ value: @escaping AttributedString.Action) -> Self {
+        return .init(attributes: [.action: value])
     }
     
     public static func baselineOffset(_ value: CGFloat) -> Self {

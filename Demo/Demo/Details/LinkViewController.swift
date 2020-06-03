@@ -15,11 +15,17 @@ class LinkViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        func click(_ string: NSAttributedString, _ range: NSRange) {
+            print("点击了: \n\(string) \nrange: \(range)")
+        }
+        
         textView.attributed.text = """
         
         link: none
         
         \("link: https://www.apple.com", .link("https://www.apple.com"))
+        
+        \("link: https://www.apple.com", .link("https://www.apple.com"), .action(click))
         
         """
     }

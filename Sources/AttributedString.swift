@@ -26,6 +26,7 @@ public typealias Font = UIFont
 public struct AttributedString {
     
     public typealias Style = AttributedStringInterpolation.Style
+    public typealias Action = (NSAttributedString, NSRange) -> Void
     
     public let value: NSAttributedString
     
