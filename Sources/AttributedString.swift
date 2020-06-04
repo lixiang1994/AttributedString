@@ -25,7 +25,9 @@ public typealias Font = UIFont
 
 public struct AttributedString {
     
-    public typealias Style = AttributedStringInterpolation.Style
+    public typealias Attribute = AttributedStringInterpolation.Attribute
+    public typealias WrapMode = AttributedStringInterpolation.WrapMode
+    @available(iOS 9.0, *)
     public typealias Action = (NSAttributedString, NSRange) -> Void
     
     public let value: NSAttributedString
@@ -39,13 +41,23 @@ public struct AttributedString {
         self.value = value
     }
     
-    public init(_ string: AttributedString, _ styles: Style...) {
-        let temp: AttributedString = "\(wrap: .embedding(string), with: styles)"
+    public init(_ string: AttributedString, _ attributes: Attribute...) {
+        let temp: AttributedString = "\(wrap: .embedding(string), with: attributes)"
         self.value = temp.value
     }
     
-    public init(_ string: AttributedString, with styles: [Style]) {
-        let temp: AttributedString = "\(wrap: .embedding(string), with: styles)"
+    public init(_ string: AttributedString, with attributes: [Attribute]) {
+        let temp: AttributedString = "\(wrap: .embedding(string), with: attributes)"
+        self.value = temp.value
+    }
+    
+    public init(wrap mode: WrapMode, _ attributes: Attribute...) {
+        let temp: AttributedString = "\(wrap: mode, with: attributes)"
+        self.value = temp.value
+    }
+    
+    public init(wrap mode: WrapMode, with attributes: [Attribute]) {
+        let temp: AttributedString = "\(wrap: mode, with: attributes)"
         self.value = temp.value
     }
 }

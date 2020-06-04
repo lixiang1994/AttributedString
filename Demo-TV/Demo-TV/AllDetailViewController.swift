@@ -7,29 +7,74 @@
 //
 
 import UIKit
+import AttributedString
 
 class AllDetailViewController: UIViewController {
 
     typealias Item = AllTableViewController.Item
     
-    @IBOutlet weak var content: UITextView!
-    @IBOutlet weak var code: UITextView!
+    @IBOutlet weak var tableView: UITableView!
+
+    private var list: [NSAttributedString] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 解决tvOS UITextView 无法滚动问题
-        content.isSelectable = true
-        content.isUserInteractionEnabled = true
-        content.panGestureRecognizer.allowedTouchTypes = [.init(value: UITouch.TouchType.indirect.rawValue)]
-        
-        code.isSelectable = true
-        code.isUserInteractionEnabled = true
-        code.panGestureRecognizer.allowedTouchTypes = [.init(value: UITouch.TouchType.indirect.rawValue)]
     }
 
     func set(item: Item) {
-        content.attributed.text = "\(wrap: .embedding(item.content), .font(.systemFont(ofSize: 38)))"
-        code.text = item.code
+        list = [
+            AttributedString(item.content, .font(.systemFont(ofSize: 38))).value,
+            .init(string: item.code)
+        ]
+
+        tableView.reloadData()
+    }
+}
+
+extension AllDetailViewController: UITableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+}
+
+extension AllDetailViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return list.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "DetailCell",
+            for: indexPath
+        ) as! DetailCell
+        cell.set(list[indexPath.row])
+        cell.set(indexPath.row)
+        return cell
+    }
+}
+
+class DetailCell: UITableViewCell {
+    
+    @IBOutlet weak var label: UILabel!
+    
+    func set(_ text: NSAttributedString) {
+        label.attributedText = text
+    }
+    
+    func set(_ index: Int) {
+        switch index {
+        case 0:
+            label.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            label.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            
+        case 1:
+            label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            label.backgroundColor = #colorLiteral(red: 0.3333333433, green: 0.3333333433, blue: 0.3333333433, alpha: 1)
+            
+        default: break
+        }
     }
 }

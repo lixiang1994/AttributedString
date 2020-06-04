@@ -1,5 +1,5 @@
 //
-//  AttributedStringStyle.swift
+//  AttributedStringAttribute.swift
 //  ┌─┐      ┌───────┐ ┌───────┐
 //  │ │      │ ┌─────┘ │ ┌─────┘
 //  │ │      │ └─────┐ │ └─────┐
@@ -19,17 +19,17 @@ import UIKit
 
 extension AttributedStringInterpolation {
     
-    public struct Style {
+    public struct Attribute {
         let attributes: [NSAttributedString.Key: Any]
     }
     
-    public mutating func appendInterpolation<T>(_ value: T, _ styles: Style...) {
-        appendInterpolation(value, with: styles)
+    public mutating func appendInterpolation<T>(_ value: T, _ attributes: Attribute...) {
+        appendInterpolation(value, with: attributes)
     }
     
-    public mutating func appendInterpolation<T>(_ value: T, with styles: [Style]) {
+    public mutating func appendInterpolation<T>(_ value: T, with attributes: [Attribute]) {
         var temp: [NSAttributedString.Key: Any] = [:]
-        styles.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         self.value.append(.init(string: "\(value)", attributes: temp))
     }
     
@@ -40,16 +40,16 @@ extension AttributedStringInterpolation {
     }
     
     // 嵌套包装
-    public mutating func appendInterpolation(wrap string: AttributedString, _ styles: Style...) {
-        appendInterpolation(wrap: .embedding(string), with: styles)
+    public mutating func appendInterpolation(wrap string: AttributedString, _ attributes: Attribute...) {
+        appendInterpolation(wrap: .embedding(string), with: attributes)
     }
-    public mutating func appendInterpolation(wrap mode: WrapMode, _ styles: Style...) {
-        appendInterpolation(wrap: mode, with: styles)
+    public mutating func appendInterpolation(wrap mode: WrapMode, _ attributes: Attribute...) {
+        appendInterpolation(wrap: mode, with: attributes)
     }
-    mutating func appendInterpolation(wrap mode: WrapMode, with styles: [Style]) {
+    mutating func appendInterpolation(wrap mode: WrapMode, with attributes: [Attribute]) {
         // 获取通用属性
         var temp: [NSAttributedString.Key: Any] = [:]
-        styles.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         // 创建可变富文本
         let string: NSMutableAttributedString
         switch mode {
@@ -78,7 +78,7 @@ extension AttributedStringInterpolation {
     }
 }
 
-extension AttributedStringInterpolation.Style {
+extension AttributedStringInterpolation.Attribute {
     
     public static func font(_ value: Font) -> Self {
         return .init(attributes: [.font: value])
@@ -123,10 +123,6 @@ extension AttributedStringInterpolation.Style {
         return .init(attributes: [.link: value])
     }
     
-    public static func action(_ value: @escaping AttributedString.Action) -> Self {
-        return .init(attributes: [.action: value])
-    }
-    
     public static func baselineOffset(_ value: CGFloat) -> Self {
         return .init(attributes: [.baselineOffset: value])
     }
@@ -169,7 +165,7 @@ extension AttributedStringInterpolation.Style {
     }
 }
 
-extension AttributedStringInterpolation.Style {
+extension AttributedStringInterpolation.Attribute {
     
     public enum WritingDirection {
         case LRE
@@ -188,5 +184,13 @@ extension AttributedStringInterpolation.Style {
             case .RLO:  return [NSWritingDirection.rightToLeft.rawValue | NSWritingDirectionFormatType.override.rawValue]
             }
         }
+    }
+}
+
+@available(iOS 9.0, *)
+extension AttributedStringInterpolation.Attribute {
+    
+    public static func action(_ value: @escaping AttributedString.Action) -> Self {
+        return .init(attributes: [.action: value])
     }
 }

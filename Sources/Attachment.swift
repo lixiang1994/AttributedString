@@ -153,6 +153,16 @@ extension AttributedStringInterpolation {
     public mutating func appendInterpolation(_ value: Attachment) {
         self.value.append(.init(attachment: value.value))
     }
+    
+    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping AttributedString.Action) {
+        let attributedString = AttributedString(.init(attachment: value))
+        self.value.append(AttributedString(attributedString, .action(action)).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: Attachment, action: @escaping AttributedString.Action) {
+        let attributedString = AttributedString(.init(attachment: value.value))
+        self.value.append(AttributedString(attributedString, .action(action)).value)
+    }
 }
 
 #endif

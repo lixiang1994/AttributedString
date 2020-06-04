@@ -14,14 +14,14 @@ class AttachmentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         textView.attributed.text = """
         
         This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"))) -> Displayed in original size.
         
         This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 200, height: 200)))) -> Displayed in custom size.
         
-        This is the recommended size image -> \(.image(#imageLiteral(resourceName: "huaji"), .proposed(.center))).
+        This is the recommended size image -> \(.image(#imageLiteral(resourceName: "huaji"), .proposed(.center)))).
         
         """
     }

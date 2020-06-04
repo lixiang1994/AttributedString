@@ -26,15 +26,18 @@ extension AttributedStringWrapper where Base: UITextView {
         set {
             base.attributedText = newValue.value
             
-            if newValue.value.contains(.action) {
-                addGestureRecognizer()
-                
-            } else {
-                removeGestureRecognizer()
+            if #available(iOS 9.0, *) {
+                if newValue.value.contains(.action) {
+                    addGestureRecognizer()
+                    
+                } else {
+                    removeGestureRecognizer()
+                }
             }
         }
     }
     
+    @available(iOS 9.0, *)
     private func addGestureRecognizer() {
         guard tap == nil else { return }
         
@@ -43,23 +46,31 @@ extension AttributedStringWrapper where Base: UITextView {
         tap = gesture
     }
     
+    @available(iOS 9.0, *)
     private func removeGestureRecognizer() {
         guard let gesture = tap else { return }
         base.removeGestureRecognizer(gesture)
         tap = nil
     }
     
+    @available(iOS 9.0, *)
     private var tap: UITapGestureRecognizer? {
         get { base.associated.get(&UITapGestureRecognizerKey) }
         set { base.associated.set(retain: &UITapGestureRecognizerKey, newValue) }
     }
 }
 
+@available(iOS 9.0, *)
 extension UITextView {
     
     @objc
     fileprivate func attributedTapAction(_ sender: UITapGestureRecognizer) {
-        guard !isEditable, !isSelectable else {
+        #if os(iOS)
+        guard !isEditable else {
+            return
+        }
+        #endif
+        guard !isSelectable else {
             return
         }
         
@@ -83,22 +94,5 @@ extension UITextView {
         }
         let substring = attributedText.attributedSubstring(from: range)
         action(substring, range)
-    }
-}
-
-extension NSAttributedString.Key {
-    static let action = NSAttributedString.Key.init("com.attributed.string.action")
-}
-
-extension NSAttributedString {
-    
-    func contains(_ name: Key) -> Bool {
-        var result = false
-        enumerateAttribute(name, in: .init(location: 0, length: length), options: .longestEffectiveRangeNotRequired) { (an, range, stop) in
-            guard an != nil else { return }
-            result = true
-            stop.pointee = true
-        }
-        return result
     }
 }

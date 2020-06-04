@@ -22,11 +22,15 @@ class ActionViewController: UIViewController {
         }
         
         label.attributed.text = """
-        This is \("Labelw", .font(.systemFont(ofSize: 50)), .action(click))
+        This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
+        
+        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
         """
         
         textView.attributed.text = """
         This is \("TextView", .font(.systemFont(ofSize: 20)), .action(click))
+        
+        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
         """
     }
 }

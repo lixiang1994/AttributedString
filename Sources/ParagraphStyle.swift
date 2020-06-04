@@ -17,14 +17,14 @@ import AppKit
 import UIKit
 #endif
 
-extension AttributedStringInterpolation.Style {
+extension AttributedStringInterpolation.Attribute {
     
     public static func paragraph(_ value: ParagraphStyle...) -> Self {
         return .init(attributes: [.paragraphStyle: ParagraphStyle.get(value)])
     }
 }
 
-extension AttributedStringInterpolation.Style {
+extension AttributedStringInterpolation.Attribute {
     
     public struct ParagraphStyle {
         
@@ -49,9 +49,9 @@ extension AttributedStringInterpolation.Style {
         
         fileprivate let style: [Key: Any]
         
-        fileprivate static func get(_ styles: [ParagraphStyle]) -> NSParagraphStyle {
+        fileprivate static func get(_ attributes: [ParagraphStyle]) -> NSParagraphStyle {
             var temp: [Key: Any] = [:]
-            styles.forEach { temp.merge($0.style, uniquingKeysWith: { $1 }) }
+            attributes.forEach { temp.merge($0.style, uniquingKeysWith: { $1 }) }
             
             func fetch<Value>(_ key: Key, completion: (Value)->()) {
                 guard let value = temp[key] as? Value else { return }
@@ -80,7 +80,7 @@ extension AttributedStringInterpolation.Style {
     }
 }
 
-extension AttributedStringInterpolation.Style.ParagraphStyle {
+extension AttributedStringInterpolation.Attribute.ParagraphStyle {
     
     public static func lineSpacing(_ value: CGFloat) -> Self {
         return .init(style: [.lineSpacing: value])
