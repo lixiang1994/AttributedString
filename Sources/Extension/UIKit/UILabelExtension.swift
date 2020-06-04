@@ -60,16 +60,18 @@ extension AttributedStringWrapper where Base: UILabel {
     }
 }
 
-extension UILabel {
+fileprivate extension UILabel {
+    
+    typealias Action = AttributedString.Action
     
     @objc
     @available(iOS 9.0, *)
-    fileprivate func attributedTapAction(_ sender: UITapGestureRecognizer) {
+    func attributedTapAction(_ sender: UITapGestureRecognizer) {
         // 处理动作
         handleAction(sender.location(in: self))
     }
     
-    fileprivate func handleAction(_ point: CGPoint) {
+    func handleAction(_ point: CGPoint) {
         guard let attributedText = attributedText else { return }
         // 同步Label默认样式 使用嵌入包装模式 防止原有富文本样式被覆盖
         let attributedString: AttributedString = """
@@ -104,10 +106,15 @@ extension UILabel {
         }
         // 获取点击的字符串范围和回调事件
         var range = NSRange()
-        guard let action = attributedText.attribute(.action, at: index, effectiveRange: &range) as? AttributedString.Action else {
+        guard let action = attributedText.attribute(.action, at: index, effectiveRange: &range) as? (Action) -> Void else {
             return
         }
         let substring = attributedText.attributedSubstring(from: range)
-        action(substring, range)
+        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
+            action(.init(range: range, content: .attachment(attachment)))
+            
+        } else {
+            action(.init(range: range, content: .string(substring)))
+        }
     }
 }

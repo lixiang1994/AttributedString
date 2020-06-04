@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AttributedString
 
 class ActionViewController: UIViewController {
 
@@ -17,9 +18,18 @@ class ActionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        func click(_ string: NSAttributedString, _ range: NSRange) {
-            print("点击了: \n\(string) \nrange: \(range)")
+        func click(_ action: AttributedString.Action) {
+            switch action.content {
+            case .string(let value):
+                print("点击了文本: \n\(value) \nrange: \(action.range)")
+                
+            case .attachment(let value):
+                print("点击了附件: \n\(value) \nrange: \(action.range)")
+            }
         }
+        
+        let a: AttributedString = .init("123", .action({ }))
+        let b: AttributedString = .init(<#T##string: AttributedString##AttributedString#>, <#T##attributes: AttributedString.Attribute...##AttributedString.Attribute#>)
         
         label.attributed.text = """
         This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))

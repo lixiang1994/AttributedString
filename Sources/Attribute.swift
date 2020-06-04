@@ -186,11 +186,3 @@ extension AttributedStringInterpolation.Attribute {
         }
     }
 }
-
-@available(iOS 9.0, *)
-extension AttributedStringInterpolation.Attribute {
-    
-    public static func action(_ value: @escaping AttributedString.Action) -> Self {
-        return .init(attributes: [.action: value])
-    }
-}

@@ -14,8 +14,8 @@
 import Foundation
 
 class AssociatedWrapper<Base> {
-   let base: Base
-   init(_ base: Base) {
+    let base: Base
+    init(_ base: Base) {
         self.base = base
     }
 }
@@ -27,7 +27,7 @@ protocol AssociatedCompatible {
 
 extension AssociatedCompatible {
     
-    public var associated: AssociatedWrapper<Self> {
+    var associated: AssociatedWrapper<Self> {
         get { return AssociatedWrapper(self) }
     }
 }

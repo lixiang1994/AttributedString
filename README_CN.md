@@ -135,6 +135,15 @@ textView.attributed.text = a + b
 textView.attributed.text += c
 ```
 
+#### 点击:
+
+```swift
+// 文本
+
+```
+
+
+
 更多示例请查看工程应用.
 
 

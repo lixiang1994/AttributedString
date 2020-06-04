@@ -27,28 +27,48 @@ public struct AttributedString {
     
     public typealias Attribute = AttributedStringInterpolation.Attribute
     public typealias WrapMode = AttributedStringInterpolation.WrapMode
-    @available(iOS 9.0, *)
-    public typealias Action = (NSAttributedString, NSRange) -> Void
     
     public let value: NSAttributedString
+    
+    /// NSAttributedString
     
     init(_ value: NSAttributedString) {
         self.value = value
     }
     
-    public init?(_ value: NSAttributedString?) {
-        guard let value = value else { return nil }
-        self.value = value
+    /// NSAttributedString + attributes
+    
+    public init(_ value: NSAttributedString, _ attributes: Attribute...) {
+        self.value = AttributedString(value, with: attributes).value
     }
     
+    public init?(_ value: NSAttributedString?, _ attributes: Attribute...) {
+        guard let value = value else { return nil }
+        self.value = AttributedString(value, with: attributes).value
+    }
+    
+    public init(_ value: NSAttributedString, with attributes: [Attribute] = []) {
+        if attributes.isEmpty {
+            self.value = AttributedString(.init(value)).value
+            
+        } else {
+            self.value = AttributedString(.init(value), with: attributes).value
+        }
+    }
+    
+    public init?(_ value: NSAttributedString?, with attributes: [Attribute] = []) {
+        guard let value = value else { return nil }
+        self.value = AttributedString(.init(value), with: attributes).value
+    }
+    
+    /// AttributedString + attributes
+    
     public init(_ string: AttributedString, _ attributes: Attribute...) {
-        let temp: AttributedString = "\(wrap: .embedding(string), with: attributes)"
-        self.value = temp.value
+        self.value = AttributedString(wrap: .embedding(string), with: attributes).value
     }
     
     public init(_ string: AttributedString, with attributes: [Attribute]) {
-        let temp: AttributedString = "\(wrap: .embedding(string), with: attributes)"
-        self.value = temp.value
+        self.value = AttributedString(wrap: .embedding(string), with: attributes).value
     }
     
     public init(wrap mode: WrapMode, _ attributes: Attribute...) {
