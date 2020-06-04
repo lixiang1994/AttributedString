@@ -28,15 +28,16 @@ extension AttributedStringWrapper where Base: UILabel {
             base.attributedText = newValue?.value
             
             if newValue?.value.contains(.action) ?? false {
-                addGestureRecognizer()
+                addGestureRecognizers()
                 
             } else {
-                removeGestureRecognizer()
+                removeGestureRecognizers()
             }
         }
     }
     
-    private func addGestureRecognizer() {
+    @available(iOS 9.0, *)
+    private func addGestureRecognizers() {
         defer { base.isUserInteractionEnabled = true }
         guard tap == nil else { return }
         
@@ -45,12 +46,14 @@ extension AttributedStringWrapper where Base: UILabel {
         tap = gesture
     }
     
-    private func removeGestureRecognizer() {
+    @available(iOS 9.0, *)
+    private func removeGestureRecognizers() {
         guard let gesture = tap else { return }
         base.removeGestureRecognizer(gesture)
         tap = nil
     }
     
+    @available(iOS 9.0, *)
     private var tap: UITapGestureRecognizer? {
         get { base.associated.get(&UITapGestureRecognizerKey) }
         set { base.associated.set(retain: &UITapGestureRecognizerKey, newValue) }
@@ -60,7 +63,13 @@ extension AttributedStringWrapper where Base: UILabel {
 extension UILabel {
     
     @objc
+    @available(iOS 9.0, *)
     fileprivate func attributedTapAction(_ sender: UITapGestureRecognizer) {
+        // 处理动作
+        handleAction(sender.location(in: self))
+    }
+    
+    fileprivate func handleAction(_ point: CGPoint) {
         guard let attributedText = attributedText else { return }
         // 同步Label默认样式 使用嵌入包装模式 防止原有富文本样式被覆盖
         let attributedString: AttributedString = """
@@ -81,8 +90,9 @@ extension UILabel {
         let height = layoutManager.usedRect(for: textContainer).height
         
         // 获取点击坐标 并排除各种偏移
-        var point = sender.location(in: self)
+        var point = point
         point.y -= (bounds.height - height) / 2
+        
         // 获取字形下标
         var fraction: CGFloat = 0
         let glyphIndex = layoutManager.glyphIndex(for: point, in: textContainer, fractionOfDistanceThroughGlyph: &fraction)

@@ -28,17 +28,17 @@ extension AttributedStringWrapper where Base: UITextView {
             
             if #available(iOS 9.0, *) {
                 if newValue.value.contains(.action) {
-                    addGestureRecognizer()
+                    addGestureRecognizers()
                     
                 } else {
-                    removeGestureRecognizer()
+                    removeGestureRecognizers()
                 }
             }
         }
     }
     
     @available(iOS 9.0, *)
-    private func addGestureRecognizer() {
+    private func addGestureRecognizers() {
         guard tap == nil else { return }
         
         let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedTapAction))
@@ -47,7 +47,7 @@ extension AttributedStringWrapper where Base: UITextView {
     }
     
     @available(iOS 9.0, *)
-    private func removeGestureRecognizer() {
+    private func removeGestureRecognizers() {
         guard let gesture = tap else { return }
         base.removeGestureRecognizer(gesture)
         tap = nil
@@ -64,6 +64,7 @@ extension AttributedStringWrapper where Base: UITextView {
 extension UITextView {
     
     @objc
+    @available(iOS 9.0, *)
     fileprivate func attributedTapAction(_ sender: UITapGestureRecognizer) {
         #if os(iOS)
         guard !isEditable else {
@@ -74,8 +75,13 @@ extension UITextView {
             return
         }
         
+        // 处理动作
+        handleAction(sender.location(in: self))
+    }
+    
+    fileprivate func handleAction(_ point: CGPoint) {
         // 获取点击坐标 并排除各种偏移
-        var point = sender.location(in: self)
+        var point = point
         point.x -= textContainerInset.left
         point.y -= textContainerInset.top
         // 获取字形下标
