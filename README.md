@@ -158,7 +158,7 @@ textView.attributed.text += c
 let a: AttributedString = .init("lee", .action({  }))
 // Attachment (image)
 let b: AttributedString = .init(.image(image), action: {
-		// code
+	// code
 })
 
 // It is recommended to use functions as parameters.
@@ -174,13 +174,13 @@ let f: AttributedString = "\(.image(image), action: click)"
 
 // More information. 
 func click(_ action: AttributedString.Action) {
-		switch action.content {
-		case .string(let value):
-				print("Currently clicked text: \(value) range: \(action.range)")
+    switch action.content {
+        case .string(let value):
+            print("Currently clicked text: \(value) range: \(action.range)")
 				
-		case .attachment(let value):
-				print("Currently clicked attachment: \(value) range: \(action.range)")
-		}
+    case .attachment(let value):
+            print("Currently clicked attachment: \(value) range: \(action.range)")
+    }
 }
 
 label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(click))"
