@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "AttributedString"
-s.version      = "1.2.0"
+s.version      = "1.3.0"
 s.summary      = "基于Swift字符串插值快速构建你想要的富文本"
 
 s.homepage     = "https://github.com/lixiang1994/AttributedString"
@@ -24,7 +24,7 @@ s.watchos.frameworks = "WatchKit"
 
 s.ios.deployment_target = '9.0'
 s.osx.deployment_target = "10.13"
-s.tvos.deployment_target = "10.0"
+s.tvos.deployment_target = "11.0"
 s.watchos.deployment_target = "5.0"
 
 s.source_files  = ["Sources/*.swift", "Sources/Extension/*.swift", "Sources/Extension/CoreGraphics/*.swift"]
