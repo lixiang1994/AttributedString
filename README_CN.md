@@ -158,12 +158,12 @@ textView.attributed.text += c
 let a: AttributedString = .init("lee", .action({  }))
 // 附件 (图片)
 let b: AttributedString = .init(.image(image), action: {
-		// code
+    // code
 })
 
 // 建议使用函数作为参数 语法上比直接使用闭包更加整洁.
 func click() {
-  	// code
+    // code
 }
 // 正常初始化
 let c: AttributedString = .init("lee", .action(click))
@@ -174,13 +174,13 @@ let f: AttributedString = "\(.image(image), action: click)"
 
 // 获取更多信息 
 func click(_ action: AttributedString.Action) {
-		switch action.content {
-		case .string(let value):
-				print("点击了文本: \(value) range: \(action.range)")
+    switch action.content {
+    case .string(let value):
+        print("点击了文本: \(value) range: \(action.range)")
                 
-		case .attachment(let value):
-				print("点击了附件: \(value) range: \(action.range)")
-		}
+    case .attachment(let value):
+        print("点击了附件: \(value) range: \(action.range)")
+    }
 }
 
 label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(click))"
