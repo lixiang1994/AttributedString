@@ -158,12 +158,12 @@ textView.attributed.text += c
 let a: AttributedString = .init("lee", .action({  }))
 // Attachment (image)
 let b: AttributedString = .init(.image(image), action: {
-	// code
+    // code
 })
 
 // It is recommended to use functions as parameters.
 func click() {
-  	// code
+    // code
 }
 // Normal
 let c: AttributedString = .init("lee", .action(click))
