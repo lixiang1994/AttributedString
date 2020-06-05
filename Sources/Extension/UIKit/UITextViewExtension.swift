@@ -26,18 +26,19 @@ extension AttributedStringWrapper where Base: UITextView {
         set {
             base.attributedText = newValue.value
             
-            if #available(iOS 9.0, *) {
-                if newValue.value.contains(.action) {
-                    addGestureRecognizers()
-                    
-                } else {
-                    removeGestureRecognizers()
-                }
+            #if os(iOS)
+            if newValue.value.contains(.action) {
+                addGestureRecognizers()
+                
+            } else {
+                removeGestureRecognizers()
             }
+            #endif
         }
     }
     
-    @available(iOS 9.0, *)
+    #if os(iOS)
+    
     private func addGestureRecognizers() {
         guard tap == nil else { return }
         
@@ -46,34 +47,29 @@ extension AttributedStringWrapper where Base: UITextView {
         tap = gesture
     }
     
-    @available(iOS 9.0, *)
     private func removeGestureRecognizers() {
         guard let gesture = tap else { return }
         base.removeGestureRecognizer(gesture)
         tap = nil
     }
     
-    @available(iOS 9.0, *)
     private var tap: UITapGestureRecognizer? {
         get { base.associated.get(&UITapGestureRecognizerKey) }
         set { base.associated.set(retain: &UITapGestureRecognizerKey, newValue) }
     }
+    
+    #endif
 }
 
-@available(iOS 9.0, *)
+#if os(iOS)
+
 fileprivate extension UITextView {
     
     typealias Action = AttributedString.Action
     
     @objc
-    @available(iOS 9.0, *)
     func attributedTapAction(_ sender: UITapGestureRecognizer) {
-        #if os(iOS)
-        guard !isEditable else {
-            return
-        }
-        #endif
-        guard !isSelectable else {
+        guard !isEditable, !isSelectable else {
             return
         }
         
@@ -110,3 +106,5 @@ fileprivate extension UITextView {
         }
     }
 }
+
+#endif

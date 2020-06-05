@@ -13,6 +13,7 @@ AttributedString - 基于Swift插值方式优雅的构建富文本
 - [x] 支持多层富文本嵌套并提供嵌套样式优先级策略.
 - [x] 支持全部`NSAttributedString.Key`特性.
 - [x] 支持 iOS & macOS & watchOS & tvOS.
+- [x] 支持文本和附件点击回调
 - [x] 更多新特性的不断加入.
 
 
@@ -48,6 +49,8 @@ pod 'AttributedString'
 github "lixiang1994/AttributedString"
 ```
 
+
+
 ## 使用
 
 首先导入
@@ -55,6 +58,19 @@ github "lixiang1994/AttributedString"
 ```swift
 import AttributedString
 ```
+
+
+
+初始化
+
+```swift
+// 常规初始化
+let a: AttributedString = .init("lee", .font(.systemFont(ofSize: 13)))
+// 插值初始化
+let b: AttributedString = "\("lee", .font(.systemFont(ofSize: 13)))"
+```
+
+
 
 下面是一些简单示例. 支持所有设备和模拟器:
 
@@ -97,7 +113,7 @@ textView.attributed.text = """
 """
 ```
 
-#### 图片:
+#### 图片: 	(不包括watchOS)
 
 ```swift
 textView.attributed.text = """
@@ -135,11 +151,40 @@ textView.attributed.text = a + b
 textView.attributed.text += c
 ```
 
-#### 点击:
+#### 点击:	(仅支持iOS 仅在 UILabel / UITextView 有效)
 
 ```swift
 // 文本
+let a: AttributedString = .init("lee", .action({  }))
+// 附件 (图片)
+let b: AttributedString = .init(.image(image), action: {
+		// code
+})
 
+// 建议使用函数作为参数 语法上比直接使用闭包更加整洁.
+func click() {
+  	// code
+}
+// 正常初始化
+let c: AttributedString = .init("lee", .action(click))
+let d: AttributedString = .init(.image(image), action: click)
+// 字面量初始化
+let e: AttributedString = "\("lee", .action(click))"
+let f: AttributedString = "\(.image(image), action: click)"
+
+// 获取更多信息 
+func click(_ action: AttributedString.Action) {
+		switch action.content {
+		case .string(let value):
+				print("点击了文本: \(value) range: \(action.range)")
+                
+		case .attachment(let value):
+				print("点击了附件: \(value) range: \(action.range)")
+		}
+}
+
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(click))"
+textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), action: click) Displayed in custom size."
 ```
 
 
@@ -148,7 +193,7 @@ textView.attributed.text += c
 
 
 
-## 通过`Style`类提供的属性
+## 通过`Attribute`类提供的属性
 
 以下属性可用：
 
@@ -171,8 +216,6 @@ textView.attributed.text += c
 | expansion         | `CGFloat`                            | 拉伸/压缩                                    |
 | writingDirection  | `WritingDirection` / `[Int]`         | 书写方式                                     |
 | verticalGlyphForm | `Bool`                               | 垂直排版 (当前在iOS上, 它始终是水平的)       |
-
-
 
 
 

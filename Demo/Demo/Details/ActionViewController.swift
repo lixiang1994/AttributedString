@@ -28,9 +28,6 @@ class ActionViewController: UIViewController {
             }
         }
         
-        let a: AttributedString = .init("123", .action({ }))
-        let b: AttributedString = .init(<#T##string: AttributedString##AttributedString#>, <#T##attributes: AttributedString.Attribute...##AttributedString.Attribute#>)
-        
         label.attributed.text = """
         This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
         

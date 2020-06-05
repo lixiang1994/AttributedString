@@ -73,10 +73,6 @@
 		9B8765A124850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
 		9B8765A224850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
 		9B8765A324850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
-		9BE7D4C12488984400DE1176 /* AttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C02488984400DE1176 /* AttributedStringExtension.swift */; };
-		9BE7D4C224889F3E00DE1176 /* AttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C02488984400DE1176 /* AttributedStringExtension.swift */; };
-		9BE7D4C324889F3F00DE1176 /* AttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C02488984400DE1176 /* AttributedStringExtension.swift */; };
-		9BE7D4C424889F4000DE1176 /* AttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C02488984400DE1176 /* AttributedStringExtension.swift */; };
 		9BE7D4C62488E0FC00DE1176 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C52488E0FC00DE1176 /* Action.swift */; };
 		9BE7D4C72488E0FC00DE1176 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C52488E0FC00DE1176 /* Action.swift */; };
 		9BE7D4C82488E0FC00DE1176 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C52488E0FC00DE1176 /* Action.swift */; };
@@ -142,7 +138,6 @@
 		9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyle.swift; sourceTree = "<group>"; };
 		9B6E89E42382C488009EBEBE /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		9B87659F24850742009C51C2 /* ObjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectExtension.swift; sourceTree = "<group>"; };
-		9BE7D4C02488984400DE1176 /* AttributedStringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringExtension.swift; sourceTree = "<group>"; };
 		9BE7D4C52488E0FC00DE1176 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -272,7 +267,6 @@
 				9B6E89A42382739C009EBEBE /* UIKit */,
 				9B0A2A3723851EB6003D8A55 /* Extension.swift */,
 				9B87659F24850742009C51C2 /* ObjectExtension.swift */,
-				9BE7D4C02488984400DE1176 /* AttributedStringExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -604,7 +598,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BE7D4C324889F3F00DE1176 /* AttributedStringExtension.swift in Sources */,
 				9B267B8C24406B2F002F571E /* WKInterfaceLabelExtension.swift in Sources */,
 				9B267B77244066C1002F571E /* CGSizeExtension.swift in Sources */,
 				9B267B78244066C1002F571E /* CGRectExtension.swift in Sources */,
@@ -633,7 +626,6 @@
 				9B267BE724408357002F571E /* NSShadowExtension.swift in Sources */,
 				9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */,
 				9B8765A324850742009C51C2 /* ObjectExtension.swift in Sources */,
-				9BE7D4C424889F4000DE1176 /* AttributedStringExtension.swift in Sources */,
 				9B267BB32440811F002F571E /* CGSizeExtension.swift in Sources */,
 				9B267BB42440811F002F571E /* CGRectExtension.swift in Sources */,
 				9BE7D4C92488E0FC00DE1176 /* Action.swift in Sources */,
@@ -663,7 +655,6 @@
 				9B34BD65243DFACE00932E6C /* NSShadowExtension.swift in Sources */,
 				9B34BD40243DBEA900932E6C /* CGSizeExtension.swift in Sources */,
 				9B34BD41243DBEA900932E6C /* CGRectExtension.swift in Sources */,
-				9BE7D4C224889F3E00DE1176 /* AttributedStringExtension.swift in Sources */,
 				9B34BD42243DBEA900932E6C /* CGPointExtension.swift in Sources */,
 				9B34BD43243DBEA900932E6C /* Extension.swift in Sources */,
 				9B34BD44243DBEA900932E6C /* AttributedString.swift in Sources */,
@@ -686,7 +677,6 @@
 				9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */,
 				9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */,
 				9B8765A024850742009C51C2 /* ObjectExtension.swift in Sources */,
-				9BE7D4C12488984400DE1176 /* AttributedStringExtension.swift in Sources */,
 				9B6E89DF23828F7C009EBEBE /* NSShadowExtension.swift in Sources */,
 				9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */,
 				9BE7D4C62488E0FC00DE1176 /* Action.swift in Sources */,

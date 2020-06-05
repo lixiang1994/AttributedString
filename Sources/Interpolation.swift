@@ -36,6 +36,10 @@ public struct AttributedStringInterpolation : StringInterpolationProtocol {
         self.value.append(.init(string: literal))
     }
     
+    public mutating func appendInterpolation(_ value: NSAttributedString) {
+        self.value.append(value)
+    }
+    
     /// Interpolates the given value's textual representation into the
     /// attributed string literal being created.
     ///
@@ -72,7 +76,9 @@ public struct AttributedStringInterpolation : StringInterpolationProtocol {
     ///                   \(number) cookies cost \(price * number) dollars.
     ///                   """
     ///     print(message)
+    ///
     ///     // Prints "If one cookie costs 2 dollars, 3 cookies cost 6 dollars."
+    ///
     public mutating func appendInterpolation<T>(_ value: T) {
         self.value.append(.init(string: "\(value)"))
     }

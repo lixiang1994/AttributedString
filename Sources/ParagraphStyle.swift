@@ -17,14 +17,17 @@ import AppKit
 import UIKit
 #endif
 
-extension AttributedStringInterpolation.Attribute {
+extension AttributedString.Attribute {
     
+    /// 段落
+    /// - Parameter value: 段落样式
+    /// - Returns: 属性
     public static func paragraph(_ value: ParagraphStyle...) -> Self {
         return .init(attributes: [.paragraphStyle: ParagraphStyle.get(value)])
     }
 }
 
-extension AttributedStringInterpolation.Attribute {
+extension AttributedString.Attribute {
     
     public struct ParagraphStyle {
         
@@ -80,7 +83,7 @@ extension AttributedStringInterpolation.Attribute {
     }
 }
 
-extension AttributedStringInterpolation.Attribute.ParagraphStyle {
+extension AttributedString.Attribute.ParagraphStyle {
     
     public static func lineSpacing(_ value: CGFloat) -> Self {
         return .init(style: [.lineSpacing: value])

@@ -17,9 +17,8 @@ import AppKit
 import UIKit
 #endif
 
-#if !os(watchOS)
+#if os(iOS)
 
-@available(iOS 9.0, *)
 extension AttributedString {
     
     public struct Action {
@@ -28,7 +27,6 @@ extension AttributedString {
     }
 }
 
-@available(iOS 9.0, *)
 extension AttributedString.Action {
     
     public enum Content {
@@ -37,8 +35,7 @@ extension AttributedString.Action {
     }
 }
 
-@available(iOS 9.0, *)
-extension AttributedStringInterpolation.Attribute {
+extension AttributedString.Attribute {
     
     public typealias Action = AttributedString.Action
     
@@ -51,43 +48,73 @@ extension AttributedStringInterpolation.Attribute {
     }
 }
 
-@available(iOS 9.0, *)
-extension AttributedStringInterpolation {
-    
-    public typealias Action = AttributedString.Action
-    
-    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping () -> Void) {
-        let attributedString = AttributedString(.init(attachment: value))
-        self.value.append(AttributedString(attributedString, .action(action)).value)
-    }
-    
-    public mutating func appendInterpolation(_ value: Attachment, action: @escaping () -> Void) {
-        let attributedString = AttributedString(.init(attachment: value.value))
-        self.value.append(AttributedString(attributedString, .action(action)).value)
-    }
-    
-    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping (Action) -> Void) {
-        let attributedString = AttributedString(.init(attachment: value))
-        self.value.append(AttributedString(attributedString, .action(action)).value)
-    }
-    
-    public mutating func appendInterpolation(_ value: Attachment, action: @escaping (Action) -> Void) {
-        let attributedString = AttributedString(.init(attachment: value.value))
-        self.value.append(AttributedString(attributedString, .action(action)).value)
-    }
-}
-
 extension AttributedString {
     
-    public typealias Attachment = AttributedStringInterpolation.Attachment
-    public typealias ImageTextAttachment = AttributedStringInterpolation.ImageTextAttachment
+    public init<T: NSTextAttachment>(_ attachment: T, action: @escaping () -> Void) {
+        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+    }
+    
+    public init(_ attachment: ImageTextAttachment, action: @escaping () -> Void) {
+        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+    }
+    
+    public init(_ attachment: Attachment, action: @escaping () -> Void) {
+        self.value = AttributedString(attachment.value, action: action).value
+    }
     
     public init<T: NSTextAttachment>(_ attachment: T, action: @escaping (Action) -> Void) {
         self.value = AttributedString(.init(attachment: attachment), .action(action)).value
     }
     
+    public init(_ attachment: ImageTextAttachment, action: @escaping (Action) -> Void) {
+        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+    }
+    
     public init(_ attachment: Attachment, action: @escaping (Action) -> Void) {
         self.value = AttributedString(attachment.value, action: action).value
+    }
+}
+
+extension AttributedStringInterpolation {
+    
+    public typealias Action = AttributedString.Action
+    
+    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping () -> Void) {
+        self.value.append(AttributedString(.init(attachment: value), .action(action)).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: Attachment, action: @escaping () -> Void) {
+        self.value.append(AttributedString(.init(attachment: value.value), .action(action)).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping (Action) -> Void) {
+        self.value.append(AttributedString(.init(attachment: value), .action(action)).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: Attachment, action: @escaping (Action) -> Void) {
+        self.value.append(AttributedString(.init(attachment: value.value), .action(action)).value)
+    }
+}
+
+extension NSAttributedString.Key {
+    
+    static let action = NSAttributedString.Key("com.attributed.string.action")
+}
+
+extension NSAttributedString {
+    
+    func contains(_ name: Key) -> Bool {
+        var result = false
+        enumerateAttribute(
+            name,
+            in: .init(location: 0, length: length),
+            options: .longestEffectiveRangeNotRequired
+        ) { (an, range, stop) in
+            guard an != nil else { return }
+            result = true
+            stop.pointee = true
+        }
+        return result
     }
 }
 

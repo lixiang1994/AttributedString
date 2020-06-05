@@ -14,6 +14,7 @@
 - [x] Support for multi-level rich text cascading and provide other style priority strategies.
 - [x] Support for all `NSAttributedString.Key` functions.
 - [x] Support iOS & macOS & watchOS & tvOS.
+- [x] Support text and attachment click event callback.
 - [x] Continue to add more new features.
 
 ## Screenshot
@@ -48,6 +49,8 @@ pod 'AttributedString'
 github "lixiang1994/AttributedString"
 ```
 
+
+
 ## Usage
 
 First make sure to import the framework:
@@ -55,6 +58,19 @@ First make sure to import the framework:
 ```swift
 import AttributedString
 ```
+
+
+
+How to initialize:
+
+```swift
+// Normal
+let a: AttributedString = .init("lee", .font(.systemFont(ofSize: 13)))
+// Interpolation
+let b: AttributedString = "\("lee", .font(.systemFont(ofSize: 13)))"
+```
+
+
 
 Here are some usage examples. All devices are also available as simulators:
 
@@ -97,7 +113,7 @@ textView.attributed.text = """
 """
 ```
 
-#### Image:
+#### Image:	(Does not include watchOS)
 
 ```swift
 textView.attributed.text = """
@@ -135,9 +151,49 @@ textView.attributed.text = a + b
 textView.attributed.text += c
 ```
 
+#### Click:	(Only supports iOS, only for UILabel / UITextView)
+
+```swift
+// Text
+let a: AttributedString = .init("lee", .action({  }))
+// Attachment (image)
+let b: AttributedString = .init(.image(image), action: {
+		// code
+})
+
+// It is recommended to use functions as parameters.
+func click() {
+  	// code
+}
+// Normal
+let c: AttributedString = .init("lee", .action(click))
+let d: AttributedString = .init(.image(image), action: click)
+// Interpolation
+let e: AttributedString = "\("lee", .action(click))"
+let f: AttributedString = "\(.image(image), action: click)"
+
+// More information. 
+func click(_ action: AttributedString.Action) {
+		switch action.content {
+		case .string(let value):
+				print("Currently clicked text: \(value) range: \(action.range)")
+				
+		case .attachment(let value):
+				print("Currently clicked attachment: \(value) range: \(action.range)")
+		}
+}
+
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(click))"
+textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), action: click) Displayed in custom size."
+```
 
 
-## Properties available via `Style` class
+
+For more examples, see the sample application.
+
+
+
+## Properties available via `Attribute` class
 
 The following properties are available:
 
@@ -160,8 +216,6 @@ The following properties are available:
 | expansion         | `CGFloat`                            | expansion / shrink                                           |
 | writingDirection  | `WritingDirection` / `[Int]`         | initial writing direction used to determine the actual writing direction for text |
 | verticalGlyphForm | `Bool`                               | vertical glyph (Currently on iOS, it's always horizontal.)   |
-
-
 
 
 

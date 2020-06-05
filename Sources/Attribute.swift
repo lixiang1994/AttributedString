@@ -17,68 +17,28 @@ import AppKit
 import UIKit
 #endif
 
-extension AttributedStringInterpolation {
+extension AttributedString {
     
+    /// 属性
     public struct Attribute {
         let attributes: [NSAttributedString.Key: Any]
     }
     
-    public mutating func appendInterpolation<T>(_ value: T, _ attributes: Attribute...) {
-        appendInterpolation(value, with: attributes)
-    }
-    
-    public mutating func appendInterpolation<T>(_ value: T, with attributes: [Attribute]) {
-        var temp: [NSAttributedString.Key: Any] = [:]
-        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
-        self.value.append(.init(string: "\(value)", attributes: temp))
-    }
-    
-    // 包装模式
+    /// 包装模式
     public enum WrapMode {
-        case embedding(AttributedString)
-        case override(AttributedString)
-    }
-    
-    // 嵌套包装
-    public mutating func appendInterpolation(wrap string: AttributedString, _ attributes: Attribute...) {
-        appendInterpolation(wrap: .embedding(string), with: attributes)
-    }
-    public mutating func appendInterpolation(wrap mode: WrapMode, _ attributes: Attribute...) {
-        appendInterpolation(wrap: mode, with: attributes)
-    }
-    mutating func appendInterpolation(wrap mode: WrapMode, with attributes: [Attribute]) {
-        // 获取通用属性
-        var temp: [NSAttributedString.Key: Any] = [:]
-        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
-        // 创建可变富文本
-        let string: NSMutableAttributedString
-        switch mode {
-        case .embedding(let value):
-            string = NSMutableAttributedString(attributedString: value.value)
-            // 过滤后的属性以及范围
-            var ranges: [([NSAttributedString.Key: Any], NSRange)] = []
-            // 遍历原属性 去除重复属性 防止覆盖
-            string.enumerateAttributes(
-                in: .init(location: 0, length: string.length),
-                options: .longestEffectiveRangeNotRequired
-            ) { (attributs, range, stop) in
-                // 差集 从通用属性中过滤掉原本就存在的属性
-                let keys = Set(temp.keys).subtracting(Set(attributs.keys))
-                ranges.append((temp.filter { keys.contains($0.key) }, range))
-            }
-            // 添加过滤后的属性和相应的范围
-            ranges.forEach { string.addAttributes($0, range: $1) }
-            
-        case .override(let value):
-            string = NSMutableAttributedString(attributedString: value.value)
-            string.addAttributes(temp, range: .init(location: 0, length: string.length))
-        }
+        case embedding(AttributedString)        // 嵌入模式
+        case override(AttributedString)         // 覆盖模式
         
-        self.value.append(string)
+        internal var value: AttributedString {
+            switch self {
+            case .embedding(let value):     return value
+            case .override(let value):      return value
+            }
+        }
     }
 }
 
-extension AttributedStringInterpolation.Attribute {
+extension AttributedString.Attribute {
     
     public static func font(_ value: Font) -> Self {
         return .init(attributes: [.font: value])
@@ -165,7 +125,7 @@ extension AttributedStringInterpolation.Attribute {
     }
 }
 
-extension AttributedStringInterpolation.Attribute {
+extension AttributedString.Attribute {
     
     public enum WritingDirection {
         case LRE
@@ -184,5 +144,33 @@ extension AttributedStringInterpolation.Attribute {
             case .RLO:  return [NSWritingDirection.rightToLeft.rawValue | NSWritingDirectionFormatType.override.rawValue]
             }
         }
+    }
+}
+
+extension AttributedStringInterpolation {
+    
+    public typealias Attribute = AttributedString.Attribute
+    public typealias WrapMode = AttributedString.WrapMode
+    
+    public mutating func appendInterpolation<T>(_ value: T, _ attributes: Attribute...) {
+        appendInterpolation(value, with: attributes)
+    }
+    
+    public mutating func appendInterpolation<T>(_ value: T, with attributes: [Attribute]) {
+        self.value.append(AttributedString(.init(value), with: attributes).value)
+    }
+    
+    // 嵌套包装
+    public mutating func appendInterpolation(wrap string: AttributedString, _ attributes: Attribute...) {
+        appendInterpolation(wrap: string, with: attributes)
+    }
+    public mutating func appendInterpolation(wrap string: AttributedString, with attributes: [Attribute]) {
+        self.value.append(AttributedString(wrap: .embedding(string), with: attributes).value)
+    }
+    public mutating func appendInterpolation(wrap mode: WrapMode, _ attributes: Attribute...) {
+        appendInterpolation(wrap: mode, with: attributes)
+    }
+    public mutating func appendInterpolation(wrap mode: WrapMode, with attributes: [Attribute]) {
+        self.value.append(AttributedString(wrap: mode, with: attributes).value)
     }
 }

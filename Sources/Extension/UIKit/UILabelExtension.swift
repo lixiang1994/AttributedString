@@ -12,7 +12,6 @@
 //
 
 import UIKit
-import CoreText
 
 private var UITapGestureRecognizerKey: Void?
 
@@ -27,16 +26,19 @@ extension AttributedStringWrapper where Base: UILabel {
         set {
             base.attributedText = newValue?.value
             
+            #if os(iOS)
             if newValue?.value.contains(.action) ?? false {
                 addGestureRecognizers()
                 
             } else {
                 removeGestureRecognizers()
             }
+            #endif
         }
     }
     
-    @available(iOS 9.0, *)
+    #if os(iOS)
+    
     private func addGestureRecognizers() {
         defer { base.isUserInteractionEnabled = true }
         guard tap == nil else { return }
@@ -46,26 +48,27 @@ extension AttributedStringWrapper where Base: UILabel {
         tap = gesture
     }
     
-    @available(iOS 9.0, *)
     private func removeGestureRecognizers() {
         guard let gesture = tap else { return }
         base.removeGestureRecognizer(gesture)
         tap = nil
     }
     
-    @available(iOS 9.0, *)
     private var tap: UITapGestureRecognizer? {
         get { base.associated.get(&UITapGestureRecognizerKey) }
         set { base.associated.set(retain: &UITapGestureRecognizerKey, newValue) }
     }
+    
+    #endif
 }
+
+#if os(iOS)
 
 fileprivate extension UILabel {
     
     typealias Action = AttributedString.Action
     
     @objc
-    @available(iOS 9.0, *)
     func attributedTapAction(_ sender: UITapGestureRecognizer) {
         // 处理动作
         handleAction(sender.location(in: self))
@@ -118,3 +121,5 @@ fileprivate extension UILabel {
         }
     }
 }
+
+#endif
