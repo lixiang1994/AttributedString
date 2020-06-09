@@ -32,7 +32,6 @@ extension AttributedStringCompatible {
     }
 }
 
-
 extension AttributedString {
     
     /// Add a AttributedString to another AttributedString.
@@ -85,6 +84,15 @@ extension AttributedString {
     public static func + (lhs: AttributedString, rhs: String) -> AttributedString {
         return lhs + AttributedString(.init(string: rhs))
     }
+    /// Add a AttributedString to another String and return a new AttributedString instance.
+    ///
+    /// - Parameters:
+    ///   - lhs: String to add.
+    ///   - rhs: AttributedString to add.
+    /// - Returns: New instance with added NSAttributedString.
+    public static func + (lhs: String, rhs: AttributedString) -> AttributedString {
+        return AttributedString(.init(string: lhs)) + rhs
+    }
     
     /// Add a NSAttributedString to another AttributedString.
     ///
@@ -112,6 +120,16 @@ extension AttributedString {
     /// - Returns: New instance with added NSAttributedString.
     public static func + (lhs: AttributedString, rhs: NSAttributedString) -> AttributedString {
         return lhs + AttributedString(rhs)
+    }
+    
+    /// Add a AttributedString to another NSAttributedString and return a new AttributedString instance.
+    ///
+    /// - Parameters:
+    ///   - lhs: NSAttributedString to add.
+    ///   - rhs: AttributedString to add.
+    /// - Returns: New instance with added NSAttributedString.
+    public static func + (lhs: NSAttributedString, rhs: AttributedString) -> AttributedString {
+        return AttributedString(lhs) + rhs
     }
     
     /// Add a AttributedString.Attribute to another AttributedString.
