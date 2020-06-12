@@ -871,10 +871,39 @@ extension AllViewController {
                 
                 """
                 """#
+            ),
+            .init(
+                title: ("Click", "点击事件"),
+                content: """
+                
+                This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
+                
+                This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
+                
+                """,
+                code: #"""
+                """
+                
+                This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
+                
+                This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
+                
+                """
+                """#
             )
         ]
         
         tableView.reloadData()
         tableView.selectRowIndexes(.init(integer: 0), byExtendingSelection: true)
+    }
+    
+    func click(_ action: AttributedString.Action) {
+        switch action.content {
+        case .string(let value):
+            print("点击了文本: \n\(value) \nrange: \(action.range)")
+            
+        case .attachment(let value):
+            print("点击了附件: \n\(value) \nrange: \(action.range)")
+        }
     }
 }
