@@ -151,7 +151,7 @@ textView.attributed.text = a + b
 textView.attributed.text += c
 ```
 
-#### 点击:	(仅支持iOS 仅在 UILabel / UITextView 有效)
+#### 点击:	(仅支持 iOS: UILabel / UITextView 和 macOS: NSTextField)
 
 ```swift
 // 文本

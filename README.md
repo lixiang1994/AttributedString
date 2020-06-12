@@ -151,7 +151,7 @@ textView.attributed.text = a + b
 textView.attributed.text += c
 ```
 
-#### Click:	(Only supports iOS, only for UILabel / UITextView)
+#### Click:	(Only supports iOS: UILabel / UITextView & macOS: NSTextField)
 
 ```swift
 // Text
