@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "AttributedString"
-s.version      = "1.3.2"
+s.version      = "1.3.3"
 s.summary      = "基于Swift字符串插值快速构建你想要的富文本"
 
 s.homepage     = "https://github.com/lixiang1994/AttributedString"
