@@ -6,6 +6,8 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
+#if os(macOS)
+
 import AppKit
 
 private var NSClickGestureRecognizerKey: Void?
@@ -21,14 +23,12 @@ extension AttributedStringWrapper where Base: NSTextField {
         set {
             base.attributedStringValue = newValue.value
             
-            #if os(macOS)
             if newValue.value.contains(.action) {
                 addGestureRecognizers()
                 
             } else {
                 removeGestureRecognizers()
             }
-            #endif
         }
     }
     
@@ -36,8 +36,6 @@ extension AttributedStringWrapper where Base: NSTextField {
         get { AttributedString(base.placeholderAttributedString) }
         set { base.placeholderAttributedString = newValue?.value }
     }
-    
-    #if os(macOS)
     
     private func addGestureRecognizers() {
         guard click == nil else { return }
@@ -56,11 +54,7 @@ extension AttributedStringWrapper where Base: NSTextField {
         get { base.associated.get(&NSClickGestureRecognizerKey) }
         set { base.associated.set(retain: &NSClickGestureRecognizerKey, newValue) }
     }
-    
-    #endif
 }
-
-#if os(macOS)
 
 fileprivate extension NSTextField {
     

@@ -37,18 +37,31 @@
 
 ## Installation
 
-**CocoaPods - Podfile**
+#### CocoaPods - Podfile
 
 ```ruby
 pod 'AttributedString'
 ```
 
-**Carthage - Cartfile**
+#### Carthage - Cartfile
 
 ```ruby
 github "lixiang1994/AttributedString"
 ```
 
+#### [Swift Package Manager for Apple platforms](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app)
+
+Select Xcode menu `File > Swift Packages > Add Package Dependency` and enter repository URL with GUI.  
+```
+Repository: https://github.com/lixiang1994/AttributedString
+```
+
+#### [Swift Package Manager](https://swift.org/package-manager/)
+
+Add the following to the dependencies of your `Package.swift`:
+```swift
+.package(url: "https://github.com/lixiang1994/AttributedString.git", from: "version")
+```
 
 
 ## Usage

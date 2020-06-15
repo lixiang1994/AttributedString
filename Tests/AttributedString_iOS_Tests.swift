@@ -6,6 +6,8 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
+#if os(iOS)
+
 import XCTest
 
 class AttributedString_iOS_Tests: XCTestCase {
@@ -31,3 +33,5 @@ class AttributedString_iOS_Tests: XCTestCase {
     }
 
 }
+
+#endif

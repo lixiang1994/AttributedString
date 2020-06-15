@@ -11,6 +11,8 @@
 //  Copyright © 2019 LEE. All rights reserved.
 //
 
+#if os(iOS) || os(tvOS)
+
 import UIKit
 
 extension UITextField: AttributedStringCompatible {
@@ -29,3 +31,5 @@ extension AttributedStringWrapper where Base: UITextField {
         set { base.attributedPlaceholder = newValue?.value }
     }
 }
+
+#endif

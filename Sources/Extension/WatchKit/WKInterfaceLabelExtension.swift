@@ -6,6 +6,8 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
+#if os(watchOS)
+
 import WatchKit
 
 extension WKInterfaceLabel: AttributedStringCompatible {
@@ -18,3 +20,5 @@ extension AttributedStringWrapper where Base: WKInterfaceLabel {
         base.setAttributedText(text?.value)
     }
 }
+
+#endif

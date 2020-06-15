@@ -6,6 +6,8 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
+#if os(watchOS)
+
 import WatchKit
 
 @available(watchOS 6.0, *)
@@ -24,3 +26,5 @@ extension AttributedStringWrapper where Base: WKInterfaceTextField {
         base.setAttributedPlaceholder(text?.value)
     }
 }
+
+#endif

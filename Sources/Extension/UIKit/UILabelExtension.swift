@@ -11,6 +11,8 @@
 //  Copyright © 2019 LEE. All rights reserved.
 //
 
+#if os(iOS) || os(tvOS)
+
 import UIKit
 
 private var UITapGestureRecognizerKey: Void?
@@ -121,5 +123,7 @@ fileprivate extension UILabel {
         }
     }
 }
+
+#endif
 
 #endif

@@ -6,6 +6,8 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
+#if os(watchOS)
+
 import WatchKit
 
 extension WKInterfaceButton: AttributedStringCompatible {
@@ -18,3 +20,5 @@ extension AttributedStringWrapper where Base: WKInterfaceButton {
         base.setAttributedTitle(title?.value)
     }
 }
+
+#endif

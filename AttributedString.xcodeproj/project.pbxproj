@@ -26,7 +26,6 @@
 		9B267B8B24406B2F002F571E /* WKInterfaceButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B8924406B2F002F571E /* WKInterfaceButtonExtension.swift */; };
 		9B267B8C24406B2F002F571E /* WKInterfaceLabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B8A24406B2F002F571E /* WKInterfaceLabelExtension.swift */; };
 		9B267B8E24406D71002F571E /* WKInterfaceTextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B8D24406D71002F571E /* WKInterfaceTextFieldExtension.swift */; };
-		9B267B95244072BE002F571E /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B94244072BE002F571E /* NSShadowExtension.swift */; };
 		9B267BA424408072002F571E /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B267B9B24408072002F571E /* AttributedString.framework */; };
 		9B267BB2244080FC002F571E /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B267BB32440811F002F571E /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AE238275D2009EBEBE /* CGSizeExtension.swift */; };
@@ -54,8 +53,9 @@
 		9B34BD46243DBEA900932E6C /* Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E02382C301009EBEBE /* Attribute.swift */; };
 		9B34BD47243DBEA900932E6C /* ParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */; };
 		9B34BD48243DBEA900932E6C /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* Attachment.swift */; };
-		9B34BD65243DFACE00932E6C /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B34BD63243DFAA600932E6C /* NSShadowExtension.swift */; };
 		9B34BD68243DFCBB00932E6C /* NSTextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */; };
+		9B6854C524971B8B005F301C /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
+		9B6854C624971B8C005F301C /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
 		9B6E895123823C40009EBEBE /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B6E899E23823FFD009EBEBE /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E899D23823FFD009EBEBE /* AttributedString.swift */; };
 		9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* Interpolation.swift */; };
@@ -115,12 +115,10 @@
 		9B267B8924406B2F002F571E /* WKInterfaceButtonExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKInterfaceButtonExtension.swift; sourceTree = "<group>"; };
 		9B267B8A24406B2F002F571E /* WKInterfaceLabelExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WKInterfaceLabelExtension.swift; sourceTree = "<group>"; };
 		9B267B8D24406D71002F571E /* WKInterfaceTextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKInterfaceTextFieldExtension.swift; sourceTree = "<group>"; };
-		9B267B94244072BE002F571E /* NSShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShadowExtension.swift; sourceTree = "<group>"; };
 		9B267B9B24408072002F571E /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B267BA324408072002F571E /* AttributedString-tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AttributedString-tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B267BBF244081BB002F571E /* AttributedString_tvOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString_tvOS_Tests.swift; sourceTree = "<group>"; };
 		9B34BD37243DBC8100932E6C /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B34BD63243DFAA600932E6C /* NSShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShadowExtension.swift; sourceTree = "<group>"; };
 		9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSTextFieldExtension.swift; sourceTree = "<group>"; };
 		9B6E894C23823C40009EBEBE /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6E894F23823C40009EBEBE /* AttributedString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedString.h; sourceTree = "<group>"; };
@@ -214,7 +212,6 @@
 				9B267B8924406B2F002F571E /* WKInterfaceButtonExtension.swift */,
 				9B267B8A24406B2F002F571E /* WKInterfaceLabelExtension.swift */,
 				9B267B8D24406D71002F571E /* WKInterfaceTextFieldExtension.swift */,
-				9B267B94244072BE002F571E /* NSShadowExtension.swift */,
 			);
 			path = WatchKit;
 			sourceTree = "<group>";
@@ -267,6 +264,7 @@
 				9B6E89A42382739C009EBEBE /* UIKit */,
 				9B0A2A3723851EB6003D8A55 /* Extension.swift */,
 				9B87659F24850742009C51C2 /* ObjectExtension.swift */,
+				9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -277,7 +275,6 @@
 				9B6E89A7238273E4009EBEBE /* UITextViewExtension.swift */,
 				9B6E89A92382742F009EBEBE /* UITextFieldExtension.swift */,
 				9B6E89AB238274CB009EBEBE /* UILabelExtension.swift */,
-				9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */,
 				9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */,
 			);
 			path = UIKit;
@@ -286,7 +283,6 @@
 		9B6E89A5238273B2009EBEBE /* AppKit */ = {
 			isa = PBXGroup;
 			children = (
-				9B34BD63243DFAA600932E6C /* NSShadowExtension.swift */,
 				9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */,
 			);
 			path = AppKit;
@@ -604,13 +600,13 @@
 				9B267B79244066C1002F571E /* CGPointExtension.swift in Sources */,
 				9BE7D4C82488E0FC00DE1176 /* Action.swift in Sources */,
 				9B267B7A244066C1002F571E /* Extension.swift in Sources */,
-				9B267B95244072BE002F571E /* NSShadowExtension.swift in Sources */,
 				9B267B8B24406B2F002F571E /* WKInterfaceButtonExtension.swift in Sources */,
 				9B267B7B244066C1002F571E /* AttributedString.swift in Sources */,
 				9B267B7C244066C1002F571E /* Interpolation.swift in Sources */,
 				9B267B7D244066C1002F571E /* Attribute.swift in Sources */,
 				9B8765A224850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B267B7E244066C1002F571E /* ParagraphStyle.swift in Sources */,
+				9B6854C624971B8C005F301C /* NSShadowExtension.swift in Sources */,
 				9B267B7F244066C1002F571E /* Attachment.swift in Sources */,
 				9B267B8E24406D71002F571E /* WKInterfaceTextFieldExtension.swift in Sources */,
 			);
@@ -652,11 +648,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B34BD68243DFCBB00932E6C /* NSTextFieldExtension.swift in Sources */,
-				9B34BD65243DFACE00932E6C /* NSShadowExtension.swift in Sources */,
 				9B34BD40243DBEA900932E6C /* CGSizeExtension.swift in Sources */,
 				9B34BD41243DBEA900932E6C /* CGRectExtension.swift in Sources */,
 				9B34BD42243DBEA900932E6C /* CGPointExtension.swift in Sources */,
 				9B34BD43243DBEA900932E6C /* Extension.swift in Sources */,
+				9B6854C524971B8B005F301C /* NSShadowExtension.swift in Sources */,
 				9B34BD44243DBEA900932E6C /* AttributedString.swift in Sources */,
 				9B34BD45243DBEA900932E6C /* Interpolation.swift in Sources */,
 				9B8765A124850742009C51C2 /* ObjectExtension.swift in Sources */,
@@ -808,7 +804,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = watchos;
@@ -836,7 +832,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = watchos;
@@ -863,7 +859,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = appletvos;
@@ -890,7 +886,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = appletvos;
@@ -966,7 +962,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = macosx;
@@ -993,7 +989,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = macosx;
@@ -1140,7 +1136,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios;
 				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;
@@ -1168,7 +1164,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.2;
+				MARKETING_VERSION = 1.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios;
 				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;

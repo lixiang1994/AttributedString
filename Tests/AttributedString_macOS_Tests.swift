@@ -6,6 +6,8 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
+#if os(macOS)
+
 import XCTest
 
 class AttributedString_macOS_Tests: XCTestCase {
@@ -31,3 +33,5 @@ class AttributedString_macOS_Tests: XCTestCase {
     }
 
 }
+
+#endif

@@ -11,6 +11,8 @@
 //  Copyright © 2019 LEE. All rights reserved.
 //
 
+#if os(iOS) || os(tvOS)
+
 import UIKit
 
 extension UIButton: AttributedStringCompatible {
@@ -27,3 +29,5 @@ extension AttributedStringWrapper where Base: UIButton {
         AttributedString(base.attributedTitle(for: state))
     }
 }
+
+#endif
