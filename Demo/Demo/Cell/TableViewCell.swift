@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AttributedString
 
 class TableViewCell: UITableViewCell {
 
@@ -20,8 +21,8 @@ class TableViewCell: UITableViewCell {
         textView.textContainerInset = .zero
     }
     
-    func set(_ string: NSAttributedString) {
-        textView.attributedText = string
+    func set(_ string: AttributedString) {
+        textView.attributed.text = string
     }
     
     func set(_ height: CGFloat) {

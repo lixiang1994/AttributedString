@@ -174,7 +174,7 @@ extension ViewController: UITableViewDataSource {
             for: indexPath
         ) as! TableViewCell
         let model = list[indexPath.row]
-        cell.set(model.content.value)
+        cell.set(model.content)
         cell.set(model.height)
         return cell
     }
