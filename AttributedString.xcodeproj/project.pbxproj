@@ -41,7 +41,7 @@
 		9B267BE424408357002F571E /* UITextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A7238273E4009EBEBE /* UITextViewExtension.swift */; };
 		9B267BE524408357002F571E /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A92382742F009EBEBE /* UITextFieldExtension.swift */; };
 		9B267BE624408357002F571E /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AB238274CB009EBEBE /* UILabelExtension.swift */; };
-		9B267BE724408357002F571E /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
+		9B267BE724408357002F571E /* ShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* ShadowExtension.swift */; };
 		9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */; };
 		9B34BD3F243DBE7500932E6C /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B34BD40243DBEA900932E6C /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AE238275D2009EBEBE /* CGSizeExtension.swift */; };
@@ -54,8 +54,8 @@
 		9B34BD47243DBEA900932E6C /* ParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */; };
 		9B34BD48243DBEA900932E6C /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* Attachment.swift */; };
 		9B34BD68243DFCBB00932E6C /* NSTextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B34BD66243DFC9E00932E6C /* NSTextFieldExtension.swift */; };
-		9B6854C524971B8B005F301C /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
-		9B6854C624971B8C005F301C /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
+		9B6854C524971B8B005F301C /* ShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* ShadowExtension.swift */; };
+		9B6854C624971B8C005F301C /* ShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* ShadowExtension.swift */; };
 		9B6E895123823C40009EBEBE /* AttributedString.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B6E894F23823C40009EBEBE /* AttributedString.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9B6E899E23823FFD009EBEBE /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E899D23823FFD009EBEBE /* AttributedString.swift */; };
 		9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89A123826D8E009EBEBE /* Interpolation.swift */; };
@@ -65,7 +65,7 @@
 		9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89AE238275D2009EBEBE /* CGSizeExtension.swift */; };
 		9B6E89B12382766F009EBEBE /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B02382766F009EBEBE /* CGRectExtension.swift */; };
 		9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89B2238276B0009EBEBE /* CGPointExtension.swift */; };
-		9B6E89DF23828F7C009EBEBE /* NSShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */; };
+		9B6E89DF23828F7C009EBEBE /* ShadowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89DE23828F7C009EBEBE /* ShadowExtension.swift */; };
 		9B6E89E12382C301009EBEBE /* Attribute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E02382C301009EBEBE /* Attribute.swift */; };
 		9B6E89E32382C392009EBEBE /* ParagraphStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */; };
 		9B6E89E52382C488009EBEBE /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89E42382C488009EBEBE /* Attachment.swift */; };
@@ -131,7 +131,7 @@
 		9B6E89AE238275D2009EBEBE /* CGSizeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtension.swift; sourceTree = "<group>"; };
 		9B6E89B02382766F009EBEBE /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		9B6E89B2238276B0009EBEBE /* CGPointExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtension.swift; sourceTree = "<group>"; };
-		9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSShadowExtension.swift; sourceTree = "<group>"; };
+		9B6E89DE23828F7C009EBEBE /* ShadowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowExtension.swift; sourceTree = "<group>"; };
 		9B6E89E02382C301009EBEBE /* Attribute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attribute.swift; sourceTree = "<group>"; };
 		9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyle.swift; sourceTree = "<group>"; };
 		9B6E89E42382C488009EBEBE /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
@@ -264,7 +264,7 @@
 				9B6E89A42382739C009EBEBE /* UIKit */,
 				9B0A2A3723851EB6003D8A55 /* Extension.swift */,
 				9B87659F24850742009C51C2 /* ObjectExtension.swift */,
-				9B6E89DE23828F7C009EBEBE /* NSShadowExtension.swift */,
+				9B6E89DE23828F7C009EBEBE /* ShadowExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -606,7 +606,7 @@
 				9B267B7D244066C1002F571E /* Attribute.swift in Sources */,
 				9B8765A224850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B267B7E244066C1002F571E /* ParagraphStyle.swift in Sources */,
-				9B6854C624971B8C005F301C /* NSShadowExtension.swift in Sources */,
+				9B6854C624971B8C005F301C /* ShadowExtension.swift in Sources */,
 				9B267B7F244066C1002F571E /* Attachment.swift in Sources */,
 				9B267B8E24406D71002F571E /* WKInterfaceTextFieldExtension.swift in Sources */,
 			);
@@ -619,7 +619,7 @@
 				9B267BE424408357002F571E /* UITextViewExtension.swift in Sources */,
 				9B267BE524408357002F571E /* UITextFieldExtension.swift in Sources */,
 				9B267BE624408357002F571E /* UILabelExtension.swift in Sources */,
-				9B267BE724408357002F571E /* NSShadowExtension.swift in Sources */,
+				9B267BE724408357002F571E /* ShadowExtension.swift in Sources */,
 				9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */,
 				9B8765A324850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B267BB32440811F002F571E /* CGSizeExtension.swift in Sources */,
@@ -652,7 +652,7 @@
 				9B34BD41243DBEA900932E6C /* CGRectExtension.swift in Sources */,
 				9B34BD42243DBEA900932E6C /* CGPointExtension.swift in Sources */,
 				9B34BD43243DBEA900932E6C /* Extension.swift in Sources */,
-				9B6854C524971B8B005F301C /* NSShadowExtension.swift in Sources */,
+				9B6854C524971B8B005F301C /* ShadowExtension.swift in Sources */,
 				9B34BD44243DBEA900932E6C /* AttributedString.swift in Sources */,
 				9B34BD45243DBEA900932E6C /* Interpolation.swift in Sources */,
 				9B8765A124850742009C51C2 /* ObjectExtension.swift in Sources */,
@@ -673,7 +673,7 @@
 				9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */,
 				9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */,
 				9B8765A024850742009C51C2 /* ObjectExtension.swift in Sources */,
-				9B6E89DF23828F7C009EBEBE /* NSShadowExtension.swift in Sources */,
+				9B6E89DF23828F7C009EBEBE /* ShadowExtension.swift in Sources */,
 				9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */,
 				9BE7D4C62488E0FC00DE1176 /* Action.swift in Sources */,
 				9B6E89B12382766F009EBEBE /* CGRectExtension.swift in Sources */,

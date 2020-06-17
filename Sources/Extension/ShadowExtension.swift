@@ -1,5 +1,5 @@
 //
-//  NSShadowExtension.swift
+//  ShadowExtension.swift
 //  ┌─┐      ┌───────┐ ┌───────┐
 //  │ │      │ ┌─────┘ │ ┌─────┘
 //  │ │      │ └─────┐ │ └─────┐

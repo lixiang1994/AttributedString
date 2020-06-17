@@ -66,18 +66,79 @@ extension AttributedStringWrapper where Base: UILabel {
 
 #if os(iOS)
 
+extension UILabel {
+    
+    private static var attributedString: AttributedString?
+    
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard let touch = touches.first else { return }
+        guard let (range, action) = handleAction(touch.location(in: self)) else { return }
+        // 备份原始内容
+        UILabel.attributedString = attributed.text
+        // 设置高亮样式
+        var temp: [NSAttributedString.Key: Any] = [:]
+        action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        self.attributedText = attributedText?.reset(range: range) { (attributes) in
+            attributes.merge(temp, uniquingKeysWith: { $1 })
+        }
+    }
+    
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        guard let attributedString = UILabel.attributedString else {
+            return
+        }
+        attributedText = attributedString.value
+        UILabel.attributedString = nil
+    }
+    
+    open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        guard let attributedString = UILabel.attributedString else {
+            return
+        }
+        attributedText = attributedString.value
+        UILabel.attributedString = nil
+    }
+}
+
+fileprivate extension NSAttributedString {
+    
+    func reset(range: NSRange, attributes handle: (inout [NSAttributedString.Key: Any]) -> Void) -> NSAttributedString {
+        let string = NSMutableAttributedString(attributedString: self)
+        enumerateAttributes(
+            in: range,
+            options: .longestEffectiveRangeNotRequired
+        ) { (attributes, range, stop) in
+            var temp = attributes
+            handle(&temp)
+            string.setAttributes(temp, range: range)
+        }
+        return string
+    }
+}
+
 fileprivate extension UILabel {
     
-    typealias Action = AttributedString.Action
+    typealias ActionModel = AttributedString.ActionModel
     
     @objc
     func attributedTapAction(_ sender: UITapGestureRecognizer) {
-        // 处理动作
-        handleAction(sender.location(in: self))
+        guard let attributedText = attributedText else { return }
+        guard let (range, action) = handleAction(sender.location(in: self)) else { return }
+        
+        let substring = attributedText.attributedSubstring(from: range)
+        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
+            action.callback(.init(range: range, content: .attachment(attachment)))
+            
+        } else {
+            action.callback(.init(range: range, content: .string(substring)))
+        }
     }
     
-    func handleAction(_ point: CGPoint) {
-        guard let attributedText = attributedText else { return }
+    func handleAction(_ point: CGPoint) -> (NSRange, ActionModel)? {
+        guard let attributedText = attributedText else { return nil }
         // 同步Label默认样式 使用嵌入包装模式 防止原有富文本样式被覆盖
         let attributedString: AttributedString = """
         \(wrap: .embedding(.init(attributedText)), with: [.font(font), .paragraph(.alignment(textAlignment))])
@@ -107,20 +168,14 @@ fileprivate extension UILabel {
         let index = layoutManager.characterIndexForGlyph(at: glyphIndex)
         // 通过字形距离判断是否在字形范围内
         guard fraction > 0, fraction < 1 else {
-            return
+            return nil
         }
         // 获取点击的字符串范围和回调事件
         var range = NSRange()
-        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? (Action) -> Void else {
-            return
+        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? ActionModel else {
+            return nil
         }
-        let substring = attributedString.value.attributedSubstring(from: range)
-        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
-            action(.init(range: range, content: .attachment(attachment)))
-            
-        } else {
-            action(.init(range: range, content: .string(substring)))
-        }
+        return (range, action)
     }
 }
 
