@@ -67,7 +67,7 @@ extension AttributedStringWrapper where Base: UITextView {
 
 fileprivate extension UITextView {
     
-    typealias Action = AttributedString.Action
+    typealias Result = AttributedString.Action.Result
     
     @objc
     func attributedTapAction(_ sender: UITapGestureRecognizer) {
@@ -95,7 +95,7 @@ fileprivate extension UITextView {
         }
         // 获取点击的字符串范围和回调事件
         var range = NSRange()
-        guard let action = attributedText.attribute(.action, at: index, effectiveRange: &range) as? (Action) -> Void else {
+        guard let action = attributedText.attribute(.action, at: index, effectiveRange: &range) as? (Result) -> Void else {
             return
         }
         let substring = attributedText.attributedSubstring(from: range)

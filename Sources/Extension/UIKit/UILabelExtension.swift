@@ -15,7 +15,7 @@
 
 import UIKit
 
-private var UITapGestureRecognizerKey: Void?
+private var UIGestureRecognizerKey: Void?
 
 extension UILabel: AttributedStringCompatible {
     
@@ -29,36 +29,45 @@ extension AttributedStringWrapper where Base: UILabel {
             base.attributedText = newValue?.value
             
             #if os(iOS)
-            if newValue?.value.contains(.action) ?? false {
-                addGestureRecognizers()
-                
-            } else {
-                removeGestureRecognizers()
-            }
+            let actions = newValue?.value.get(.action).compactMap({ $0 as? AttributedString.Action }) ?? []
+            setupGestureRecognizers(actions)
             #endif
         }
     }
     
     #if os(iOS)
     
-    private func addGestureRecognizers() {
+    private func setupGestureRecognizers(_ actions: [AttributedString.Action]) {
         defer { base.isUserInteractionEnabled = true }
-        guard tap == nil else { return }
+        gestures.forEach { base.removeGestureRecognizer($0) }
+        gestures = []
         
-        let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedTapAction))
-        base.addGestureRecognizer(gesture)
-        tap = gesture
+        Set(actions.map({ $0.trigger })).forEach {
+            switch $0 {
+            case .click:
+                let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+                
+            case .press:
+                let gesture = UILongPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+                
+            case .gesture(let gesture):
+                gesture.addTarget(base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+            }
+        }
     }
     
-    private func removeGestureRecognizers() {
-        guard let gesture = tap else { return }
-        base.removeGestureRecognizer(gesture)
-        tap = nil
-    }
-    
-    private var tap: UITapGestureRecognizer? {
-        get { base.associated.get(&UITapGestureRecognizerKey) }
-        set { base.associated.set(retain: &UITapGestureRecognizerKey, newValue) }
+    private var gestures: [UIGestureRecognizer] {
+        get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
+        set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
     }
     
     #endif
@@ -103,31 +112,16 @@ extension UILabel {
     }
 }
 
-fileprivate extension NSAttributedString {
-    
-    func reset(range: NSRange, attributes handle: (inout [NSAttributedString.Key: Any]) -> Void) -> NSAttributedString {
-        let string = NSMutableAttributedString(attributedString: self)
-        enumerateAttributes(
-            in: range,
-            options: .longestEffectiveRangeNotRequired
-        ) { (attributes, range, stop) in
-            var temp = attributes
-            handle(&temp)
-            string.setAttributes(temp, range: range)
-        }
-        return string
-    }
-}
-
 fileprivate extension UILabel {
     
-    typealias ActionModel = AttributedString.ActionModel
+    typealias Action = AttributedString.Action
     
     @objc
-    func attributedTapAction(_ sender: UITapGestureRecognizer) {
+    func attributedAction(_ sender: UITapGestureRecognizer) {
+        guard sender.state == .ended else { return }
         guard let attributedText = attributedText else { return }
         guard let (range, action) = handleAction(sender.location(in: self)) else { return }
-        
+        // 获取点击字符串 回调
         let substring = attributedText.attributedSubstring(from: range)
         if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
             action.callback(.init(range: range, content: .attachment(attachment)))
@@ -137,7 +131,7 @@ fileprivate extension UILabel {
         }
     }
     
-    func handleAction(_ point: CGPoint) -> (NSRange, ActionModel)? {
+    func handleAction(_ point: CGPoint) -> (NSRange, Action)? {
         guard let attributedText = attributedText else { return nil }
         // 同步Label默认样式 使用嵌入包装模式 防止原有富文本样式被覆盖
         let attributedString: AttributedString = """
@@ -172,7 +166,7 @@ fileprivate extension UILabel {
         }
         // 获取点击的字符串范围和回调事件
         var range = NSRange()
-        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? ActionModel else {
+        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? Action else {
             return nil
         }
         return (range, action)

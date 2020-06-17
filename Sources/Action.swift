@@ -24,17 +24,8 @@ public typealias GestureRecognizer = UIGestureRecognizer
 extension AttributedString {
     
     public struct Action {
-        public let range: NSRange
-        public let content: Content
-    }
-     
-    public struct Highlight {
-        let attributes: [NSAttributedString.Key: Any]
-    }
-    
-    struct ActionModel {
         
-        enum Trigger {
+        public enum Trigger: Hashable {
             /// 单击
             case click
             /// 按住
@@ -48,9 +39,9 @@ extension AttributedString {
         /// 高亮属性
         let highlights: [Highlight]
         /// 触发回调
-        let callback: (Action) -> Void
+        let callback: (Result) -> Void
         
-        init(_ trigger: Trigger = .click, highlights: [Highlight] = .defalut, with callback: @escaping (Action) -> Void) {
+        public init(_ trigger: Trigger = .click, highlights: [Highlight] = .defalut, with callback: @escaping (Result) -> Void) {
             self.trigger = trigger
             self.highlights = highlights
             self.callback = callback
@@ -58,12 +49,24 @@ extension AttributedString {
     }
 }
 
-extension Array where Element == AttributedString.Highlight {
+public extension Array where Element == AttributedString.Action.Highlight {
     
-    static let defalut: [AttributedString.Highlight] = [.color(#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)), .underline(.single)]
+    static let defalut: [AttributedString.Action.Highlight] = [.color(#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)), .underline(.single)]
 }
 
 extension AttributedString.Action {
+    
+    public struct Result {
+        public let range: NSRange
+        public let content: Content
+    }
+     
+    public struct Highlight {
+        let attributes: [NSAttributedString.Key: Any]
+    }
+}
+
+extension AttributedString.Action.Result {
     
     public enum Content {
         case string(NSAttributedString)
@@ -73,20 +76,25 @@ extension AttributedString.Action {
 
 extension AttributedString.Attribute {
     
-    public typealias Highlight = AttributedString.Highlight
     public typealias Action = AttributedString.Action
-    typealias ActionModel = AttributedString.ActionModel
+    public typealias Highlight = Action.Highlight
+    public typealias Result = Action.Result
+    
     
     public static func action(_ value: @escaping () -> Void) -> Self {
         return action { _ in value() }
     }
     
-    public static func action(_ value: @escaping (Action) -> Void) -> Self {
-        return .init(attributes: [.action: ActionModel(with: value)])
+    public static func action(_ value: @escaping (Result) -> Void) -> Self {
+        return .init(attributes: [.action: Action(with: value)])
     }
     
-    public static func action(_ highlights: [Highlight], _ closure: @escaping (Action) -> Void) -> Self {
-        return .init(attributes: [.action: ActionModel(highlights: highlights, with: closure)])
+    public static func action(_ highlights: [Highlight], _ closure: @escaping (Result) -> Void) -> Self {
+        return .init(attributes: [.action: Action(highlights: highlights, with: closure)])
+    }
+    
+    public static func action(_ value: Action) -> Self {
+        return .init(attributes: [.action: value])
     }
 }
 
@@ -104,22 +112,22 @@ extension AttributedString {
         self.value = AttributedString(attachment.value, action: action).value
     }
     
-    public init<T: NSTextAttachment>(_ attachment: T, action: @escaping (Action) -> Void) {
+    public init<T: NSTextAttachment>(_ attachment: T, action: @escaping (Action.Result) -> Void) {
         self.value = AttributedString(.init(attachment: attachment), .action(action)).value
     }
     
-    public init(_ attachment: ImageTextAttachment, action: @escaping (Action) -> Void) {
+    public init(_ attachment: ImageTextAttachment, action: @escaping (Action.Result) -> Void) {
         self.value = AttributedString(.init(attachment: attachment), .action(action)).value
     }
     
-    public init(_ attachment: Attachment, action: @escaping (Action) -> Void) {
+    public init(_ attachment: Attachment, action: @escaping (Action.Result) -> Void) {
         self.value = AttributedString(attachment.value, action: action).value
     }
 }
 
 extension AttributedStringInterpolation {
     
-    public typealias Action = AttributedString.Action
+    public typealias Result = AttributedString.Action.Result
     
     public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping () -> Void) {
         self.value.append(AttributedString(.init(attachment: value), .action(action)).value)
@@ -129,16 +137,16 @@ extension AttributedStringInterpolation {
         self.value.append(AttributedString(.init(attachment: value.value), .action(action)).value)
     }
     
-    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping (Action) -> Void) {
+    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping (Result) -> Void) {
         self.value.append(AttributedString(.init(attachment: value), .action(action)).value)
     }
     
-    public mutating func appendInterpolation(_ value: Attachment, action: @escaping (Action) -> Void) {
+    public mutating func appendInterpolation(_ value: Attachment, action: @escaping (Result) -> Void) {
         self.value.append(AttributedString(.init(attachment: value.value), .action(action)).value)
     }
 }
 
-extension AttributedString.Highlight {
+extension AttributedString.Action.Highlight {
     
     public static func color(_ value: Color) -> Self {
         return .init(attributes: [.foregroundColor: value])
@@ -187,12 +195,38 @@ extension NSAttributedString {
             name,
             in: .init(location: 0, length: length),
             options: .longestEffectiveRangeNotRequired
-        ) { (an, range, stop) in
-            guard an != nil else { return }
+        ) { (value, range, stop) in
+            guard value != nil else { return }
             result = true
             stop.pointee = true
         }
         return result
+    }
+    
+    func get(_ name: Key) -> [Any] {
+        var result: [Any] = []
+        enumerateAttribute(
+            name,
+            in: .init(location: 0, length: length),
+            options: .longestEffectiveRangeNotRequired
+        ) { (value, range, stop) in
+            guard let value = value else { return }
+            result.append(value)
+        }
+        return result
+    }
+    
+    func reset(range: NSRange, attributes handle: (inout [NSAttributedString.Key: Any]) -> Void) -> NSAttributedString {
+        let string = NSMutableAttributedString(attributedString: self)
+        enumerateAttributes(
+            in: range,
+            options: .longestEffectiveRangeNotRequired
+        ) { (attributes, range, stop) in
+            var temp = attributes
+            handle(&temp)
+            string.setAttributes(temp, range: range)
+        }
+        return string
     }
 }
 

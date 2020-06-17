@@ -18,18 +18,28 @@ class ActionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        func click(_ action: AttributedString.Action) {
-            switch action.content {
+        func click(_ result: AttributedString.Action.Result) {
+            switch result.content {
             case .string(let value):
-                print("点击了文本: \n\(value) \nrange: \(action.range)")
+                print("点击了文本: \n\(value) \nrange: \(result.range)")
                 
             case .attachment(let value):
-                print("点击了附件: \n\(value) \nrange: \(action.range)")
+                print("点击了附件: \n\(value) \nrange: \(result.range)")
+            }
+        }
+        
+        let action = AttributedString.Action(.press, highlights: .defalut) { (result) in
+            switch result.content {
+            case .string(let value):
+                print("点击了文本: \n\(value) \nrange: \(result.range)")
+                
+            case .attachment(let value):
+                print("点击了附件: \n\(value) \nrange: \(result.range)")
             }
         }
         
         label.attributed.text = """
-        This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
+        This is \("Label", .font(.systemFont(ofSize: 50)), .action(action))
         
         This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
         """

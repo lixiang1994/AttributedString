@@ -58,7 +58,7 @@ extension AttributedStringWrapper where Base: NSTextField {
 
 fileprivate extension NSTextField {
     
-    typealias Action = AttributedString.Action
+    typealias Result = AttributedString.Action.Result
     
     @objc
     func attributedClickAction(_ sender: NSClickGestureRecognizer) {
@@ -97,7 +97,7 @@ fileprivate extension NSTextField {
         }
         // 获取点击的字符串范围和回调事件
         var range = NSRange()
-        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? (Action) -> Void else {
+        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? (Result) -> Void else {
             return
         }
         let substring = attributedString.value.attributedSubstring(from: range)
