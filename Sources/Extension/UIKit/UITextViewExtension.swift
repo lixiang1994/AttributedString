@@ -15,7 +15,7 @@
 
 import UIKit
 
-private var UITapGestureRecognizerKey: Void?
+private var UIGestureRecognizerKey: Void?
 
 extension UITextView: AttributedStringCompatible {
     
@@ -24,40 +24,53 @@ extension UITextView: AttributedStringCompatible {
 extension AttributedStringWrapper where Base: UITextView {
 
     public var text: AttributedString {
-        get { .init(base.attributedText) }
+        get { .init(base.attributedText ?? .init(string: "")) }
         set {
             base.attributedText = newValue.value
             
             #if os(iOS)
-            if newValue.value.contains(.action) {
-                addGestureRecognizers()
-                
-            } else {
-                removeGestureRecognizers()
-            }
+            setupGestureRecognizers()
             #endif
         }
     }
     
     #if os(iOS)
     
-    private func addGestureRecognizers() {
-        guard tap == nil else { return }
+    private func setupGestureRecognizers() {
+        base.isUserInteractionEnabled = true
+        base.delaysContentTouches = false
         
-        let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedTapAction))
-        base.addGestureRecognizer(gesture)
-        tap = gesture
+        gestures.forEach { base.removeGestureRecognizer($0) }
+        gestures = []
+        
+        let actions = base.attributedText?.get(.action).compactMap({ $0 as? AttributedString.Action }) ?? []
+        
+        Set(actions.map({ $0.trigger })).forEach {
+            switch $0 {
+            case .click:
+                let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+                
+            case .press:
+                let gesture = UILongPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+                
+            case .gesture(let gesture):
+                gesture.addTarget(base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+            }
+        }
     }
     
-    private func removeGestureRecognizers() {
-        guard let gesture = tap else { return }
-        base.removeGestureRecognizer(gesture)
-        tap = nil
-    }
-    
-    private var tap: UITapGestureRecognizer? {
-        get { base.associated.get(&UITapGestureRecognizerKey) }
-        set { base.associated.set(retain: &UITapGestureRecognizerKey, newValue) }
+    private var gestures: [UIGestureRecognizer] {
+        get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
+        set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
     }
     
     #endif
@@ -65,21 +78,70 @@ extension AttributedStringWrapper where Base: UITextView {
 
 #if os(iOS)
 
-fileprivate extension UITextView {
+extension UITextView {
     
-    typealias Result = AttributedString.Action.Result
-    
-    @objc
-    func attributedTapAction(_ sender: UITapGestureRecognizer) {
-        guard !isEditable, !isSelectable else {
-            return
-        }
-        
-        // 处理动作
-        handleAction(sender.location(in: self))
+    /// 是否启用Action
+    fileprivate var isActionEnabled: Bool {
+        return !isEditable && !isSelectable
     }
     
-    func handleAction(_ point: CGPoint) {
+    private static var attributedString: AttributedString?
+    
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard isActionEnabled else { return }
+        guard let touch = touches.first else { return }
+        guard let (range, action) = matching(touch.location(in: self)) else { return }
+        // 备份原始内容
+        UITextView.attributedString = attributed.text
+        // 设置高亮样式
+        var temp: [NSAttributedString.Key: Any] = [:]
+        action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        self.attributedText = attributedText.reset(range: range) { (attributes) in
+            attributes.merge(temp, uniquingKeysWith: { $1 })
+        }
+    }
+    
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        guard isActionEnabled else { return }
+        guard let attributedString = UITextView.attributedString else { return }
+        attributedText = attributedString.value
+        UITextView.attributedString = nil
+    }
+    
+    open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        guard isActionEnabled else { return }
+        guard let attributedString = UITextView.attributedString else { return }
+        attributedText = attributedString.value
+        UITextView.attributedString = nil
+    }
+}
+
+fileprivate extension UITextView {
+    
+    typealias Action = AttributedString.Action
+    
+    @objc
+    func attributedAction(_ sender: UIGestureRecognizer) {
+        guard sender.state == .ended else { return }
+        guard isActionEnabled else { return }
+        guard let string = UITextView.attributedString?.value else { return }
+        guard let (range, action) = matching(sender.location(in: self)) else { return }
+        guard action.trigger.matching(sender) else { return }
+        
+        // 获取点击字符串 回调
+        let substring = string.attributedSubstring(from: range)
+        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
+            action.callback(.init(range: range, content: .attachment(attachment)))
+            
+        } else {
+            action.callback(.init(range: range, content: .string(substring)))
+        }
+    }
+    
+    func matching(_ point: CGPoint) -> (NSRange, Action)? {
         // 获取点击坐标 并排除各种偏移
         var point = point
         point.x -= textContainerInset.left
@@ -91,21 +153,14 @@ fileprivate extension UITextView {
         let index = layoutManager.characterIndexForGlyph(at: glyphIndex)
         // 通过字形距离判断是否在字形范围内
         guard fraction > 0, fraction < 1 else {
-            return
+            return nil
         }
         // 获取点击的字符串范围和回调事件
         var range = NSRange()
-        guard let action = attributedText.attribute(.action, at: index, effectiveRange: &range) as? (Result) -> Void else {
-            return
+        guard let action = attributedText.attribute(.action, at: index, effectiveRange: &range) as? Action else {
+            return nil
         }
-        let substring = attributedText.attributedSubstring(from: range)
-        
-        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
-            action(.init(range: range, content: .attachment(attachment)))
-            
-        } else {
-            action(.init(range: range, content: .string(substring)))
-        }
+        return (range, action)
     }
 }
 

@@ -29,18 +29,20 @@ extension AttributedStringWrapper where Base: UILabel {
             base.attributedText = newValue?.value
             
             #if os(iOS)
-            let actions = newValue?.value.get(.action).compactMap({ $0 as? AttributedString.Action }) ?? []
-            setupGestureRecognizers(actions)
+            setupGestureRecognizers()
             #endif
         }
     }
     
     #if os(iOS)
     
-    private func setupGestureRecognizers(_ actions: [AttributedString.Action]) {
-        defer { base.isUserInteractionEnabled = true }
+    private func setupGestureRecognizers() {
+        base.isUserInteractionEnabled = true
+        
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
+        
+        let actions = base.attributedText?.get(.action).compactMap({ $0 as? AttributedString.Action }) ?? []
         
         Set(actions.map({ $0.trigger })).forEach {
             switch $0 {
@@ -77,12 +79,18 @@ extension AttributedStringWrapper where Base: UILabel {
 
 extension UILabel {
     
+    /// 是否启用Action
+    fileprivate var isActionEnabled: Bool {
+        return !(adjustsFontSizeToFitWidth && numberOfLines == 1)
+    }
+    
     private static var attributedString: AttributedString?
     
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+        guard isActionEnabled else { return }
         guard let touch = touches.first else { return }
-        guard let (range, action) = handleAction(touch.location(in: self)) else { return }
+        guard let (range, action) = matching(touch.location(in: self)) else { return }
         // 备份原始内容
         UILabel.attributedString = attributed.text
         // 设置高亮样式
@@ -95,18 +103,16 @@ extension UILabel {
     
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        guard let attributedString = UILabel.attributedString else {
-            return
-        }
+        guard isActionEnabled else { return }
+        guard let attributedString = UILabel.attributedString else { return }
         attributedText = attributedString.value
         UILabel.attributedString = nil
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
-        guard let attributedString = UILabel.attributedString else {
-            return
-        }
+        guard isActionEnabled else { return }
+        guard let attributedString = UILabel.attributedString else { return }
         attributedText = attributedString.value
         UILabel.attributedString = nil
     }
@@ -117,12 +123,15 @@ fileprivate extension UILabel {
     typealias Action = AttributedString.Action
     
     @objc
-    func attributedAction(_ sender: UITapGestureRecognizer) {
+    func attributedAction(_ sender: UIGestureRecognizer) {
         guard sender.state == .ended else { return }
-        guard let attributedText = attributedText else { return }
-        guard let (range, action) = handleAction(sender.location(in: self)) else { return }
+        guard isActionEnabled else { return }
+        guard let string = UILabel.attributedString?.value else { return }
+        guard let (range, action) = matching(sender.location(in: self)) else { return }
+        guard action.trigger.matching(sender) else { return }
+        
         // 获取点击字符串 回调
-        let substring = attributedText.attributedSubstring(from: range)
+        let substring = string.attributedSubstring(from: range)
         if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
             action.callback(.init(range: range, content: .attachment(attachment)))
             
@@ -131,7 +140,7 @@ fileprivate extension UILabel {
         }
     }
     
-    func handleAction(_ point: CGPoint) -> (NSRange, Action)? {
+    func matching(_ point: CGPoint) -> (NSRange, Action)? {
         guard let attributedText = attributedText else { return nil }
         // 同步Label默认样式 使用嵌入包装模式 防止原有富文本样式被覆盖
         let attributedString: AttributedString = """

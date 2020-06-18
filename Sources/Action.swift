@@ -52,6 +52,8 @@ extension AttributedString {
 public extension Array where Element == AttributedString.Action.Highlight {
     
     static let defalut: [AttributedString.Action.Highlight] = [.color(#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)), .underline(.single)]
+    
+    static let empty: [AttributedString.Action.Highlight] = []
 }
 
 extension AttributedString.Action {
@@ -179,6 +181,31 @@ extension AttributedString.Action.Highlight {
         temp[.strokeColor] = color
         temp[.strokeWidth] = width
         return .init(attributes: temp)
+    }
+}
+
+extension AttributedString.Action.Trigger {
+
+    func matching(_ gesture: GestureRecognizer) -> Bool {
+        switch self {
+        case .gesture(let value) where gesture == value:
+            return true
+        #if os(iOS)
+        case .click where gesture is UITapGestureRecognizer:
+            return true
+        case .press where gesture is UILongPressGestureRecognizer:
+            return true
+        #endif
+        
+        #if os(macOS)
+        case .click where gesture is NSClickGestureRecognizer:
+            return true
+        case .press where gesture is NSPressGestureRecognizer:
+            return true
+        #endif
+        default:
+            return false
+        }
     }
 }
 
