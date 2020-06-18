@@ -67,7 +67,7 @@ extension AttributedStringWrapper where Base: UILabel {
         }
     }
     
-    private var gestures: [UIGestureRecognizer] {
+    private(set) var gestures: [UIGestureRecognizer] {
         get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
         set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
     }
@@ -81,7 +81,7 @@ extension UILabel {
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
-        return !(adjustsFontSizeToFitWidth && numberOfLines == 1)
+        return !attributed.gestures.isEmpty && !(adjustsFontSizeToFitWidth && numberOfLines == 1)
     }
     
     private static var attributedString: AttributedString?

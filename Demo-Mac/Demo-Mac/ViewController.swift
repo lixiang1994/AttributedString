@@ -134,11 +134,5 @@ class ViewController: NSViewController {
         }
         label.attributed.string = string
     }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
 }
 

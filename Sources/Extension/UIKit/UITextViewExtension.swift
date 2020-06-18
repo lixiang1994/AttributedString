@@ -68,7 +68,7 @@ extension AttributedStringWrapper where Base: UITextView {
         }
     }
     
-    private var gestures: [UIGestureRecognizer] {
+    private(set) var gestures: [UIGestureRecognizer] {
         get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
         set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
     }
@@ -82,7 +82,7 @@ extension UITextView {
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
-        return !isEditable && !isSelectable
+        return !attributed.gestures.isEmpty && (!isEditable && !isSelectable)
     }
     
     private static var attributedString: AttributedString?

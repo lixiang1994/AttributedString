@@ -21,6 +21,11 @@ class AllViewController: NSViewController {
         super.viewDidLoad()
         loadData()
     }
+    
+    override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
+        print(#function)
+    }
 }
 
 extension AllViewController: NSTableViewDelegate {
@@ -897,13 +902,13 @@ extension AllViewController {
         tableView.selectRowIndexes(.init(integer: 0), byExtendingSelection: true)
     }
     
-    func click(_ action: AttributedString.Action) {
-        switch action.content {
+    func click(_ result: AttributedString.Action.Result) {
+        switch result.content {
         case .string(let value):
-            print("点击了文本: \n\(value) \nrange: \(action.range)")
+            print("点击了文本: \n\(value) \nrange: \(result.range)")
             
         case .attachment(let value):
-            print("点击了附件: \n\(value) \nrange: \(action.range)")
+            print("点击了附件: \n\(value) \nrange: \(result.range)")
         }
     }
 }
