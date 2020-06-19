@@ -21,11 +21,6 @@ class AllViewController: NSViewController {
         super.viewDidLoad()
         loadData()
     }
-    
-    override func mouseDown(with event: NSEvent) {
-        super.mouseDown(with: event)
-        print(#function)
-    }
 }
 
 extension AllViewController: NSTableViewDelegate {
@@ -884,6 +879,8 @@ extension AllViewController {
                 This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
                 
                 This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
+                
+                This is \("Press", .font(.systemFont(ofSize: 50)), .action(.init(.press, with: click)))
                 
                 """,
                 code: #"""

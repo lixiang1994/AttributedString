@@ -16,6 +16,7 @@
 import UIKit
 
 private var UIGestureRecognizerKey: Void?
+private var UITextViewCurrentKey: Void?
 
 extension UITextView: AttributedStringCompatible {
     
@@ -58,12 +59,6 @@ extension AttributedStringWrapper where Base: UITextView {
                 gesture.cancelsTouchesInView = false
                 base.addGestureRecognizer(gesture)
                 gestures.append(gesture)
-                
-            case .gesture(let gesture):
-                gesture.addTarget(base, action: #selector(Base.attributedAction))
-                gesture.cancelsTouchesInView = false
-                base.addGestureRecognizer(gesture)
-                gestures.append(gesture)
             }
         }
     }
@@ -85,7 +80,11 @@ extension UITextView {
         return !attributed.gestures.isEmpty && (!isEditable && !isSelectable)
     }
     
-    private static var attributedString: AttributedString?
+    /// 当前信息
+    private var current: (AttributedString, NSRange, Action)? {
+        get { associated.get(&UITextViewCurrentKey) }
+        set { associated.set(retain: &UITextViewCurrentKey, newValue) }
+    }
     
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -93,7 +92,7 @@ extension UITextView {
         guard let touch = touches.first else { return }
         guard let (range, action) = matching(touch.location(in: self)) else { return }
         // 备份原始内容
-        UITextView.attributedString = attributed.text
+        current = (attributed.text, range, action)
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
@@ -105,17 +104,17 @@ extension UITextView {
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         guard isActionEnabled else { return }
-        guard let attributedString = UITextView.attributedString else { return }
-        attributedText = attributedString.value
-        UITextView.attributedString = nil
+        guard let current = self.current else { return }
+        attributedText = current.0.value
+        self.current = nil
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         guard isActionEnabled else { return }
-        guard let attributedString = UITextView.attributedString else { return }
-        attributedText = attributedString.value
-        UITextView.attributedString = nil
+        guard let current = self.current else { return }
+        attributedText = current.0.value
+        self.current = nil
     }
 }
 
@@ -125,14 +124,12 @@ fileprivate extension UITextView {
     
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
-        guard sender.state == .ended else { return }
         guard isActionEnabled else { return }
-        guard let string = UITextView.attributedString?.value else { return }
-        guard let (range, action) = matching(sender.location(in: self)) else { return }
+        guard let (string, range, action) = current else { return }
         guard action.trigger.matching(sender) else { return }
         
-        // 获取点击字符串 回调
-        let substring = string.attributedSubstring(from: range)
+        // 点击 回调
+        let substring = string.value.attributedSubstring(from: range)
         if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
             action.callback(.init(range: range, content: .attachment(attachment)))
             

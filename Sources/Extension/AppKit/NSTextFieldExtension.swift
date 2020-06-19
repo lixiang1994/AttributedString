@@ -11,6 +11,8 @@
 import AppKit
 
 private var NSGestureRecognizerKey: Void?
+private var NSEventMonitorKey: Void?
+private var NSTextFieldCurrentKey: Void?
 
 extension NSTextField: AttributedStringCompatible {
     
@@ -49,13 +51,23 @@ extension AttributedStringWrapper where Base: NSTextField {
                 let gesture = NSPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
                 base.addGestureRecognizer(gesture)
                 gestures.append(gesture)
-                
-            case .gesture(let gesture):
-                gesture.target = base
-                gesture.action = #selector(Base.attributedAction)
-                base.addGestureRecognizer(gesture)
-                gestures.append(gesture)
             }
+        }
+        
+        monitors.forEach { NSEvent.removeMonitor($0) }
+        monitors = []
+        guard base.isActionEnabled else { return }
+        if let monitor = NSEvent.addLocalMonitorForEvents(matching: .leftMouseDown, handler: { (event) -> NSEvent? in
+            self.base.attributed_mouseDown(with: event)
+            return event
+        }) {
+            monitors.append(monitor)
+        }
+        if let monitor = NSEvent.addLocalMonitorForEvents(matching: .leftMouseUp, handler: { (event) -> NSEvent? in
+            self.base.attributed_mouseUp(with: event)
+            return event
+        }) {
+            monitors.append(monitor)
         }
     }
     
@@ -63,24 +75,36 @@ extension AttributedStringWrapper where Base: NSTextField {
         get { base.associated.get(&NSGestureRecognizerKey) ?? [] }
         set { base.associated.set(retain: &NSGestureRecognizerKey, newValue) }
     }
+    
+    private(set) var monitors: [Any] {
+        get { base.associated.get(&NSEventMonitorKey) ?? [] }
+        set { base.associated.set(retain: &NSEventMonitorKey, newValue) }
+    }
 }
 
 extension NSTextField {
-
+    
+    typealias Action = AttributedString.Action
+    
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
         return !attributed.gestures.isEmpty && (!isEditable && !isSelectable)
     }
     
-    private static var attributedString: AttributedString?
+    /// 当前信息
+    private var current: (AttributedString, NSRange, Action)? {
+        get { associated.get(&NSTextFieldCurrentKey) }
+        set { associated.set(retain: &NSTextFieldCurrentKey, newValue) }
+    }
     
-    open override func mouseDown(with event: NSEvent) {
-        super.mouseDown(with: event)
+    @objc
+    func attributed_mouseDown(with event: NSEvent) {
+        let point = convert(event.locationInWindow, from: nil)
+        guard bounds.contains(point), window == event.window else { return }
         guard isActionEnabled else { return }
-        guard let touch = event.touches(matching: .began, in: self).first else { return }
-        guard let (range, action) = matching(touch.location(in: self)) else { return }
-        // 备份原始内容
-        NSTextField.attributedString = attributed.string
+        guard let (range, action) = matching(point) else { return }
+        // 备份当前信息
+        current = (attributed.string, range, action)
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
@@ -89,47 +113,33 @@ extension NSTextField {
         }
     }
     
-    open override func mouseUp(with event: NSEvent) {
-        super.mouseUp(with: event)
+    @objc
+    func attributed_mouseUp(with event: NSEvent) {
         guard isActionEnabled else { return }
-        guard let attributedString = NSTextField.attributedString else { return }
-        attributedStringValue = attributedString.value
-        NSTextField.attributedString = nil
-    }
-    
-    open override func beginGesture(with event: NSEvent) {
-        super.beginGesture(with: event)
-    }
-    
-    open override func endGesture(with event: NSEvent) {
-        super.endGesture(with: event)
+        guard let current = self.current else { return }
+        DispatchQueue.main.async {
+            self.attributedStringValue = current.0.value
+            self.current = nil
+        }
     }
 }
 
 fileprivate extension NSTextField {
     
-    typealias Action = AttributedString.Action
-    
     @objc
     func attributedAction(_ sender: NSGestureRecognizer) {
-        guard sender.state == .ended else { return }
         guard isActionEnabled else { return }
-        guard let string = NSTextField.attributedString?.value else { return }
-        guard let (range, action) = matching(sender.location(in: self)) else { return }
+        guard let (string, range, action) = current else { return }
         guard action.trigger.matching(sender) else { return }
         
-        // 获取点击字符串 回调
-        let substring = string.attributedSubstring(from: range)
+        // 点击 回调
+        let substring = string.value.attributedSubstring(from: range)
         if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
             action.callback(.init(range: range, content: .attachment(attachment)))
             
         } else {
             action.callback(.init(range: range, content: .string(substring)))
         }
-        
-        guard let attributedString = NSTextField.attributedString else { return }
-        attributedStringValue = attributedString.value
-        NSTextField.attributedString = nil
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {

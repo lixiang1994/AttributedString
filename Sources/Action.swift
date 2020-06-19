@@ -30,8 +30,6 @@ extension AttributedString {
             case click
             /// 按住
             case press
-            /// 自定义手势
-            case gesture(GestureRecognizer)
         }
         
         /// 触发类型
@@ -188,20 +186,18 @@ extension AttributedString.Action.Trigger {
 
     func matching(_ gesture: GestureRecognizer) -> Bool {
         switch self {
-        case .gesture(let value) where gesture == value:
-            return true
         #if os(iOS)
         case .click where gesture is UITapGestureRecognizer:
-            return true
+            return gesture.state == .ended
         case .press where gesture is UILongPressGestureRecognizer:
-            return true
+            return gesture.state == .began
         #endif
         
         #if os(macOS)
         case .click where gesture is NSClickGestureRecognizer:
-            return true
+            return gesture.state == .ended
         case .press where gesture is NSPressGestureRecognizer:
-            return true
+            return gesture.state == .began
         #endif
         default:
             return false
