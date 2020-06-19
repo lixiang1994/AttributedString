@@ -186,13 +186,13 @@ let e: AttributedString = "\("lee", .action(click))"
 let f: AttributedString = "\(.image(image), action: click)"
 
 // 获取更多信息 
-func click(_ action: AttributedString.Action) {
-    switch action.content {
+func click(_ result: AttributedString.Action.Result) {
+    switch result.content {
     case .string(let value):
-        print("点击了文本: \(value) range: \(action.range)")
+        print("点击了文本: \(value) range: \(result.range)")
                 
     case .attachment(let value):
-        print("点击了附件: \(value) range: \(action.range)")
+        print("点击了附件: \(value) range: \(result.range)")
     }
 }
 

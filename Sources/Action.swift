@@ -77,6 +77,7 @@ extension AttributedString.Action.Result {
 extension AttributedString.Attribute {
     
     public typealias Action = AttributedString.Action
+    public typealias Trigger = Action.Trigger
     public typealias Highlight = Action.Highlight
     public typealias Result = Action.Result
     
@@ -87,6 +88,10 @@ extension AttributedString.Attribute {
     
     public static func action(_ value: @escaping (Result) -> Void) -> Self {
         return .init(attributes: [.action: Action(with: value)])
+    }
+    
+    public static func action(_ trigger: Trigger, _ closure: @escaping (Result) -> Void) -> Self {
+        return .init(attributes: [.action: Action(trigger, with: closure)])
     }
     
     public static func action(_ highlights: [Highlight], _ closure: @escaping (Result) -> Void) -> Self {
@@ -123,11 +128,24 @@ extension AttributedString {
     public init(_ attachment: Attachment, action: @escaping (Action.Result) -> Void) {
         self.value = AttributedString(attachment.value, action: action).value
     }
+    
+    public init<T: NSTextAttachment>(_ attachment: T, action: Action) {
+        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+    }
+    
+    public init(_ attachment: ImageTextAttachment, action: Action) {
+        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+    }
+    
+    public init(_ attachment: Attachment, action: Action) {
+        self.value = AttributedString(attachment.value, action: action).value
+    }
 }
 
 extension AttributedStringInterpolation {
     
-    public typealias Result = AttributedString.Action.Result
+    public typealias Action = AttributedString.Action
+    public typealias Result = Action.Result
     
     public mutating func appendInterpolation(_ value: ImageTextAttachment, action: @escaping () -> Void) {
         self.value.append(AttributedString(.init(attachment: value), .action(action)).value)
@@ -142,6 +160,14 @@ extension AttributedStringInterpolation {
     }
     
     public mutating func appendInterpolation(_ value: Attachment, action: @escaping (Result) -> Void) {
+        self.value.append(AttributedString(.init(attachment: value.value), .action(action)).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: ImageTextAttachment, action: Action) {
+        self.value.append(AttributedString(.init(attachment: value), .action(action)).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: Attachment, action: Action) {
         self.value.append(AttributedString(.init(attachment: value.value), .action(action)).value)
     }
 }

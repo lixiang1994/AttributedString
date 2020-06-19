@@ -28,7 +28,17 @@ class ActionViewController: UIViewController {
             }
         }
         
-        let action = AttributedString.Action(.press, highlights: .defalut) { (result) in
+        func press(_ result: AttributedString.Action.Result) {
+            switch result.content {
+            case .string(let value):
+                print("按住了文本: \n\(value) \nrange: \(result.range)")
+                
+            case .attachment(let value):
+                print("按住了附件: \n\(value) \nrange: \(result.range)")
+            }
+        }
+        
+        let action = AttributedString.Action(.press, highlights: [.background(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1))]) { (result) in
             switch result.content {
             case .string(let value):
                 print("点击了文本: \n\(value) \nrange: \(result.range)")
@@ -43,7 +53,9 @@ class ActionViewController: UIViewController {
         
         This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
         
-        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(action))
+        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, press))
+        
+        Please long press -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: action)
         
         """
         
@@ -52,7 +64,10 @@ class ActionViewController: UIViewController {
         
         This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
         
-        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(action))
+        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, press))
+        
+        Please long press -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: action)
+        
         """
     }
 }

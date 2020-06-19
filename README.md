@@ -186,13 +186,13 @@ let e: AttributedString = "\("lee", .action(click))"
 let f: AttributedString = "\(.image(image), action: click)"
 
 // More information. 
-func click(_ action: AttributedString.Action) {
-    switch action.content {
+func click(_ result: AttributedString.Action.Result) {
+    switch result.content {
     case .string(let value):
-       	print("Currently clicked text: \(value) range: \(action.range)")
+       	print("Currently clicked text: \(value) range: \(result.range)")
 				
     case .attachment(let value):
-	print("Currently clicked attachment: \(value) range: \(action.range)")
+        print("Currently clicked attachment: \(value) range: \(result.range)")
     }
 }
 

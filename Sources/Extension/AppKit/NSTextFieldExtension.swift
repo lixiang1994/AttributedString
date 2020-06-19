@@ -23,7 +23,14 @@ extension AttributedStringWrapper where Base: NSTextField {
     public var string: AttributedString {
         get { AttributedString(base.attributedStringValue) }
         set {
-            base.attributedStringValue = newValue.value
+            base.attributedStringValue = AttributedString(
+                newValue.value,
+                .font(base.font!),
+                .paragraph(
+                    .alignment(base.alignment),
+                    .baseWritingDirection(base.baseWritingDirection)
+                )
+            ).value
             
             setupGestureRecognizers()
         }
@@ -143,10 +150,7 @@ fileprivate extension NSTextField {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        // 同步NSTextField默认样式 使用嵌入包装模式 防止原有富文本样式被覆盖
-        let attributedString: AttributedString = """
-        \(wrap: .embedding(.init(attributedStringValue)), with: [.font(font!), .paragraph(.alignment(alignment), .baseWritingDirection(baseWritingDirection))])
-        """
+        let attributedString = AttributedString(attributedStringValue)
         
         // 构建同步Label设置的TextKit
         let textStorage = NSTextStorage(attributedString: attributedString.value)

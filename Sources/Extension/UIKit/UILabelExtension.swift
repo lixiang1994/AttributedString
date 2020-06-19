@@ -23,11 +23,17 @@ extension UILabel: AttributedStringCompatible {
 }
 
 extension AttributedStringWrapper where Base: UILabel {
-
+    
     public var text: AttributedString? {
         get { AttributedString(base.attributedText) }
         set {
-            base.attributedText = newValue?.value
+            base.attributedText = nil
+            // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
+            base.attributedText = AttributedString(
+                newValue?.value,
+                .font(base.font),
+                .paragraph(.alignment(base.textAlignment))
+            )?.value
             
             #if os(iOS)
             setupGestureRecognizers()
@@ -138,11 +144,7 @@ fileprivate extension UILabel {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        guard let attributedText = attributedText else { return nil }
-        // 同步Label默认样式 使用嵌入包装模式 防止原有富文本样式被覆盖
-        let attributedString: AttributedString = """
-        \(wrap: .embedding(.init(attributedText)), with: [.font(font), .paragraph(.alignment(textAlignment))])
-        """
+        guard let attributedString = AttributedString(attributedText) else { return nil }
         
         // 构建同步Label设置的TextKit
         let textStorage = NSTextStorage(attributedString: attributedString.value)
