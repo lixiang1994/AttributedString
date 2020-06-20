@@ -18,7 +18,10 @@ class ActionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        func click(_ result: AttributedString.Action.Result) {
+        // 如果需要修改全局默认高亮样式 可以通过以下方式
+        // Array<AttributedString.Action.Highlight>.defalut = [.color(<#T##value: Color##Color#>)]
+        
+        func clicked(_ result: AttributedString.Action.Result) {
             switch result.content {
             case .string(let value):
                 print("点击了文本: \n\(value) \nrange: \(result.range)")
@@ -28,7 +31,7 @@ class ActionViewController: UIViewController {
             }
         }
         
-        func press(_ result: AttributedString.Action.Result) {
+        func pressed(_ result: AttributedString.Action.Result) {
             switch result.content {
             case .string(let value):
                 print("按住了文本: \n\(value) \nrange: \(result.range)")
@@ -38,35 +41,39 @@ class ActionViewController: UIViewController {
             }
         }
         
-        let action = AttributedString.Action(.press, highlights: [.background(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1))]) { (result) in
+        let custom = AttributedString.Action(.press, highlights: [.background(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), .color(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))]) { (result) in
             switch result.content {
             case .string(let value):
-                print("点击了文本: \n\(value) \nrange: \(result.range)")
+                print("按住了文本: \n\(value) \nrange: \(result.range)")
                 
             case .attachment(let value):
-                print("点击了附件: \n\(value) \nrange: \(result.range)")
+                print("按住了附件: \n\(value) \nrange: \(result.range)")
             }
         }
         
         label.attributed.text = """
-        This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
+        This is \("Label", .font(.systemFont(ofSize: 50)), .action(clicked))
         
-        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
+        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: clicked) -> Displayed in custom size.
         
-        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, press))
+        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, pressed))
         
-        Please long press -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: action)
+        Please \("custom", .font(.systemFont(ofSize: 30)), .action(custom)).
+        
+        Please custom -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: custom).
         
         """
         
         textView.attributed.text = """
-        This is \("TextView", .font(.systemFont(ofSize: 20)), .action(click))
+        This is \("TextView", .font(.systemFont(ofSize: 20)), .action(clicked))
         
-        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
+        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: clicked) -> Displayed in custom size.
         
-        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, press))
+        This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, pressed))
         
-        Please long press -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: action)
+        Please \("custom", .font(.systemFont(ofSize: 30)), .action(custom)).
+        
+        Please custom -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: custom).
         
         """
     }

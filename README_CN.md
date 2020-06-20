@@ -13,7 +13,7 @@ AttributedString - 基于Swift插值方式优雅的构建富文本
 - [x] 支持多层富文本嵌套并提供嵌套样式优先级策略.
 - [x] 支持全部`NSAttributedString.Key`特性.
 - [x] 支持 iOS & macOS & watchOS & tvOS.
-- [x] 支持文本和附件点击回调
+- [x] 支持文本和附件点击或长按事件回调, 支持高亮样式.
 - [x] 更多新特性的不断加入.
 
 
@@ -164,7 +164,9 @@ textView.attributed.text = a + b
 textView.attributed.text += c
 ```
 
-#### 点击:	(仅支持 iOS: UILabel / UITextView 和 macOS: NSTextField)
+#### 动作: (仅支持 iOS: UILabel / UITextView 和 macOS: NSTextField)
+
+##### 点击:    
 
 ```swift
 // 文本
@@ -175,18 +177,18 @@ let b: AttributedString = .init(.image(image), action: {
 })
 
 // 建议使用函数作为参数 语法上比直接使用闭包更加整洁.
-func click() {
+func clicked() {
     // code
 }
 // 正常初始化
-let c: AttributedString = .init("lee", .action(click))
-let d: AttributedString = .init(.image(image), action: click)
+let c: AttributedString = .init("lee", .action(clicked))
+let d: AttributedString = .init(.image(image), action: clicked)
 // 字面量初始化
-let e: AttributedString = "\("lee", .action(click))"
-let f: AttributedString = "\(.image(image), action: click)"
+let e: AttributedString = "\("lee", .action(clicked))"
+let f: AttributedString = "\(.image(image), action: clicked)"
 
 // 获取更多信息 
-func click(_ result: AttributedString.Action.Result) {
+func clicked(_ result: AttributedString.Action.Result) {
     switch result.content {
     case .string(let value):
         print("点击了文本: \(value) range: \(result.range)")
@@ -196,11 +198,60 @@ func click(_ result: AttributedString.Action.Result) {
     }
 }
 
-label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(click))"
-textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), action: click) Displayed in custom size."
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(clicked))"
+textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), action: clicked) Displayed in custom size."
 ```
 
+##### 按住:  
 
+```swift
+func pressed(_ result: AttributedString.Action.Result) {
+    switch result.content {
+    case .string(let value):
+        print("按住了文本: \(value) range: \(result.range)")
+                
+    case .attachment(let value):
+        print("按住了附件: \(value) range: \(result.range)")
+    }
+}
+
+label.attributed.text = "This is \("Long Press", .font(.systemFont(ofSize: 20)), .action(.press, pressed))"
+textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), trigger: .press, action: pressed) Displayed in custom size."
+```
+
+##### 高亮样式:    
+
+```swift
+func clicked(_ result: AttributedString.Action.Result) {
+    switch result.content {
+    case .string(let value):
+        print("点击了文本: \(value) range: \(result.range)")
+                
+    case .attachment(let value):
+        print("点击了附件: \(value) range: \(result.range)")
+    }
+}
+
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action([.color(.blue)], clicked))"
+```
+
+##### 自定义: 
+
+```swift
+// 触发方式为 按住, 高亮样式为 蓝色背景色和白色文字
+let custom = AttributedString.Action(.press, highlights: [.background(.blue), .color(.white)]) { (result) in
+    switch result.content {
+    case .string(let value):
+        print("按住了文本: \(value) range: \(result.range)")
+        
+    case .attachment(let value):
+        print("按住了附件: \(value) range: \(result.range)")
+    }
+}
+
+label.attributed.text = "This is \("Custom", .font(.systemFont(ofSize: 20)), .action(custom))"
+textView.attributed.text = "This is a picture \(.image(image, .original(.center)), action: custom) Displayed in original size."
+```
 
 更多示例请查看工程应用.
 

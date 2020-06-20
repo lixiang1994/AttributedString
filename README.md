@@ -14,7 +14,7 @@
 - [x] Support for multi-level rich text cascading and provide other style priority strategies.
 - [x] Support for all `NSAttributedString.Key` functions.
 - [x] Support iOS & macOS & watchOS & tvOS.
-- [x] Support text and attachment click event callback.
+- [x] Support text and attachment click or press event callback, support highlight style.
 - [x] Continue to add more new features.
 
 ## Screenshot
@@ -164,7 +164,9 @@ textView.attributed.text = a + b
 textView.attributed.text += c
 ```
 
-#### Click:	(Only supports iOS: UILabel / UITextView & macOS: NSTextField)
+#### Action: (Only supports iOS: UILabel / UITextView & macOS: NSTextField)
+
+##### Click:	
 
 ```swift
 // Text
@@ -175,18 +177,18 @@ let b: AttributedString = .init(.image(image), action: {
 })
 
 // It is recommended to use functions as parameters.
-func click() {
+func clicked() {
     // code
 }
 // Normal
-let c: AttributedString = .init("lee", .action(click))
-let d: AttributedString = .init(.image(image), action: click)
+let c: AttributedString = .init("lee", .action(clicked))
+let d: AttributedString = .init(.image(image), action: clicked)
 // Interpolation
-let e: AttributedString = "\("lee", .action(click))"
-let f: AttributedString = "\(.image(image), action: click)"
+let e: AttributedString = "\("lee", .action(clicked))"
+let f: AttributedString = "\(.image(image), action: clicked)"
 
 // More information. 
-func click(_ result: AttributedString.Action.Result) {
+func clicked(_ result: AttributedString.Action.Result) {
     switch result.content {
     case .string(let value):
        	print("Currently clicked text: \(value) range: \(result.range)")
@@ -196,11 +198,59 @@ func click(_ result: AttributedString.Action.Result) {
     }
 }
 
-label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(click))"
-textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), action: click) Displayed in custom size."
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action(clicked))"
+textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), action: clicked) Displayed in custom size."
 ```
 
+##### Press:  
 
+```swift
+func pressed(_ result: AttributedString.Action.Result) {
+    switch result.content {
+    case .string(let value):
+        print("Currently pressed text: \(value) range: \(result.range)")
+                
+    case .attachment(let value):
+        print("Currently pressed attachment: \(value) range: \(result.range)")
+    }
+}
+
+label.attributed.text = "This is \("Long Press", .font(.systemFont(ofSize: 20)), .action(.press, pressed))"
+textView.attributed.text = "This is a picture \(.image(image, .custom(size: .init(width: 100, height: 100))), trigger: .press, action: pressed) Displayed in custom size."
+```
+
+##### Highlight style:    
+
+```swift
+func clicked(_ result: AttributedString.Action.Result) {
+    switch result.content {
+    case .string(let value):
+        print("Currently clicked text: \(value) range: \(result.range)")
+                
+    case .attachment(let value):
+        print("Currently clicked attachment: \(value) range: \(result.range)")
+    }
+}
+
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action([.color(.blue)], clicked))"
+```
+
+##### Custom: 
+
+```swift
+let custom = AttributedString.Action(.press, highlights: [.background(.blue), .color(.white)]) { (result) in
+    switch result.content {
+    case .string(let value):
+        print("Currently pressed text: \(value) range: \(result.range)")
+        
+    case .attachment(let value):
+        print("Currently pressed attachment: \(value) range: \(result.range)")
+    }
+}
+
+label.attributed.text = "This is \("Custom", .font(.systemFont(ofSize: 20)), .action(custom))"
+textView.attributed.text = "This is a picture \(.image(image, .original(.center)), action: custom) Displayed in original size."
+```
 
 For more examples, see the sample application.
 
