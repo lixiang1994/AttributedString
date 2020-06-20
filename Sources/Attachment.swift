@@ -25,6 +25,7 @@ extension AttributedString {
         case image(Image, bounds: CGRect)
         case data(Data, type: String)
         case file(FileWrapper)
+        case custom(NSTextAttachment)
         
         var value: NSTextAttachment {
             switch self {
@@ -41,6 +42,9 @@ extension AttributedString {
                 let temp = NSTextAttachment()
                 temp.fileWrapper = wrapper
                 return temp
+                
+            case let .custom(value):
+                return value
             }
         }
     }
@@ -162,11 +166,7 @@ extension AttributedStringInterpolation {
 }
 
 extension AttributedString {
-
-    public init<T: NSTextAttachment>(_ attachment: T) {
-        self.value = .init(attachment: attachment)
-    }
-
+    
     public init(_ attachment: ImageTextAttachment) {
         self.value = .init(attachment: attachment)
     }

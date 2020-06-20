@@ -13,10 +13,13 @@
 
 #if os(macOS)
 import AppKit
-public typealias GestureRecognizer = NSGestureRecognizer
-#else
+typealias GestureRecognizer = NSGestureRecognizer
+#elseif os(iOS)
 import UIKit
-public typealias GestureRecognizer = UIGestureRecognizer
+typealias GestureRecognizer = UIGestureRecognizer
+#elseif os(watchOS)
+import WatchKit
+typealias GestureRecognizer = WKGestureRecognizer
 #endif
 
 #if os(iOS) || os(macOS)
@@ -105,20 +108,12 @@ extension AttributedString.Attribute {
 
 extension AttributedString {
     
-    public init<T: NSTextAttachment>(_ attachment: T, action: @escaping () -> Void) {
-        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
-    }
-    
     public init(_ attachment: ImageTextAttachment, action: @escaping () -> Void) {
         self.value = AttributedString(.init(attachment: attachment), .action(action)).value
     }
     
     public init(_ attachment: Attachment, action: @escaping () -> Void) {
-        self.value = AttributedString(attachment.value, action: action).value
-    }
-    
-    public init<T: NSTextAttachment>(_ attachment: T, action: @escaping (Action.Result) -> Void) {
-        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+        self.value = AttributedString(.init(attachment: attachment.value), .action(action)).value
     }
     
     public init(_ attachment: ImageTextAttachment, action: @escaping (Action.Result) -> Void) {
@@ -126,11 +121,7 @@ extension AttributedString {
     }
     
     public init(_ attachment: Attachment, action: @escaping (Action.Result) -> Void) {
-        self.value = AttributedString(attachment.value, action: action).value
-    }
-    
-    public init<T: NSTextAttachment>(_ attachment: T, action: Action) {
-        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+        self.value = AttributedString(.init(attachment: attachment.value), .action(action)).value
     }
     
     public init(_ attachment: ImageTextAttachment, action: Action) {
@@ -138,7 +129,7 @@ extension AttributedString {
     }
     
     public init(_ attachment: Attachment, action: Action) {
-        self.value = AttributedString(attachment.value, action: action).value
+        self.value = AttributedString(.init(attachment: attachment.value), .action(action)).value
     }
 }
 
