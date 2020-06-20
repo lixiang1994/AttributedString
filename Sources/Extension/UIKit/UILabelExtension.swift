@@ -32,7 +32,7 @@ extension AttributedStringWrapper where Base: UILabel {
             base.attributedText = AttributedString(
                 newValue?.value,
                 .font(base.font),
-                .paragraph(.alignment(base.textAlignment))
+                .paragraph(.alignment(base.textAlignment), .lineBreakMode(base.lineBreakMode))
             )?.value
             
             #if os(iOS)
