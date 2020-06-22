@@ -32,7 +32,7 @@ extension AttributedStringWrapper where Base: UILabel {
             base.attributedText = AttributedString(
                 newValue?.value,
                 .font(base.font),
-                .paragraph(.alignment(base.textAlignment), .lineBreakMode(base.lineBreakMode))
+                .paragraph(.alignment(base.textAlignment))
             )?.value
             
             #if os(iOS)
@@ -156,6 +156,11 @@ fileprivate extension UILabel {
         textContainer.lineFragmentPadding = 0.0
         textContainer.maximumNumberOfLines = numberOfLines
         
+//        subviews.forEach({ $0.removeFromSuperview() })
+//        let view = DebugView(frame: bounds)
+//        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
+//        addSubview(view)
+        
         // 获取文本所占高度
         let height = layoutManager.usedRect(for: textContainer).height
         
@@ -178,6 +183,25 @@ fileprivate extension UILabel {
             return nil
         }
         return (range, action)
+    }
+}
+
+fileprivate class DebugView: UIView {
+    var draw: (() -> Void)?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.draw?()
     }
 }
 
