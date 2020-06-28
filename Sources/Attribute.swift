@@ -157,7 +157,7 @@ extension AttributedStringInterpolation {
     }
     
     public mutating func appendInterpolation<T>(_ value: T, with attributes: [Attribute]) {
-        self.value.append(AttributedString(.init(value), with: attributes).value)
+        self.value.append(AttributedString("\(value)", with: attributes).value)
     }
     
     // 嵌套包装

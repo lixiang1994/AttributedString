@@ -13,6 +13,7 @@ import AppKit
 private var NSGestureRecognizerKey: Void?
 private var NSEventMonitorKey: Void?
 private var NSTextFieldCurrentKey: Void?
+private var NSTextFieldObservationKey: Void?
 
 extension NSTextField: AttributedStringCompatible {
     
@@ -21,16 +22,30 @@ extension NSTextField: AttributedStringCompatible {
 extension AttributedStringWrapper where Base: NSTextField {
 
     public var string: AttributedString {
-        get { AttributedString(base.attributedStringValue) }
+        get { base.current?.0 ?? .init(base.attributedStringValue) }
         set {
-            base.attributedStringValue = AttributedString(
-                newValue.value,
-                .font(base.font!),
-                .paragraph(
-                    .alignment(base.alignment),
-                    .baseWritingDirection(base.baseWritingDirection)
-                )
-            ).value
+            // 判断当前是否在触摸状态, 内容是否发生了变化
+            if var current = base.current, current.0.isContentEqual(to: newValue) {
+                current.0 = newValue
+                base.current = current
+                
+                // 将当前的高亮属性覆盖到新文本中 替换显示的文本
+                let string = NSMutableAttributedString(attributedString: newValue.value)
+                base.attributedStringValue.get(current.1).forEach { (range, attributes) in
+                    string.setAttributes(attributes, range: range)
+                }
+                base.attributedStringValue = string
+                
+            } else {
+                base.attributedStringValue = AttributedString(
+                    newValue.value,
+                    .font(base.font ?? .systemFont(ofSize: 13)),
+                    .paragraph(
+                        .alignment(base.alignment),
+                        .baseWritingDirection(base.baseWritingDirection)
+                    )
+                ).value
+            }
             
             setupGestureRecognizers()
         }
@@ -45,9 +60,9 @@ extension AttributedStringWrapper where Base: NSTextField {
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
         
-        let actions = base.attributedStringValue.get(.action).compactMap({ $0 as? AttributedString.Action })
+        let actions: [(NSRange, AttributedString.Action)] = base.attributedStringValue.get(.action)
         
-        Set(actions.map({ $0.trigger })).forEach {
+        Set(actions.map({ $0.1.trigger })).forEach {
             switch $0 {
             case .click:
                 let gesture = NSClickGestureRecognizer(target: base, action: #selector(Base.attributedAction))
@@ -99,9 +114,15 @@ extension NSTextField {
     }
     
     /// 当前信息
-    private var current: (AttributedString, NSRange, Action)? {
+    fileprivate var current: (AttributedString, NSRange, Action)? {
         get { associated.get(&NSTextFieldCurrentKey) }
         set { associated.set(retain: &NSTextFieldCurrentKey, newValue) }
+    }
+    
+    /// 监听
+    private var observation: NSKeyValueObservation? {
+        get { associated.get(&NSTextFieldObservationKey) }
+        set { associated.set(retain: &NSTextFieldObservationKey, newValue) }
     }
     
     @objc
@@ -110,23 +131,25 @@ extension NSTextField {
         guard bounds.contains(point), window == event.window else { return }
         guard isActionEnabled else { return }
         guard let (range, action) = matching(point) else { return }
+        let string = attributed.string
         // 备份当前信息
-        current = (attributed.string, range, action)
+        current = (string, range, action)
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         self.attributedStringValue = attributedStringValue.reset(range: range) { (attributes) in
             attributes.merge(temp, uniquingKeysWith: { $1 })
         }
+        let highlights = string.value.get(range)
     }
     
     @objc
     func attributed_mouseUp(with event: NSEvent) {
         guard isActionEnabled else { return }
-        guard let current = self.current else { return }
         DispatchQueue.main.async {
-            self.attributedStringValue = current.0.value
+            guard let current = self.current else { return }
             self.current = nil
+            self.attributedStringValue = current.0.value
         }
     }
 }

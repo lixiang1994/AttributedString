@@ -25,12 +25,17 @@ public typealias Font = UIFont
 
 public struct AttributedString {
     
-    public let value: NSAttributedString
+    public internal(set) var value: NSAttributedString
     
-    /// Generic
+    public var length: Int {
+        value.length
     
-    public init<T>(_ value: T) {
-        self.value = .init(string: "\(value)")
+    }
+    
+    /// String
+    
+    public init(_ value: String) {
+        self.value = .init(string: value)
     }
     
     /// NSAttributedString
@@ -65,7 +70,7 @@ public struct AttributedString {
         self.value = AttributedString(wrap: .embedding(string), with: attributes).value
     }
     
-    public init(_ string: AttributedString, with attributes: [Attribute]) {
+    public init(_ string: AttributedString, with attributes: [Attribute] = []) {
         self.value = AttributedString(wrap: .embedding(string), with: attributes).value
     }
     
@@ -121,5 +126,34 @@ extension AttributedString: CustomStringConvertible {
     
     public var description: String {
         .init(describing: value)
+    }
+}
+
+extension AttributedString: Equatable {
+    
+    public static func == (lhs: AttributedString, rhs: AttributedString) -> Bool {
+        guard lhs.length == rhs.length else {
+            return false
+        }
+        guard lhs.value.string == rhs.value.string else {
+            return false
+        }
+        guard lhs.value.get(.init(location: 0, length: lhs.length)) == rhs.value.get(.init(location: 0, length: rhs.length)) else {
+            return false
+        }
+        return true
+    }
+    
+    /// 内容是否相等
+    /// - Parameter other: 其他AttributedString
+    /// - Returns: 结果
+    public func isContentEqual(to other: AttributedString?) -> Bool {
+        guard let other = other else {
+            return false
+        }
+        guard length == other.length else {
+            return false
+        }
+        return value.string == other.value.string
     }
 }

@@ -876,11 +876,11 @@ extension AllViewController {
                 title: ("Click", "点击事件"),
                 content: """
                 
-                This is \("Label", .font(.systemFont(ofSize: 50)), .action(click))
+                This is \("Label", .font(.systemFont(ofSize: 50)), .action(clicked))
+                http://www.baidu2.com/aa/nn
+                This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: clicked) -> Displayed in custom size.
                 
-                This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 100, height: 100))), action: click) -> Displayed in custom size.
-                
-                This is \("Press", .font(.systemFont(ofSize: 50)), .action(.init(.press, with: click)))
+                This is \("Press", .font(.systemFont(ofSize: 50)), .action(.init(.press, with: pressed)))
                 
                 """,
                 code: #"""
@@ -899,13 +899,25 @@ extension AllViewController {
         tableView.selectRowIndexes(.init(integer: 0), byExtendingSelection: true)
     }
     
-    func click(_ result: AttributedString.Action.Result) {
+    func clicked(_ result: AttributedString.Action.Result) {
         switch result.content {
         case .string(let value):
             print("点击了文本: \n\(value) \nrange: \(result.range)")
             
         case .attachment(let value):
             print("点击了附件: \n\(value) \nrange: \(result.range)")
+        }
+    }
+    
+    func pressed(_ result: AttributedString.Action.Result) {
+        switch result.content {
+        case .string(let value):
+            print("按住了文本: \n\(value) \nrange: \(result.range)")
+            // 设置action类型高亮显示
+            content.attributed.string.highlighted(checkings: [.action], [.color(#colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1))])
+            
+        case .attachment(let value):
+            print("按住了附件: \n\(value) \nrange: \(result.range)")
         }
     }
 }

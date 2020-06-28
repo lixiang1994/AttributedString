@@ -80,7 +80,6 @@ extension AttributedString.Attribute {
     
     public typealias Action = AttributedString.Action
     public typealias Trigger = Action.Trigger
-    public typealias Highlight = Action.Highlight
     public typealias Result = Action.Result
     
     public static func action(_ value: @escaping () -> Void) -> Self {
@@ -99,11 +98,11 @@ extension AttributedString.Attribute {
         return .init(attributes: [.action: Action(trigger, with: closure)])
     }
     
-    public static func action(_ highlights: [Highlight], _ closure: @escaping () -> Void) -> Self {
+    public static func action(_ highlights: [Action.Highlight], _ closure: @escaping () -> Void) -> Self {
         return .init(attributes: [.action: Action(highlights: highlights, with: { _ in closure() })])
     }
     
-    public static func action(_ highlights: [Highlight], _ closure: @escaping (Result) -> Void) -> Self {
+    public static func action(_ highlights: [Action.Highlight], _ closure: @escaping (Result) -> Void) -> Self {
         return .init(attributes: [.action: Action(highlights: highlights, with: closure)])
     }
     
@@ -233,6 +232,8 @@ extension NSAttributedString.Key {
     static let action = NSAttributedString.Key("com.attributed.string.action")
 }
 
+#endif
+
 extension NSAttributedString {
     
     func contains(_ name: Key) -> Bool {
@@ -249,15 +250,23 @@ extension NSAttributedString {
         return result
     }
     
-    func get(_ name: Key) -> [Any] {
-        var result: [Any] = []
+    func get<T>(_ name: Key) -> [(NSRange, T)] {
+        var result: [(NSRange, T)] = []
         enumerateAttribute(
             name,
             in: .init(location: 0, length: length),
             options: .longestEffectiveRangeNotRequired
         ) { (value, range, stop) in
-            guard let value = value else { return }
-            result.append(value)
+            guard let value = value as? T else { return }
+            result.append((range, value))
+        }
+        return result
+    }
+    
+    func get(_ range: NSRange) -> [(NSRange, [NSAttributedString.Key: Any])] {
+        var result: [(NSRange, [NSAttributedString.Key: Any])] = []
+        enumerateAttributes(in: range, options: .longestEffectiveRangeNotRequired) { (attributes, range, stop) in
+            result.append((range, attributes))
         }
         return result
     }
@@ -275,5 +284,3 @@ extension NSAttributedString {
         return string
     }
 }
-
-#endif

@@ -17,6 +17,7 @@ import UIKit
 
 private var UIGestureRecognizerKey: Void?
 private var UITextViewCurrentKey: Void?
+private var UITextViewObservationKey: Void?
 
 extension UITextView: AttributedStringCompatible {
     
@@ -25,9 +26,23 @@ extension UITextView: AttributedStringCompatible {
 extension AttributedStringWrapper where Base: UITextView {
 
     public var text: AttributedString {
-        get { .init(base.attributedText ?? .init(string: "")) }
+        get { base.current?.0 ?? .init(base.attributedText) }
         set {
-            base.attributedText = newValue.value
+            // 判断当前是否在触摸状态, 内容是否发生了变化
+            if var current = base.current, current.0.isContentEqual(to: newValue) {
+                current.0 = newValue
+                base.current = current
+                
+                // 将当前的高亮属性覆盖到新文本中 替换显示的文本
+                let string = NSMutableAttributedString(attributedString: newValue.value)
+                base.attributedText.get(current.1).forEach { (range, attributes) in
+                    string.setAttributes(attributes, range: range)
+                }
+                base.attributedText = string
+                
+            } else {
+                base.attributedText = newValue.value
+            }
             
             #if os(iOS)
             setupGestureRecognizers()
@@ -44,9 +59,9 @@ extension AttributedStringWrapper where Base: UITextView {
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
         
-        let actions = base.attributedText?.get(.action).compactMap({ $0 as? AttributedString.Action }) ?? []
+        let actions: [(NSRange, AttributedString.Action)] = base.attributedText?.get(.action) ?? []
         
-        Set(actions.map({ $0.trigger })).forEach {
+        Set(actions.map({ $0.1.trigger })).forEach {
             switch $0 {
             case .click:
                 let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
@@ -81,9 +96,15 @@ extension UITextView {
     }
     
     /// 当前信息
-    private var current: (AttributedString, NSRange, Action)? {
+    fileprivate var current: (AttributedString, NSRange, Action)? {
         get { associated.get(&UITextViewCurrentKey) }
         set { associated.set(retain: &UITextViewCurrentKey, newValue) }
+    }
+    
+    /// 监听
+    private var observation: NSKeyValueObservation? {
+        get { associated.get(&UITextViewObservationKey) }
+        set { associated.set(retain: &UITextViewObservationKey, newValue) }
     }
     
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -91,12 +112,13 @@ extension UITextView {
         guard isActionEnabled else { return }
         guard let touch = touches.first else { return }
         guard let (range, action) = matching(touch.location(in: self)) else { return }
-        // 备份原始内容
-        current = (attributed.text, range, action)
+        let string = attributed.text
+        // 设置当前范围内容
+        current = (string, range, action)
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
-        self.attributedText = attributedText.reset(range: range) { (attributes) in
+        attributedText = string.value.reset(range: range) { (attributes) in
             attributes.merge(temp, uniquingKeysWith: { $1 })
         }
     }
@@ -105,16 +127,16 @@ extension UITextView {
         super.touchesEnded(touches, with: event)
         guard isActionEnabled else { return }
         guard let current = self.current else { return }
-        attributedText = current.0.value
         self.current = nil
+        attributedText = current.0.value
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         guard isActionEnabled else { return }
         guard let current = self.current else { return }
-        attributedText = current.0.value
         self.current = nil
+        attributedText = current.0.value
     }
 }
 
@@ -162,5 +184,4 @@ fileprivate extension UITextView {
 }
 
 #endif
-
 #endif
