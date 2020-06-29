@@ -25,7 +25,6 @@ class ActionViewController: UIViewController {
             switch result.content {
             case .string(let value):
                 print("点击了文本: \n\(value) \nrange: \(result.range)")
-                textView.attributed.text.highlighted(checkings: [.action, .link], [.color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1))])
                 
             case .attachment(let value):
                 print("点击了附件: \n\(value) \nrange: \(result.range)")
@@ -36,7 +35,6 @@ class ActionViewController: UIViewController {
             switch result.content {
             case .string(let value):
                 print("按住了文本: \n\(value) \nrange: \(result.range)")
-                textView.attributed.text.highlighted(checkings: [.action], [.color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1))])
                 
             case .attachment(let value):
                 print("按住了附件: \n\(value) \nrange: \(result.range)")

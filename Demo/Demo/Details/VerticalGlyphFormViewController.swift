@@ -24,7 +24,7 @@ class VerticalGlyphFormViewController: UIViewController {
         \("verticalGlyphForm: 0", .verticalGlyphForm(false))
         
         
-        \("Currently on iOS, it's always horizontal.", .color(.lightGray))
+        \("Currently on iOS, it's always horizontal.", .foreground(.lightGray))
         
         """
     }

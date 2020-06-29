@@ -140,7 +140,6 @@ extension NSTextField {
         self.attributedStringValue = attributedStringValue.reset(range: range) { (attributes) in
             attributes.merge(temp, uniquingKeysWith: { $1 })
         }
-        let highlights = string.value.get(range)
     }
     
     @objc

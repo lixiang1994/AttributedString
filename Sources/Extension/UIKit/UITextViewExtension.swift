@@ -30,18 +30,28 @@ extension AttributedStringWrapper where Base: UITextView {
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
             if var current = base.current, current.0.isContentEqual(to: newValue) {
-                current.0 = newValue
+                var string = newValue
+                #if os(iOS)
+                // 处理监听事件 根据设置插入Action
+                setupObservation(&string)
+                #endif
+                current.0 = string
                 base.current = current
                 
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
-                let string = NSMutableAttributedString(attributedString: newValue.value)
+                let temp = NSMutableAttributedString(attributedString: newValue.value)
                 base.attributedText.get(current.1).forEach { (range, attributes) in
-                    string.setAttributes(attributes, range: range)
+                    temp.setAttributes(attributes, range: range)
                 }
-                base.attributedText = string
+                base.attributedText = temp
                 
             } else {
-                base.attributedText = newValue.value
+                var string = newValue
+                #if os(iOS)
+                // 处理监听事件 根据设置插入Action
+                setupObservation(&string)
+                #endif
+                base.attributedText = string.value
             }
             
             #if os(iOS)
@@ -88,7 +98,58 @@ extension AttributedStringWrapper where Base: UITextView {
 
 #if os(iOS)
 
+extension AttributedStringWrapper where Base: UITextView {
+    
+    /// 设置监听
+    private func setupObservation(_ string: inout AttributedString) {
+        guard let observation = base.observation else {
+            return
+        }
+        // 匹配监听的类型
+        let mached = string.matching(.init(observation.keys))
+        mached.forEach { (range, type, result) in
+            guard let value = observation[type] else { return }
+            // 为监听添加Action 如果已存在 则不再添加
+            string.add(range: range, action: .init(.click, highlights: value.0, with: { _ in value.1(result) }))
+        }
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checking: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        observe([checking], highlights: highlights, with: callback)
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checkings: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checkings: [Checking] = .all, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        var observation = base.observation ?? [:]
+        checkings.forEach { observation[$0] = (highlights, callback) }
+        base.observation = observation
+    }
+    
+    /// 移除监听
+    /// - Parameter checking: 检查类型
+    public func remove(checking: Checking) {
+        base.observation?.removeValue(forKey: checking)
+    }
+}
+
+#endif
+
+#if os(iOS)
+
 extension UITextView {
+    
+    fileprivate typealias Checking = AttributedString.Checking
+    fileprivate typealias Highlight = AttributedString.Action.Highlight
+    fileprivate typealias Observation = [Checking: ([Highlight], (Checking.Result) -> Void)]
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
@@ -102,7 +163,7 @@ extension UITextView {
     }
     
     /// 监听
-    private var observation: NSKeyValueObservation? {
+    fileprivate var observation: Observation? {
         get { associated.get(&UITextViewObservationKey) }
         set { associated.set(retain: &UITextViewObservationKey, newValue) }
     }

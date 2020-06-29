@@ -42,9 +42,14 @@ extension AttributedString {
     }
 }
 
+extension AttributedStringWrapper {
+    
+    public typealias Highlight = AttributedString.Action.Highlight
+}
+
 public extension Array where Element == AttributedString.Action.Highlight {
     
-    static var defalut: [AttributedString.Action.Highlight] = [.color(#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)), .underline(.single)]
+    static var defalut: [AttributedString.Action.Highlight] = [.foreground(#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)), .underline(.single)]
     
     static let empty: [AttributedString.Action.Highlight] = []
 }
@@ -170,7 +175,12 @@ extension AttributedStringInterpolation {
 
 extension AttributedString.Action.Highlight {
     
+    @available(*, deprecated, message: "use foreground(_:)", renamed: "foreground(_:)")
     public static func color(_ value: Color) -> Self {
+        return .init(attributes: [.foregroundColor: value])
+    }
+    
+    public static func foreground(_ value: Color) -> Self {
         return .init(attributes: [.foregroundColor: value])
     }
     
@@ -224,6 +234,33 @@ extension AttributedString.Action.Trigger {
         default:
             return false
         }
+    }
+}
+
+extension AttributedString {
+    
+    /// 设置Action
+    /// - Parameters:
+    ///   - range: 范围
+    ///   - action: Action
+    mutating func set(range: NSRange, action: Action) {
+        let string = NSMutableAttributedString(attributedString: value)
+        string.addAttribute(.action, value: action, range: range)
+        value = string
+    }
+    
+    /// 添加Action (如果该范围内已存在Action则不再添加 防止覆盖)
+    /// - Parameters:
+    ///   - range: 范围
+    ///   - action: Action
+    mutating func add(range: NSRange, action: Action) {
+        guard value.attribute(.action, at: range.location, effectiveRange: nil) == nil else {
+            return
+        }
+        
+        let string = NSMutableAttributedString(attributedString: value)
+        string.addAttribute(.action, value: action, range: range)
+        value = string
     }
 }
 

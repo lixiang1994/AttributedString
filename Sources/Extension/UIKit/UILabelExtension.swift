@@ -35,29 +35,39 @@ extension AttributedStringWrapper where Base: UILabel {
                     return
                 }
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
-                let string = NSMutableAttributedString(attributedString: new.value)
+                let temp = NSMutableAttributedString(attributedString: new.value)
                 base.attributedText?.get(current.1).forEach { (range, attributes) in
-                    string.setAttributes(attributes, range: range)
+                    temp.setAttributes(attributes, range: range)
                 }
                 // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
                 base.attributedText = nil
-                current.0 = .init(
+                var string = AttributedString(
                     new,
                     .font(base.font),
                     .paragraph(.alignment(base.textAlignment))
                 )
+                #if os(iOS)
+                // 处理监听事件 根据设置插入Action
+                setupObservation(&string)
+                #endif
+                current.0 = string
                 base.current = current
-                base.attributedText = string
+                base.attributedText = temp
                 
             } else {
                 base.current = nil
                 base.attributedText = nil
                 // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
-                base.attributedText = AttributedString(
+                var string = AttributedString(
                     newValue?.value,
                     .font(base.font),
                     .paragraph(.alignment(base.textAlignment))
-                )?.value
+                )
+                #if os(iOS)
+                // 处理监听事件 根据设置插入Action
+                setupObservation(&string)
+                #endif
+                base.attributedText = string?.value
             }
             
             #if os(iOS)
@@ -74,7 +84,7 @@ extension AttributedStringWrapper where Base: UILabel {
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
         
-        let actions: [(NSRange, AttributedString.Action)] = base.attributedText?.get(.action) ?? []
+        let actions: [(NSRange, AttributedString.Action)] = text?.value.get(.action) ?? []
         
         Set(actions.map({ $0.1.trigger })).forEach {
             switch $0 {
@@ -103,7 +113,68 @@ extension AttributedStringWrapper where Base: UILabel {
 
 #if os(iOS)
 
+extension AttributedStringWrapper where Base: UILabel {
+    
+    /// 设置监听
+    private func setupObservation(_ string: inout AttributedString?) {
+        guard var temp = string else {
+            return
+        }
+        // 消除可选类型 设置监听
+        setupObservation(&temp)
+        string = temp
+    }
+    
+    /// 设置监听
+    private func setupObservation(_ string: inout AttributedString) {
+        guard let observation = base.observation else {
+            return
+        }
+        // 匹配监听的类型
+        let mached = string.matching(.init(observation.keys))
+        mached.forEach { (range, type, result) in
+            guard let value = observation[type] else { return }
+            // 为监听添加Action 如果已存在 则不再添加
+            string.add(range: range, action: .init(.click, highlights: value.0, with: { _ in value.1(result) }))
+        }
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checking: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        observe([checking], highlights: highlights, with: callback)
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checkings: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checkings: [Checking] = .all, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        var observation = base.observation ?? [:]
+        checkings.forEach { observation[$0] = (highlights, callback) }
+        base.observation = observation
+    }
+    
+    /// 移除监听
+    /// - Parameter checking: 检查类型
+    public func remove(checking: Checking) {
+        base.observation?.removeValue(forKey: checking)
+    }
+}
+
+#endif
+
+#if os(iOS)
+
 extension UILabel {
+    
+    fileprivate typealias Checking = AttributedString.Checking
+    fileprivate typealias Highlight = AttributedString.Action.Highlight
+    fileprivate typealias Observation = [Checking: ([Highlight], (Checking.Result) -> Void)]
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
@@ -116,7 +187,7 @@ extension UILabel {
         set { associated.set(retain: &UILabelCurrentKey, newValue) }
     }
     /// 监听
-    private var observation: NSKeyValueObservation? {
+    fileprivate var observation: Observation? {
         get { associated.get(&UILabelObservationKey) }
         set { associated.set(retain: &UILabelObservationKey, newValue) }
     }
@@ -132,7 +203,7 @@ extension UILabel {
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
-        self.attributedText = string.value.reset(range: range) { (attributes) in
+        attributedText = string.value.reset(range: range) { (attributes) in
             attributes.merge(temp, uniquingKeysWith: { $1 })
         }
     }
@@ -210,7 +281,7 @@ fileprivate extension UILabel {
         }
         // 获取点击的字符串范围和回调事件
         var range = NSRange()
-        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? Action else {
+        guard let action = textStorage.attribute(.action, at: index, effectiveRange: &range) as? Action else {
             return nil
         }
         return (range, action)

@@ -44,7 +44,7 @@ extension AttributedString.Attribute {
         return .init(attributes: [.font: value])
     }
     
-    public static func color(_ value: Color) -> Self {
+    public static func foreground(_ value: Color) -> Self {
         return .init(attributes: [.foregroundColor: value])
     }
     
@@ -172,5 +172,13 @@ extension AttributedStringInterpolation {
     }
     public mutating func appendInterpolation(wrap mode: WrapMode, with attributes: [Attribute]) {
         self.value.append(AttributedString(wrap: mode, with: attributes).value)
+    }
+}
+
+extension AttributedString.Attribute {
+    
+    @available(*, deprecated, message: "use foreground(_:)", renamed: "foreground(_:)")
+    public static func color(_ value: Color) -> Self {
+        return .init(attributes: [.foregroundColor: value])
     }
 }

@@ -157,3 +157,22 @@ extension AttributedString: Equatable {
         return value.string == other.value.string
     }
 }
+
+extension Dictionary where Key == NSAttributedString.Key, Value == Any {
+    
+    static func == (lhs: [NSAttributedString.Key: Any], rhs: [NSAttributedString.Key: Any]) -> Bool {
+        lhs.keys == rhs.keys ? NSDictionary(dictionary: lhs).isEqual(to: rhs) : false
+    }
+}
+
+extension Array where Element == (NSRange, [NSAttributedString.Key: Any]) {
+    
+    static func == (lhs: [(NSRange, [NSAttributedString.Key: Any])], rhs: [(NSRange, [NSAttributedString.Key: Any])]) -> Bool {
+        guard lhs.count == rhs.count else {
+            return false
+        }
+        return zip(lhs, rhs).allSatisfy { (l, r) -> Bool in
+            l.0 == r.0 && l.1 == r.1
+        }
+    }
+}
