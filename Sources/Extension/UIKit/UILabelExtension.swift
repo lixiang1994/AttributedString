@@ -26,17 +26,17 @@ extension UILabel: AttributedStringCompatible {
 extension AttributedStringWrapper where Base: UILabel {
     
     public var text: AttributedString? {
-        get { base.current?.0 ?? AttributedString(base.attributedText) }
+        get { base.touched?.0 ?? AttributedString(base.attributedText) }
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
-            if var current = base.current, current.0.isContentEqual(to: newValue) {
+            if var touched = base.touched, touched.0.isContentEqual(to: newValue) {
                 guard let new = newValue else {
-                    base.current = nil
+                    base.touched = nil
                     return
                 }
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
                 let temp = NSMutableAttributedString(attributedString: new.value)
-                base.attributedText?.get(current.1).forEach { (range, attributes) in
+                base.attributedText?.get(touched.1).forEach { (range, attributes) in
                     temp.setAttributes(attributes, range: range)
                 }
                 // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
@@ -50,12 +50,16 @@ extension AttributedStringWrapper where Base: UILabel {
                 // 处理监听事件 根据设置插入Action
                 setupObservation(&string)
                 #endif
-                current.0 = string
-                base.current = current
+                touched.0 = string
+                base.touched = touched
                 base.attributedText = temp
                 
+                #if os(iOS)
+                setupGestureRecognizers(string)
+                #endif
+                
             } else {
-                base.current = nil
+                base.touched = nil
                 base.attributedText = nil
                 // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
                 var string = AttributedString(
@@ -68,23 +72,23 @@ extension AttributedStringWrapper where Base: UILabel {
                 setupObservation(&string)
                 #endif
                 base.attributedText = string?.value
+                
+                #if os(iOS)
+                setupGestureRecognizers(string)
+                #endif
             }
-            
-            #if os(iOS)
-            setupGestureRecognizers()
-            #endif
         }
     }
     
     #if os(iOS)
     
-    private func setupGestureRecognizers() {
+    private func setupGestureRecognizers(_ string: AttributedString?) {
         base.isUserInteractionEnabled = true
         
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
         
-        let actions: [(NSRange, AttributedString.Action)] = text?.value.get(.action) ?? []
+        let actions: [(NSRange, AttributedString.Action)] = string?.value.get(.action) ?? []
         
         Set(actions.map({ $0.1.trigger })).forEach {
             switch $0 {
@@ -181,8 +185,8 @@ extension UILabel {
         return !attributed.gestures.isEmpty && !(adjustsFontSizeToFitWidth && numberOfLines == 1)
     }
     
-    /// 当前信息
-    fileprivate var current: (AttributedString, NSRange, Action)? {
+    /// 当前触摸的信息
+    fileprivate var touched: (AttributedString, NSRange, Action)? {
         get { associated.get(&UILabelCurrentKey) }
         set { associated.set(retain: &UILabelCurrentKey, newValue) }
     }
@@ -198,8 +202,8 @@ extension UILabel {
         guard let string = attributed.text else { return }
         guard let touch = touches.first else { return }
         guard let (range, action) = matching(touch.location(in: self)) else { return }
-        // 设置当前范围内容
-        current = (string, range, action)
+        // 设置触摸范围内容
+        touched = (string, range, action)
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
@@ -211,17 +215,17 @@ extension UILabel {
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         guard isActionEnabled else { return }
-        guard let current = self.current else { return }
-        self.current = nil
-        attributedText = current.0.value
+        guard let touched = self.touched else { return }
+        self.touched = nil
+        attributedText = touched.0.value
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         guard isActionEnabled else { return }
-        guard let current = self.current else { return }
-        self.current = nil
-        attributedText = current.0.value
+        guard let touched = self.touched else { return }
+        self.touched = nil
+        attributedText = touched.0.value
     }
 }
 
@@ -232,7 +236,7 @@ fileprivate extension UILabel {
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard isActionEnabled else { return }
-        guard let (string, range, action) = current else { return }
+        guard let (string, range, action) = touched else { return }
         guard action.trigger.matching(sender) else { return }
         
         // 点击 回调

@@ -158,6 +158,29 @@ extension AttributedString: Equatable {
     }
 }
 
+extension AttributedString {
+    
+    public mutating func add(attributes: [Attribute], range: NSRange) {
+        guard !attributes.isEmpty, range.length > 0 else { return }
+        
+        var temp: [NSAttributedString.Key: Any] = [:]
+        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        let string = NSMutableAttributedString(attributedString: value)
+        string.addAttributes(temp, range: range)
+        value = string
+    }
+    
+    public mutating func set(attributes: [Attribute], range: NSRange) {
+        guard !attributes.isEmpty, range.length > 0 else { return }
+        
+        var temp: [NSAttributedString.Key: Any] = [:]
+        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        let string = NSMutableAttributedString(attributedString: value)
+        string.setAttributes(temp, range: range)
+        value = string
+    }
+}
+
 extension Dictionary where Key == NSAttributedString.Key, Value == Any {
     
     static func == (lhs: [NSAttributedString.Key: Any], rhs: [NSAttributedString.Key: Any]) -> Bool {

@@ -16,6 +16,9 @@ import Foundation
 extension AttributedString {
     
     public enum Checking: CaseIterable {
+        #if os(iOS) || os(macOS)
+        case action
+        #endif
         case date
         case link
         case address
@@ -27,6 +30,9 @@ extension AttributedString {
 extension AttributedString.Checking {
     
     public enum Result {
+        #if os(iOS) || os(macOS)
+        case action
+        #endif
         case date(Date)
         case link(URL)
         case address(Address)
@@ -62,7 +68,32 @@ extension AttributedString.Checking.Result {
 }
 
 extension AttributedStringWrapper {
+    
     public typealias Checking = AttributedString.Checking
+}
+
+public extension Array where Element == AttributedString.Checking {
+    
+    static var all: [AttributedString.Checking] = AttributedString.Checking.allCases
+    
+    static let empty: [AttributedString.Checking] = []
+}
+
+extension AttributedString {
+    
+    public mutating func add(attributes: [Attribute], checkings: [Checking] = .all) {
+        var temp: [NSAttributedString.Key: Any] = [:]
+        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        
+        let matched = matching(checkings)
+        
+        let string = NSMutableAttributedString(attributedString: value)
+        matched.forEach {
+            string.addAttributes(temp, range: $0.0)
+        }
+        
+        value = string
+    }
 }
 
 extension AttributedString {
@@ -77,10 +108,11 @@ extension AttributedString {
         
         #if os(iOS) || os(macOS)
         let actions: [(NSRange, AttributedString.Action)] = value.get(.action)
+        result += actions.map { ($0.0, .action, .action) }
         
-        func contains(_ range: NSRange) -> Bool {
-            // 允许完全相同的范围, 小于Action范围则不允许 防止Action范围被拆分
-            return actions.contains(where: { $0.0.contains(range.location) && $0.0 != range })
+        func contains(_ index: Int) -> Bool {
+            // Action范围不允许 防止Action范围被拆分
+            return actions.contains(where: { $0.0.contains(index) })
         }
         #endif
         
@@ -96,7 +128,7 @@ extension AttributedString {
             guard checkings.contains(type) else { return nil }
             #if os(iOS) || os(macOS)
             // 不包含在Action的范围内
-            guard !contains($0.range) else { return nil }
+            guard !contains($0.range.location) else { return nil }
             #endif
             
             switch type {
@@ -141,6 +173,9 @@ extension AttributedString {
                         flight: components[.flight]
                     )
                 ))
+                
+            default:
+                return nil
             }
         }
         
@@ -166,6 +201,9 @@ fileprivate extension AttributedString.Checking {
             
         case .transitInformation:
             return .transitInformation
+            
+        default:
+            return nil
         }
     }
 }

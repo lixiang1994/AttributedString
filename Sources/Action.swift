@@ -253,14 +253,16 @@ extension AttributedString {
     /// - Parameters:
     ///   - range: 范围
     ///   - action: Action
-    mutating func add(range: NSRange, action: Action) {
+    @discardableResult
+    mutating func add(range: NSRange, action: Action) -> Bool {
         guard value.attribute(.action, at: range.location, effectiveRange: nil) == nil else {
-            return
+            return false
         }
         
         let string = NSMutableAttributedString(attributedString: value)
         string.addAttribute(.action, value: action, range: range)
         value = string
+        return true
     }
 }
 

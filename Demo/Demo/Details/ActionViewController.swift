@@ -19,7 +19,7 @@ class ActionViewController: UIViewController {
         super.viewDidLoad()
         
         // 如果需要修改全局默认高亮样式 可以通过以下方式
-        // Array<AttributedString.Action.Highlight>.defalut = [.color(<#T##value: Color##Color#>)]
+        // Array<AttributedString.Action.Highlight>.defalut = [.foreground(<#T##value: Color##Color#>)]
         
         func clicked(_ result: AttributedString.Action.Result) {
             switch result.content {
@@ -41,7 +41,7 @@ class ActionViewController: UIViewController {
             }
         }
         
-        let custom = AttributedString.Action(.press, highlights: [.background(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), .color(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))]) { (result) in
+        let custom = AttributedString.Action(.press, highlights: [.background(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)), .foreground(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))]) { (result) in
             switch result.content {
             case .string(let value):
                 print("按住了文本: \n\(value) \nrange: \(result.range)")

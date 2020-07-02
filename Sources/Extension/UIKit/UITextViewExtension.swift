@@ -26,21 +26,21 @@ extension UITextView: AttributedStringCompatible {
 extension AttributedStringWrapper where Base: UITextView {
 
     public var text: AttributedString {
-        get { base.current?.0 ?? .init(base.attributedText) }
+        get { base.touched?.0 ?? .init(base.attributedText) }
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
-            if var current = base.current, current.0.isContentEqual(to: newValue) {
+            if var touched = base.touched, touched.0.isContentEqual(to: newValue) {
                 var string = newValue
                 #if os(iOS)
                 // 处理监听事件 根据设置插入Action
                 setupObservation(&string)
                 #endif
-                current.0 = string
-                base.current = current
+                touched.0 = string
+                base.touched = touched
                 
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
                 let temp = NSMutableAttributedString(attributedString: newValue.value)
-                base.attributedText.get(current.1).forEach { (range, attributes) in
+                base.attributedText.get(touched.1).forEach { (range, attributes) in
                     temp.setAttributes(attributes, range: range)
                 }
                 base.attributedText = temp
@@ -157,7 +157,7 @@ extension UITextView {
     }
     
     /// 当前信息
-    fileprivate var current: (AttributedString, NSRange, Action)? {
+    fileprivate var touched: (AttributedString, NSRange, Action)? {
         get { associated.get(&UITextViewCurrentKey) }
         set { associated.set(retain: &UITextViewCurrentKey, newValue) }
     }
@@ -174,8 +174,8 @@ extension UITextView {
         guard let touch = touches.first else { return }
         guard let (range, action) = matching(touch.location(in: self)) else { return }
         let string = attributed.text
-        // 设置当前范围内容
-        current = (string, range, action)
+        // 设置触摸范围内容
+        touched = (string, range, action)
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
@@ -187,17 +187,17 @@ extension UITextView {
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         guard isActionEnabled else { return }
-        guard let current = self.current else { return }
-        self.current = nil
-        attributedText = current.0.value
+        guard let touched = self.touched else { return }
+        self.touched = nil
+        attributedText = touched.0.value
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         guard isActionEnabled else { return }
-        guard let current = self.current else { return }
-        self.current = nil
-        attributedText = current.0.value
+        guard let touched = self.touched else { return }
+        self.touched = nil
+        attributedText = touched.0.value
     }
 }
 
@@ -208,7 +208,7 @@ fileprivate extension UITextView {
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard isActionEnabled else { return }
-        guard let (string, range, action) = current else { return }
+        guard let (string, range, action) = touched else { return }
         guard action.trigger.matching(sender) else { return }
         
         // 点击 回调
