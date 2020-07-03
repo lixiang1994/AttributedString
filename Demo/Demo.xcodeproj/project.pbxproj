@@ -18,7 +18,7 @@
 		9B6E89D223827D14009EBEBE /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89D123827D14009EBEBE /* TableViewCell.swift */; };
 		9B6E89D523828178009EBEBE /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B6E89D423828178009EBEBE /* AttributedString.framework */; };
 		9B6E89D623828178009EBEBE /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B6E89D423828178009EBEBE /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		9B74C1AE24A83A7100242418 /* HighlightedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B74C1AD24A83A7100242418 /* HighlightedViewController.swift */; };
+		9B74C1AE24A83A7100242418 /* CheckingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B74C1AD24A83A7100242418 /* CheckingViewController.swift */; };
 		9B74C1B024A83D9A00242418 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B74C1AF24A83D9A00242418 /* ViewController.swift */; };
 		9BD90EFE23840402000DBD29 /* FontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90EFD23840402000DBD29 /* FontViewController.swift */; };
 		9BD90F00238404C9000DBD29 /* ForegroundColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */; };
@@ -66,7 +66,7 @@
 		9B6E899723823F48009EBEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B6E89D123827D14009EBEBE /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		9B6E89D423828178009EBEBE /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B74C1AD24A83A7100242418 /* HighlightedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedViewController.swift; sourceTree = "<group>"; };
+		9B74C1AD24A83A7100242418 /* CheckingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckingViewController.swift; sourceTree = "<group>"; };
 		9B74C1AF24A83D9A00242418 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9BD90EFD23840402000DBD29 /* FontViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontViewController.swift; sourceTree = "<group>"; };
 		9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundColorViewController.swift; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 				9BD90F192384056F000DBD29 /* WritingDirectionViewController.swift */,
 				9BD90F1B23840581000DBD29 /* VerticalGlyphFormViewController.swift */,
 				9BE7D4BE2487B93500DE1176 /* ActionViewController.swift */,
-				9B74C1AD24A83A7100242418 /* HighlightedViewController.swift */,
+				9B74C1AD24A83A7100242418 /* CheckingViewController.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -267,7 +267,7 @@
 				9BD90F1C23840581000DBD29 /* VerticalGlyphFormViewController.swift in Sources */,
 				9BD90F06238404F4000DBD29 /* KernViewController.swift in Sources */,
 				9BD90F0823840501000DBD29 /* LigatureViewController.swift in Sources */,
-				9B74C1AE24A83A7100242418 /* HighlightedViewController.swift in Sources */,
+				9B74C1AE24A83A7100242418 /* CheckingViewController.swift in Sources */,
 				9BD90F1823840563000DBD29 /* ExpansionViewController.swift in Sources */,
 				9BD90F0C2384051C000DBD29 /* UnderlineViewController.swift in Sources */,
 				9BD90EFE23840402000DBD29 /* FontViewController.swift in Sources */,

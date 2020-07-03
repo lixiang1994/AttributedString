@@ -24,6 +24,7 @@ extension AttributedString {
         case address
         case phoneNumber
         case transitInformation
+//        case regex(String)
     }
 }
 
@@ -102,13 +103,13 @@ extension AttributedString {
     /// - Parameter checkings: 检查类型
     /// - Returns: 匹配结果 (范围, 检查类型, 检查结果)
     func matching(_ checkings: [Checking]) -> [(NSRange, Checking, Checking.Result)] {
-        guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return [] }
-        
         var result: [(NSRange, Checking, Checking.Result)] = []
         
         #if os(iOS) || os(macOS)
         let actions: [(NSRange, AttributedString.Action)] = value.get(.action)
-        result += actions.map { ($0.0, .action, .action) }
+        if checkings.contains(.action) {
+            result += actions.map { ($0.0, .action, .action) }
+        }
         
         func contains(_ index: Int) -> Bool {
             // Action范围不允许 防止Action范围被拆分
@@ -116,66 +117,76 @@ extension AttributedString {
         }
         #endif
         
-        let matches = detector.matches(
-            in: value.string,
-            options: .init(),
-            range: .init(location: 0, length: value.length)
-        )
-        
-        let checkings = Set(checkings)
-        result += matches.compactMap {
-            guard let type = $0.resultType.map() else { return nil }
-            guard checkings.contains(type) else { return nil }
-            #if os(iOS) || os(macOS)
-            // 不包含在Action的范围内
-            guard !contains($0.range.location) else { return nil }
-            #endif
+        if let regex = try? NSRegularExpression(pattern: "", options: .caseInsensitive) {
+            let matches = regex.matches(in: value.string, options: .init(), range: .init(location: 0, length: value.length))
             
-            switch type {
-            case .date:
-                return ($0.range, type, .date(
-                    .init(
-                        date: $0.date,
-                        duration: $0.duration,
-                        timeZone: $0.timeZone
-                    )
-                ))
+            for match in matches {
+                print(match.range)
+            }
+        }
+        
+        if let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) {
+            let matches = detector.matches(
+                in: value.string,
+                options: .init(),
+                range: .init(location: 0, length: value.length)
+            )
+            
+            let checkings = Set(checkings)
+            result += matches.compactMap {
+                guard let type = $0.resultType.map() else { return nil }
+                guard checkings.contains(type) else { return nil }
+                #if os(iOS) || os(macOS)
+                // 不包含在Action的范围内
+                guard !contains($0.range.location) else { return nil }
+                #endif
                 
-            case .link:
-                guard let url = $0.url else { return nil }
-                return ($0.range, type, .link(url))
-                
-            case .address:
-                guard let components = $0.addressComponents else { return nil }
-                return ($0.range, type, .address(
-                    .init(
-                        name: components[.name],
-                        jobTitle: components[.jobTitle],
-                        organization: components[.organization],
-                        street: components[.street],
-                        city: components[.city],
-                        state: components[.state],
-                        zip: components[.zip],
-                        country: components[.country],
-                        phone: components[.phone]
-                    )
-                ))
-                
-            case .phoneNumber:
-                guard let number = $0.phoneNumber else { return nil }
-                return ($0.range, type, .phoneNumber(number))
-                
-            case .transitInformation:
-                guard let components = $0.components else { return nil }
-                return ($0.range, type, .transitInformation(
-                    .init(
-                        airline: components[.airline],
-                        flight: components[.flight]
-                    )
-                ))
-                
-            default:
-                return nil
+                switch type {
+                case .date:
+                    return ($0.range, type, .date(
+                        .init(
+                            date: $0.date,
+                            duration: $0.duration,
+                            timeZone: $0.timeZone
+                        )
+                    ))
+                    
+                case .link:
+                    guard let url = $0.url else { return nil }
+                    return ($0.range, type, .link(url))
+                    
+                case .address:
+                    guard let components = $0.addressComponents else { return nil }
+                    return ($0.range, type, .address(
+                        .init(
+                            name: components[.name],
+                            jobTitle: components[.jobTitle],
+                            organization: components[.organization],
+                            street: components[.street],
+                            city: components[.city],
+                            state: components[.state],
+                            zip: components[.zip],
+                            country: components[.country],
+                            phone: components[.phone]
+                        )
+                    ))
+                    
+                case .phoneNumber:
+                    guard let number = $0.phoneNumber else { return nil }
+                    return ($0.range, type, .phoneNumber(number))
+                    
+                case .transitInformation:
+                    guard let components = $0.components else { return nil }
+                    return ($0.range, type, .transitInformation(
+                        .init(
+                            airline: components[.airline],
+                            flight: components[.flight]
+                        )
+                    ))
+                    
+                default:
+                    return nil
+                }
             }
         }
         

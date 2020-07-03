@@ -16,7 +16,8 @@
 import UIKit
 
 private var UIGestureRecognizerKey: Void?
-private var UITextViewCurrentKey: Void?
+private var UITextViewTouchedKey: Void?
+private var UITextViewActionsKey: Void?
 private var UITextViewObservationKey: Void?
 
 extension UITextView: AttributedStringCompatible {
@@ -30,12 +31,7 @@ extension AttributedStringWrapper where Base: UITextView {
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
             if var touched = base.touched, touched.0.isContentEqual(to: newValue) {
-                var string = newValue
-                #if os(iOS)
-                // 处理监听事件 根据设置插入Action
-                setupObservation(&string)
-                #endif
-                touched.0 = string
+                touched.0 = newValue
                 base.touched = touched
                 
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
@@ -45,18 +41,19 @@ extension AttributedStringWrapper where Base: UITextView {
                 }
                 base.attributedText = temp
                 
-            } else {
-                var string = newValue
                 #if os(iOS)
-                // 处理监听事件 根据设置插入Action
-                setupObservation(&string)
+                setupObservation(newValue)
+                setupGestureRecognizers()
                 #endif
-                base.attributedText = string.value
+                
+            } else {
+                base.attributedText = newValue.value
+                
+                #if os(iOS)
+                setupObservation(newValue)
+                setupGestureRecognizers()
+                #endif
             }
-            
-            #if os(iOS)
-            setupGestureRecognizers()
-            #endif
         }
     }
     
@@ -69,9 +66,7 @@ extension AttributedStringWrapper where Base: UITextView {
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
         
-        let actions: [(NSRange, AttributedString.Action)] = base.attributedText?.get(.action) ?? []
-        
-        Set(actions.map({ $0.1.trigger })).forEach {
+        Set(base.actions.values.map({ $0.trigger })).forEach {
             switch $0 {
             case .click:
                 let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
@@ -101,7 +96,18 @@ extension AttributedStringWrapper where Base: UITextView {
 extension AttributedStringWrapper where Base: UITextView {
     
     /// 设置监听
-    private func setupObservation(_ string: inout AttributedString) {
+    private func setupObservation(_ string: AttributedString?) {
+        // 清理原有动作记录
+        base.actions = [:]
+        
+        guard let string = string else {
+            return
+        }
+        // 存储文本中的动作
+        let actions: [(NSRange, AttributedString.Action)] = string.value.get(.action)
+        actions.forEach { base.actions[$0.0] = $0.1 }
+        
+        // 存储监听产生的动作
         guard let observation = base.observation else {
             return
         }
@@ -109,8 +115,7 @@ extension AttributedStringWrapper where Base: UITextView {
         let mached = string.matching(.init(observation.keys))
         mached.forEach { (range, type, result) in
             guard let value = observation[type] else { return }
-            // 为监听添加Action 如果已存在 则不再添加
-            string.add(range: range, action: .init(.click, highlights: value.0, with: { _ in value.1(result) }))
+            base.actions[range] = .init(.click, highlights: value.0, with: { _ in value.1(result) })
         }
     }
     
@@ -147,6 +152,7 @@ extension AttributedStringWrapper where Base: UITextView {
 
 extension UITextView {
     
+    fileprivate typealias Action = AttributedString.Action
     fileprivate typealias Checking = AttributedString.Checking
     fileprivate typealias Highlight = AttributedString.Action.Highlight
     fileprivate typealias Observation = [Checking: ([Highlight], (Checking.Result) -> Void)]
@@ -156,13 +162,17 @@ extension UITextView {
         return !attributed.gestures.isEmpty && (!isEditable && !isSelectable)
     }
     
-    /// 当前信息
+    /// 触摸信息
     fileprivate var touched: (AttributedString, NSRange, Action)? {
-        get { associated.get(&UITextViewCurrentKey) }
-        set { associated.set(retain: &UITextViewCurrentKey, newValue) }
+        get { associated.get(&UITextViewTouchedKey) }
+        set { associated.set(retain: &UITextViewTouchedKey, newValue) }
     }
-    
-    /// 监听
+    /// 全部动作
+    fileprivate var actions: [NSRange: Action] {
+        get { associated.get(&UITextViewActionsKey) ?? [:] }
+        set { associated.set(retain: &UITextViewActionsKey, newValue) }
+    }
+    /// 监听信息
     fileprivate var observation: Observation? {
         get { associated.get(&UITextViewObservationKey) }
         set { associated.set(retain: &UITextViewObservationKey, newValue) }
@@ -203,8 +213,6 @@ extension UITextView {
 
 fileprivate extension UITextView {
     
-    typealias Action = AttributedString.Action
-    
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard isActionEnabled else { return }
@@ -236,8 +244,9 @@ fileprivate extension UITextView {
             return nil
         }
         // 获取点击的字符串范围和回调事件
-        var range = NSRange()
-        guard let action = attributedText.attribute(.action, at: index, effectiveRange: &range) as? Action else {
+        guard
+            let range = actions.keys.first(where: { $0.contains(index) }),
+            let action = actions[range] else {
             return nil
         }
         return (range, action)

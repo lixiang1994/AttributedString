@@ -605,15 +605,15 @@
                                             <rect key="frame" x="0.0" y="0.0" width="348" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Highlighted" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ODd-Hl-FK4">
-                                                    <rect key="frame" x="16" y="14.999999999999998" width="88.333333333333329" height="20.333333333333332"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Checking" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ODd-Hl-FK4">
+                                                    <rect key="frame" x="16" y="14.999999999999998" width="72.333333333333329" height="20.333333333333332"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="高亮" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xKC-eV-9kV">
-                                                    <rect key="frame" x="305.33333333333331" y="14.999999999999998" width="34.666666666666664" height="20.333333333333332"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="文本检查" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xKC-eV-9kV">
+                                                    <rect key="frame" x="270.66666666666669" y="14.999999999999998" width="69.333333333333329" height="20.333333333333332"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2152,8 +2152,8 @@
         <!--Highlighted-->
         <scene sceneID="Aoj-FT-coi">
             <objects>
-                <viewController title="Action" hidesBottomBarWhenPushed="YES" id="QfH-3Z-ORs" userLabel="Highlighted" customClass="HighlightedViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="5OD-Bt-4za" customClass="HighlightedView" customModule="Demo" customModuleProvider="target">
+                <viewController title="Action" hidesBottomBarWhenPushed="YES" id="QfH-3Z-ORs" userLabel="Highlighted" customClass="CheckingViewController" customModule="Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5OD-Bt-4za" customClass="CheckingView" customModule="Demo" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>

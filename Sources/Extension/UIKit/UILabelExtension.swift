@@ -16,7 +16,8 @@
 import UIKit
 
 private var UIGestureRecognizerKey: Void?
-private var UILabelCurrentKey: Void?
+private var UILabelTouchedKey: Void?
+private var UILabelActionsKey: Void?
 private var UILabelObservationKey: Void?
 
 extension UILabel: AttributedStringCompatible {
@@ -41,40 +42,34 @@ extension AttributedStringWrapper where Base: UILabel {
                 }
                 // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
                 base.attributedText = nil
-                var string = AttributedString(
+                let string = AttributedString(
                     new,
                     .font(base.font),
                     .paragraph(.alignment(base.textAlignment))
                 )
-                #if os(iOS)
-                // 处理监听事件 根据设置插入Action
-                setupObservation(&string)
-                #endif
                 touched.0 = string
                 base.touched = touched
                 base.attributedText = temp
                 
                 #if os(iOS)
-                setupGestureRecognizers(string)
+                setupObservation(string)
+                setupGestureRecognizers()
                 #endif
                 
             } else {
                 base.touched = nil
                 base.attributedText = nil
                 // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
-                var string = AttributedString(
+                let string = AttributedString(
                     newValue?.value,
                     .font(base.font),
                     .paragraph(.alignment(base.textAlignment))
                 )
-                #if os(iOS)
-                // 处理监听事件 根据设置插入Action
-                setupObservation(&string)
-                #endif
                 base.attributedText = string?.value
                 
                 #if os(iOS)
-                setupGestureRecognizers(string)
+                setupObservation(string)
+                setupGestureRecognizers()
                 #endif
             }
         }
@@ -82,15 +77,13 @@ extension AttributedStringWrapper where Base: UILabel {
     
     #if os(iOS)
     
-    private func setupGestureRecognizers(_ string: AttributedString?) {
+    private func setupGestureRecognizers() {
         base.isUserInteractionEnabled = true
         
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
         
-        let actions: [(NSRange, AttributedString.Action)] = string?.value.get(.action) ?? []
-        
-        Set(actions.map({ $0.1.trigger })).forEach {
+        Set(base.actions.values.map({ $0.trigger })).forEach {
             switch $0 {
             case .click:
                 let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
@@ -120,17 +113,18 @@ extension AttributedStringWrapper where Base: UILabel {
 extension AttributedStringWrapper where Base: UILabel {
     
     /// 设置监听
-    private func setupObservation(_ string: inout AttributedString?) {
-        guard var temp = string else {
+    private func setupObservation(_ string: AttributedString?) {
+        // 清理原有动作记录
+        base.actions = [:]
+        
+        guard let string = string else {
             return
         }
-        // 消除可选类型 设置监听
-        setupObservation(&temp)
-        string = temp
-    }
-    
-    /// 设置监听
-    private func setupObservation(_ string: inout AttributedString) {
+        // 存储文本中的动作
+        let actions: [(NSRange, AttributedString.Action)] = string.value.get(.action)
+        actions.forEach { base.actions[$0.0] = $0.1 }
+        
+        // 存储监听产生的动作
         guard let observation = base.observation else {
             return
         }
@@ -138,8 +132,7 @@ extension AttributedStringWrapper where Base: UILabel {
         let mached = string.matching(.init(observation.keys))
         mached.forEach { (range, type, result) in
             guard let value = observation[type] else { return }
-            // 为监听添加Action 如果已存在 则不再添加
-            string.add(range: range, action: .init(.click, highlights: value.0, with: { _ in value.1(result) }))
+            base.actions[range] = .init(.click, highlights: value.0, with: { _ in value.1(result) })
         }
     }
     
@@ -176,21 +169,27 @@ extension AttributedStringWrapper where Base: UILabel {
 
 extension UILabel {
     
+    fileprivate typealias Action = AttributedString.Action
     fileprivate typealias Checking = AttributedString.Checking
     fileprivate typealias Highlight = AttributedString.Action.Highlight
     fileprivate typealias Observation = [Checking: ([Highlight], (Checking.Result) -> Void)]
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
-        return !attributed.gestures.isEmpty && !(adjustsFontSizeToFitWidth && numberOfLines == 1)
+        return !actions.isEmpty && !(adjustsFontSizeToFitWidth && numberOfLines == 1)
     }
     
-    /// 当前触摸的信息
+    /// 当前触摸
     fileprivate var touched: (AttributedString, NSRange, Action)? {
-        get { associated.get(&UILabelCurrentKey) }
-        set { associated.set(retain: &UILabelCurrentKey, newValue) }
+        get { associated.get(&UILabelTouchedKey) }
+        set { associated.set(retain: &UILabelTouchedKey, newValue) }
     }
-    /// 监听
+    /// 全部动作
+    fileprivate var actions: [NSRange: Action] {
+        get { associated.get(&UILabelActionsKey) ?? [:] }
+        set { associated.set(retain: &UILabelActionsKey, newValue) }
+    }
+    /// 监听信息
     fileprivate var observation: Observation? {
         get { associated.get(&UILabelObservationKey) }
         set { associated.set(retain: &UILabelObservationKey, newValue) }
@@ -230,8 +229,6 @@ extension UILabel {
 }
 
 fileprivate extension UILabel {
-    
-    typealias Action = AttributedString.Action
     
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
@@ -284,8 +281,9 @@ fileprivate extension UILabel {
             return nil
         }
         // 获取点击的字符串范围和回调事件
-        var range = NSRange()
-        guard let action = textStorage.attribute(.action, at: index, effectiveRange: &range) as? Action else {
+        guard
+            let range = actions.keys.first(where: { $0.contains(index) }),
+            let action = actions[range] else {
             return nil
         }
         return (range, action)
