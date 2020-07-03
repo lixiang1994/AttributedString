@@ -73,7 +73,7 @@ class ViewController: NSViewController {
             """,
             """
             \("Features:", .font(.systemFont(ofSize: 30, weight: .semibold)))
-            \("foregroundColor", .color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
+            \("foregroundColor", .foreground(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
             \("backgroundColor", .background(#colorLiteral(red: 0.6642242074, green: 0.6642400622, blue: 0.6642315388, alpha: 1)))
             \("font", .font(.systemFont(ofSize: 18, weight: .semibold)))
             \("link", .link("https://www.apple.com/"))
@@ -103,11 +103,11 @@ class ViewController: NSViewController {
                 Embedding
                 
                 fontSize: 16
-                This is attributed text -> \("fontSize: 30", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
+                This is attributed text -> \("fontSize: 30", .font(.systemFont(ofSize: 30)), .foreground(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
                 This is attributed text -> \("underline: single", .underline(.single))
                 \(wrap: .embedding(
                     "Test wrap color red \("fontSize: 40 medium", .font(.systemFont(ofSize: 40, weight: .medium)))"
-                ), .font(.systemFont(ofSize: 20)), .color(.red))
+                ), .font(.systemFont(ofSize: 20)), .foreground(.red))
                 """
                 ), .font(.systemFont(ofSize: 16))
             )
@@ -117,11 +117,11 @@ class ViewController: NSViewController {
                 Override
                 
                 fontSize: 16
-                This is attributed text -> \("fontSize: 30", .font(.systemFont(ofSize: 30)), .color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
+                This is attributed text -> \("fontSize: 30", .font(.systemFont(ofSize: 30)), .foreground(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
                 This is attributed text -> \("underline: single", .underline(.single))
                 \(wrap: .override(
                     "Test wrap color red \("fontSize: 40 medium", .font(.systemFont(ofSize: 40, weight: .medium)))"
-                ), .font(.systemFont(ofSize: 20)), .color(.red))
+                ), .font(.systemFont(ofSize: 20)), .foreground(.red))
                 """
                 ), .font(.systemFont(ofSize: 16))
             )

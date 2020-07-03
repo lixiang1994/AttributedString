@@ -41,19 +41,14 @@ extension AttributedStringWrapper where Base: UITextView {
                 }
                 base.attributedText = temp
                 
-                #if os(iOS)
-                setupActions(newValue)
-                setupGestureRecognizers()
-                #endif
-                
             } else {
                 base.attributedText = newValue.value
-                
-                #if os(iOS)
-                setupActions(newValue)
-                setupGestureRecognizers()
-                #endif
             }
+            
+            #if os(iOS)
+            setupActions(newValue)
+            setupGestureRecognizers()
+            #endif
         }
     }
     
@@ -107,8 +102,9 @@ extension AttributedStringWrapper where Base: UITextView {
         let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
         // 匹配检查
         let observation = base.observation
-        let checking = observation.keys + (actions.isEmpty ? [] : [.action])
-        string.matching(checking).forEach { (range, type, result) in
+        let checkings = observation.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(checkings).forEach { (range, checking) in
+            let (type, result) = checking
             switch result {
             case .action(let result):
                 guard var action = actions[range] else { return }
@@ -139,7 +135,7 @@ extension AttributedStringWrapper where Base: UITextView {
     ///   - checkings: 检查类型
     ///   - highlights: 高亮样式
     ///   - callback: 触发回调
-    public func observe(_ checkings: [Checking] = .all, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
         var observation = base.observation
         checkings.forEach { observation[$0] = (highlights, callback) }
         base.observation = observation

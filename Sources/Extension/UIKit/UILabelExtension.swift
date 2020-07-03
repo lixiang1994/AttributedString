@@ -122,11 +122,11 @@ extension AttributedStringWrapper where Base: UILabel {
         }
         // 获取全部动作
         let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
-        
         // 匹配检查
         let observation = base.observation
-        let checking = observation.keys + (actions.isEmpty ? [] : [.action])
-        string.matching(checking).forEach { (range, type, result) in
+        let checkings = observation.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(checkings).forEach { (range, checking) in
+            let (type, result) = checking
             switch result {
             case .action(let result):
                 guard var action = actions[range] else { return }
@@ -157,8 +157,8 @@ extension AttributedStringWrapper where Base: UILabel {
     ///   - checkings: 检查类型
     ///   - highlights: 高亮样式
     ///   - callback: 触发回调
-    public func observe(_ checkings: [Checking] = .all, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        var observation = base.observation ?? [:]
+    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        var observation = base.observation
         checkings.forEach { observation[$0] = (highlights, callback) }
         base.observation = observation
     }

@@ -19,7 +19,7 @@ import UIKit
 
 extension AttributedString {
         
-    public enum Checking: CaseIterable {
+    public enum Checking: Hashable {
         #if os(iOS) || os(macOS)
         case action
         #endif
@@ -28,7 +28,7 @@ extension AttributedString {
         case address
         case phoneNumber
         case transitInformation
-//        case regex(String)
+        case regex(String)
     }
 }
 
@@ -43,6 +43,8 @@ extension AttributedString.Checking {
         case address(Address)
         case phoneNumber(String)
         case transitInformation(TransitInformation)
+        
+        case regex(String)
     }
 }
 
@@ -79,14 +81,14 @@ extension AttributedStringWrapper {
 
 public extension Array where Element == AttributedString.Checking {
     
-    static var all: [AttributedString.Checking] = AttributedString.Checking.allCases
+    static var defalut: [AttributedString.Checking] = [.date, .link, .address, .phoneNumber, .transitInformation]
     
     static let empty: [AttributedString.Checking] = []
 }
 
 extension AttributedString {
     
-    public mutating func add(attributes: [Attribute], checkings: [Checking] = .all) {
+    public mutating func add(attributes: [Attribute], checkings: [Checking] = .defalut) {
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         
@@ -106,33 +108,48 @@ extension AttributedString {
     /// 匹配检查
     /// - Parameter checkings: 检查类型
     /// - Returns: 匹配结果 (范围, 检查类型, 检查结果)
-    func matching(_ checkings: [Checking]) -> [(NSRange, Checking, Checking.Result)] {
+    func matching(_ checkings: [Checking]) -> [NSRange: (Checking, Checking.Result)] {
+        guard !checkings.isEmpty else {
+            return [:]
+        }
+        
         let checkings = Set(checkings)
-        var result: [(NSRange, Checking, Checking.Result)] = []
+        var result: [NSRange: (Checking, Checking.Result)] = [:]
+        
+        func contains(_ range: NSRange) -> Bool {
+            guard !result.keys.isEmpty else {
+                return false
+            }
+            guard result[range] == nil else {
+                return false
+            }
+            return result.keys.contains(where: { $0.overlap(range) })
+        }
         
         // Actions
         #if os(iOS) || os(macOS)
         let actions: [NSRange: AttributedString.Action] = value.get(.action)
         if checkings.contains(.action) {
-            result += actions.map { ($0.key, .action, .action(value.get($0.key))) }
-        }
-        
-        func contains(_ index: Int) -> Bool {
-            // Action范围不允许 防止Action范围被拆分
-            return actions.contains(where: { $0.key.contains(index) })
+            for action in actions where !contains(action.key) {
+                result[action.key] = (.action, .action(value.get(action.key)))
+            }
         }
         #endif
         
         // 正则表达式
-        if let regex = try? NSRegularExpression(pattern: "", options: .caseInsensitive) {
+        checkings.forEach { (checking) in
+            guard case .regex(let string) = checking else { return }
+            guard let regex = try? NSRegularExpression(pattern: string, options: .caseInsensitive) else { return }
+            
             let matches = regex.matches(
                 in: value.string,
                 options: .init(),
                 range: .init(location: 0, length: value.length)
             )
             
-            for match in matches {
-                print(match.range)
+            for match in matches where !contains(match.range) {
+                let substring = value.attributedSubstring(from: match.range)
+                result[match.range] = (checking, .regex(substring.string))
             }
         }
         
@@ -144,60 +161,11 @@ extension AttributedString {
                 range: .init(location: 0, length: value.length)
             )
             
-            result += matches.compactMap {
-                guard let type = $0.resultType.map() else { return nil }
-                guard checkings.contains(type) else { return nil }
-                #if os(iOS) || os(macOS)
-                // 不包含在Action的范围内
-                guard !contains($0.range.location) else { return nil }
-                #endif
-                
-                switch type {
-                case .date:
-                    return ($0.range, type, .date(
-                        .init(
-                            date: $0.date,
-                            duration: $0.duration,
-                            timeZone: $0.timeZone
-                        )
-                    ))
-                    
-                case .link:
-                    guard let url = $0.url else { return nil }
-                    return ($0.range, type, .link(url))
-                    
-                case .address:
-                    guard let components = $0.addressComponents else { return nil }
-                    return ($0.range, type, .address(
-                        .init(
-                            name: components[.name],
-                            jobTitle: components[.jobTitle],
-                            organization: components[.organization],
-                            street: components[.street],
-                            city: components[.city],
-                            state: components[.state],
-                            zip: components[.zip],
-                            country: components[.country],
-                            phone: components[.phone]
-                        )
-                    ))
-                    
-                case .phoneNumber:
-                    guard let number = $0.phoneNumber else { return nil }
-                    return ($0.range, type, .phoneNumber(number))
-                    
-                case .transitInformation:
-                    guard let components = $0.components else { return nil }
-                    return ($0.range, type, .transitInformation(
-                        .init(
-                            airline: components[.airline],
-                            flight: components[.flight]
-                        )
-                    ))
-                    
-                default:
-                    return nil
-                }
+            for match in matches where !contains(match.range) {
+                guard let type = match.resultType.map() else { continue }
+                guard checkings.contains(type) else { continue }
+                guard let mapped = match.map() else { continue }
+                result[match.range] = (type, mapped)
             }
         }
         
@@ -252,5 +220,69 @@ fileprivate extension NSTextCheckingResult.CheckingType {
         default:
             return nil
         }
+    }
+}
+
+fileprivate extension NSTextCheckingResult {
+    
+    func map() -> AttributedString.Checking.Result? {
+        switch resultType {
+        case .date:
+            return .date(
+                .init(
+                    date: date,
+                    duration: duration,
+                    timeZone: timeZone
+                )
+            )
+        
+        case .link:
+            guard let url = url else { return nil }
+            return .link(url)
+        
+        case .address:
+            guard let components = addressComponents else { return nil }
+            return .address(
+                .init(
+                    name: components[.name],
+                    jobTitle: components[.jobTitle],
+                    organization: components[.organization],
+                    street: components[.street],
+                    city: components[.city],
+                    state: components[.state],
+                    zip: components[.zip],
+                    country: components[.country],
+                    phone: components[.phone]
+                )
+            )
+            
+        case .phoneNumber:
+            guard let number = phoneNumber else { return nil }
+            return .phoneNumber(number)
+            
+        case .transitInformation:
+            guard let components = components else { return nil }
+            return .transitInformation(
+                .init(
+                    airline: components[.airline],
+                    flight: components[.flight]
+                )
+            )
+            
+        default:
+            return nil
+        }
+    }
+}
+
+fileprivate extension NSRange {
+    
+    func overlap(_ other: NSRange) -> Bool {
+        guard
+            let lhs = Range(self),
+            let rhs = Range(other) else {
+            return false
+        }
+        return lhs.overlaps(rhs)
     }
 }

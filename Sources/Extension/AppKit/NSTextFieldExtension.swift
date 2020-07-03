@@ -12,7 +12,8 @@ import AppKit
 
 private var NSGestureRecognizerKey: Void?
 private var NSEventMonitorKey: Void?
-private var NSTextFieldCurrentKey: Void?
+private var NSTextFieldTouchedKey: Void?
+private var NSTextFieldActionsKey: Void?
 private var NSTextFieldObservationKey: Void?
 
 extension NSTextField: AttributedStringCompatible {
@@ -22,19 +23,19 @@ extension NSTextField: AttributedStringCompatible {
 extension AttributedStringWrapper where Base: NSTextField {
 
     public var string: AttributedString {
-        get { base.current?.0 ?? .init(base.attributedStringValue) }
+        get { base.touched?.0 ?? .init(base.attributedStringValue) }
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
-            if var current = base.current, current.0.isContentEqual(to: newValue) {
+            if var current = base.touched, current.0.isContentEqual(to: newValue) {
                 current.0 = newValue
-                base.current = current
+                base.touched = current
                 
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
-                let string = NSMutableAttributedString(attributedString: newValue.value)
+                let temp = NSMutableAttributedString(attributedString: newValue.value)
                 base.attributedStringValue.get(current.1).forEach { (range, attributes) in
-                    string.setAttributes(attributes, range: range)
+                    temp.setAttributes(attributes, range: range)
                 }
-                base.attributedStringValue = string
+                base.attributedStringValue = temp
                 
             } else {
                 base.attributedStringValue = AttributedString(
@@ -47,6 +48,8 @@ extension AttributedStringWrapper where Base: NSTextField {
                 ).value
             }
             
+            // 设置动作和手势
+            setupActions(newValue)
             setupGestureRecognizers()
         }
     }
@@ -60,9 +63,7 @@ extension AttributedStringWrapper where Base: NSTextField {
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
         
-        let actions: [(NSRange, AttributedString.Action)] = base.attributedStringValue.get(.action)
-        
-        Set(actions.map({ $0.1.trigger })).forEach {
+        Set(base.actions.values.map({ $0.trigger })).forEach {
             switch $0 {
             case .click:
                 let gesture = NSClickGestureRecognizer(target: base, action: #selector(Base.attributedAction))
@@ -104,24 +105,91 @@ extension AttributedStringWrapper where Base: NSTextField {
     }
 }
 
+extension AttributedStringWrapper where Base: NSTextField {
+    
+    /// 设置动作
+    private func setupActions(_ string: AttributedString?) {
+        // 清理原有动作记录
+        base.actions = [:]
+        
+        guard let string = string else {
+            return
+        }
+        // 获取全部动作
+        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
+        // 匹配检查
+        let observation = base.observation
+        let checkings = observation.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(checkings).forEach { (range, checking) in
+            let (type, result) = checking
+            switch result {
+            case .action(let result):
+                guard var action = actions[range] else { return }
+                action.handle = {
+                    action.callback(result)
+                    observation[type]?.1(.action(result))
+                }
+                base.actions[range] = action
+                
+            default:
+                guard let value = observation[type] else { return }
+                base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
+            }
+        }
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checking: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        observe([checking], highlights: highlights, with: callback)
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checkings: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        var observation = base.observation
+        checkings.forEach { observation[$0] = (highlights, callback) }
+        base.observation = observation
+    }
+    
+    /// 移除监听
+    /// - Parameter checking: 检查类型
+    public func remove(checking: Checking) {
+        base.observation.removeValue(forKey: checking)
+    }
+}
+
 extension NSTextField {
     
-    typealias Action = AttributedString.Action
+    fileprivate typealias Action = AttributedString.Action
+    fileprivate typealias Checking = AttributedString.Checking
+    fileprivate typealias Highlight = AttributedString.Action.Highlight
+    fileprivate typealias Observation = [Checking: ([Highlight], (Checking.Result) -> Void)]
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
         return !attributed.gestures.isEmpty && (!isEditable && !isSelectable)
     }
     
-    /// 当前信息
-    fileprivate var current: (AttributedString, NSRange, Action)? {
-        get { associated.get(&NSTextFieldCurrentKey) }
-        set { associated.set(retain: &NSTextFieldCurrentKey, newValue) }
+    /// 触摸信息
+    fileprivate var touched: (AttributedString, NSRange, Action)? {
+        get { associated.get(&NSTextFieldTouchedKey) }
+        set { associated.set(retain: &NSTextFieldTouchedKey, newValue) }
     }
-    
-    /// 监听
-    private var observation: NSKeyValueObservation? {
-        get { associated.get(&NSTextFieldObservationKey) }
+    /// 全部动作
+    fileprivate var actions: [NSRange: Action] {
+        get { associated.get(&NSTextFieldActionsKey) ?? [:] }
+        set { associated.set(retain: &NSTextFieldActionsKey, newValue) }
+    }
+    /// 监听信息
+    fileprivate var observation: Observation {
+        get { associated.get(&NSTextFieldObservationKey) ?? [:] }
         set { associated.set(retain: &NSTextFieldObservationKey, newValue) }
     }
     
@@ -133,7 +201,7 @@ extension NSTextField {
         guard let (range, action) = matching(point) else { return }
         let string = attributed.string
         // 备份当前信息
-        current = (string, range, action)
+        touched = (string, range, action)
         // 设置高亮样式
         var temp: [NSAttributedString.Key: Any] = [:]
         action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
@@ -146,8 +214,8 @@ extension NSTextField {
     func attributed_mouseUp(with event: NSEvent) {
         guard isActionEnabled else { return }
         DispatchQueue.main.async {
-            guard let current = self.current else { return }
-            self.current = nil
+            guard let current = self.touched else { return }
+            self.touched = nil
             self.attributedStringValue = current.0.value
         }
     }
@@ -158,17 +226,10 @@ fileprivate extension NSTextField {
     @objc
     func attributedAction(_ sender: NSGestureRecognizer) {
         guard isActionEnabled else { return }
-        guard let (string, range, action) = current else { return }
+        guard let action = touched?.2 else { return }
         guard action.trigger.matching(sender) else { return }
-        
         // 点击 回调
-        let substring = string.value.attributedSubstring(from: range)
-        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
-            action.callback(.init(range: range, content: .attachment(attachment)))
-            
-        } else {
-            action.callback(.init(range: range, content: .string(substring)))
-        }
+        action.handle?()
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
@@ -194,8 +255,9 @@ fileprivate extension NSTextField {
             return nil
         }
         // 获取点击的字符串范围和回调事件
-        var range = NSRange()
-        guard let action = attributedString.value.attribute(.action, at: index, effectiveRange: &range) as? Action else {
+        guard
+            let range = actions.keys.first(where: { $0.contains(index) }),
+            let action = actions[range] else {
             return nil
         }
         return (range, action)
