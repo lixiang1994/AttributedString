@@ -52,7 +52,7 @@ extension AttributedStringWrapper where Base: UILabel {
                 base.attributedText = temp
                 
                 #if os(iOS)
-                setupObservation(string)
+                setupActions(string)
                 setupGestureRecognizers()
                 #endif
                 
@@ -68,7 +68,7 @@ extension AttributedStringWrapper where Base: UILabel {
                 base.attributedText = string?.value
                 
                 #if os(iOS)
-                setupObservation(string)
+                setupActions(string)
                 setupGestureRecognizers()
                 #endif
             }
@@ -112,27 +112,34 @@ extension AttributedStringWrapper where Base: UILabel {
 
 extension AttributedStringWrapper where Base: UILabel {
     
-    /// 设置监听
-    private func setupObservation(_ string: AttributedString?) {
+    /// 设置动作
+    private func setupActions(_ string: AttributedString?) {
         // 清理原有动作记录
         base.actions = [:]
         
         guard let string = string else {
             return
         }
-        // 存储文本中的动作
-        let actions: [(NSRange, AttributedString.Action)] = string.value.get(.action)
-        actions.forEach { base.actions[$0.0] = $0.1 }
+        // 获取全部动作
+        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
         
-        // 存储监听产生的动作
-        guard let observation = base.observation else {
-            return
-        }
-        // 匹配监听的类型
-        let mached = string.matching(.init(observation.keys))
-        mached.forEach { (range, type, result) in
-            guard let value = observation[type] else { return }
-            base.actions[range] = .init(.click, highlights: value.0, with: { _ in value.1(result) })
+        // 匹配检查
+        let observation = base.observation
+        let checking = observation.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(checking).forEach { (range, type, result) in
+            switch result {
+            case .action(let result):
+                guard var action = actions[range] else { return }
+                action.handle = {
+                    action.callback(result)
+                    observation[type]?.1(.action(result))
+                }
+                base.actions[range] = action
+                
+            default:
+                guard let value = observation[type] else { return }
+                base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
+            }
         }
     }
     
@@ -159,7 +166,7 @@ extension AttributedStringWrapper where Base: UILabel {
     /// 移除监听
     /// - Parameter checking: 检查类型
     public func remove(checking: Checking) {
-        base.observation?.removeValue(forKey: checking)
+        base.observation.removeValue(forKey: checking)
     }
 }
 
@@ -190,8 +197,8 @@ extension UILabel {
         set { associated.set(retain: &UILabelActionsKey, newValue) }
     }
     /// 监听信息
-    fileprivate var observation: Observation? {
-        get { associated.get(&UILabelObservationKey) }
+    fileprivate var observation: Observation {
+        get { associated.get(&UILabelObservationKey) ?? [:] }
         set { associated.set(retain: &UILabelObservationKey, newValue) }
     }
     
@@ -233,17 +240,10 @@ fileprivate extension UILabel {
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard isActionEnabled else { return }
-        guard let (string, range, action) = touched else { return }
+        guard let action = touched?.2 else { return }
         guard action.trigger.matching(sender) else { return }
-        
         // 点击 回调
-        let substring = string.value.attributedSubstring(from: range)
-        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
-            action.callback(.init(range: range, content: .attachment(attachment)))
-            
-        } else {
-            action.callback(.init(range: range, content: .string(substring)))
-        }
+        action.handle?()
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {

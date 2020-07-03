@@ -188,9 +188,9 @@ extension Dictionary where Key == NSAttributedString.Key, Value == Any {
     }
 }
 
-extension Array where Element == (NSRange, [NSAttributedString.Key: Any]) {
+extension Dictionary where Key == NSRange, Value == [NSAttributedString.Key: Any]  {
     
-    static func == (lhs: [(NSRange, [NSAttributedString.Key: Any])], rhs: [(NSRange, [NSAttributedString.Key: Any])]) -> Bool {
+    static func == (lhs: [NSRange: [NSAttributedString.Key: Any]], rhs: [NSRange: [NSAttributedString.Key: Any]]) -> Bool {
         guard lhs.count == rhs.count else {
             return false
         }

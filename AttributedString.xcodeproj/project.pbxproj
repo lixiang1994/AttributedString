@@ -73,13 +73,9 @@
 		9B8765A124850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
 		9B8765A224850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
 		9B8765A324850742009C51C2 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B87659F24850742009C51C2 /* ObjectExtension.swift */; };
-		9BAA0DCB24A4914900702C23 /* Highlighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525C249F149A00CBDFFF /* Highlighted.swift */; };
 		9BAA0DCD24A4915F00702C23 /* Checking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525E24A053A600CBDFFF /* Checking.swift */; };
 		9BAA0DCE24A4916A00702C23 /* Checking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525E24A053A600CBDFFF /* Checking.swift */; };
 		9BAA0DCF24A4916A00702C23 /* Checking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525E24A053A600CBDFFF /* Checking.swift */; };
-		9BAA0DD024A492B000702C23 /* Highlighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525C249F149A00CBDFFF /* Highlighted.swift */; };
-		9BAA0DD124A492FC00702C23 /* Highlighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525C249F149A00CBDFFF /* Highlighted.swift */; };
-		9BBC525D249F149A00CBDFFF /* Highlighted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525C249F149A00CBDFFF /* Highlighted.swift */; };
 		9BBC525F24A053A600CBDFFF /* Checking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBC525E24A053A600CBDFFF /* Checking.swift */; };
 		9BE7D4C62488E0FC00DE1176 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C52488E0FC00DE1176 /* Action.swift */; };
 		9BE7D4C72488E0FC00DE1176 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C52488E0FC00DE1176 /* Action.swift */; };
@@ -144,7 +140,6 @@
 		9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyle.swift; sourceTree = "<group>"; };
 		9B6E89E42382C488009EBEBE /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		9B87659F24850742009C51C2 /* ObjectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectExtension.swift; sourceTree = "<group>"; };
-		9BBC525C249F149A00CBDFFF /* Highlighted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlighted.swift; sourceTree = "<group>"; };
 		9BBC525E24A053A600CBDFFF /* Checking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checking.swift; sourceTree = "<group>"; };
 		9BE7D4C52488E0FC00DE1176 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -261,7 +256,6 @@
 				9B6E89E22382C392009EBEBE /* ParagraphStyle.swift */,
 				9B6E89E42382C488009EBEBE /* Attachment.swift */,
 				9BE7D4C52488E0FC00DE1176 /* Action.swift */,
-				9BBC525C249F149A00CBDFFF /* Highlighted.swift */,
 				9BBC525E24A053A600CBDFFF /* Checking.swift */,
 			);
 			path = Sources;
@@ -608,7 +602,6 @@
 			files = (
 				9B267B8C24406B2F002F571E /* WKInterfaceLabelExtension.swift in Sources */,
 				9B267B77244066C1002F571E /* CGSizeExtension.swift in Sources */,
-				9BAA0DD124A492FC00702C23 /* Highlighted.swift in Sources */,
 				9B267B78244066C1002F571E /* CGRectExtension.swift in Sources */,
 				9B267B79244066C1002F571E /* CGPointExtension.swift in Sources */,
 				9BE7D4C82488E0FC00DE1176 /* Action.swift in Sources */,
@@ -632,7 +625,6 @@
 			files = (
 				9B267BE424408357002F571E /* UITextViewExtension.swift in Sources */,
 				9B267BE524408357002F571E /* UITextFieldExtension.swift in Sources */,
-				9BAA0DCB24A4914900702C23 /* Highlighted.swift in Sources */,
 				9B267BE624408357002F571E /* UILabelExtension.swift in Sources */,
 				9B267BE724408357002F571E /* ShadowExtension.swift in Sources */,
 				9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */,
@@ -673,7 +665,6 @@
 				9B34BD44243DBEA900932E6C /* AttributedString.swift in Sources */,
 				9B34BD45243DBEA900932E6C /* Interpolation.swift in Sources */,
 				9B8765A124850742009C51C2 /* ObjectExtension.swift in Sources */,
-				9BAA0DD024A492B000702C23 /* Highlighted.swift in Sources */,
 				9B34BD46243DBEA900932E6C /* Attribute.swift in Sources */,
 				9BE7D4C72488E0FC00DE1176 /* Action.swift in Sources */,
 				9B34BD47243DBEA900932E6C /* ParagraphStyle.swift in Sources */,
@@ -687,7 +678,6 @@
 			files = (
 				9B6E89E32382C392009EBEBE /* ParagraphStyle.swift in Sources */,
 				9B6E89AA2382742F009EBEBE /* UITextFieldExtension.swift in Sources */,
-				9BBC525D249F149A00CBDFFF /* Highlighted.swift in Sources */,
 				9B6E89E52382C488009EBEBE /* Attachment.swift in Sources */,
 				9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */,
 				9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */,

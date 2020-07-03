@@ -42,7 +42,7 @@ extension AttributedStringWrapper where Base: UITextView {
                 base.attributedText = temp
                 
                 #if os(iOS)
-                setupObservation(newValue)
+                setupActions(newValue)
                 setupGestureRecognizers()
                 #endif
                 
@@ -50,7 +50,7 @@ extension AttributedStringWrapper where Base: UITextView {
                 base.attributedText = newValue.value
                 
                 #if os(iOS)
-                setupObservation(newValue)
+                setupActions(newValue)
                 setupGestureRecognizers()
                 #endif
             }
@@ -95,27 +95,33 @@ extension AttributedStringWrapper where Base: UITextView {
 
 extension AttributedStringWrapper where Base: UITextView {
     
-    /// 设置监听
-    private func setupObservation(_ string: AttributedString?) {
+    /// 设置动作
+    private func setupActions(_ string: AttributedString?) {
         // 清理原有动作记录
         base.actions = [:]
         
         guard let string = string else {
             return
         }
-        // 存储文本中的动作
-        let actions: [(NSRange, AttributedString.Action)] = string.value.get(.action)
-        actions.forEach { base.actions[$0.0] = $0.1 }
-        
-        // 存储监听产生的动作
-        guard let observation = base.observation else {
-            return
-        }
-        // 匹配监听的类型
-        let mached = string.matching(.init(observation.keys))
-        mached.forEach { (range, type, result) in
-            guard let value = observation[type] else { return }
-            base.actions[range] = .init(.click, highlights: value.0, with: { _ in value.1(result) })
+        // 获取全部动作
+        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
+        // 匹配检查
+        let observation = base.observation
+        let checking = observation.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(checking).forEach { (range, type, result) in
+            switch result {
+            case .action(let result):
+                guard var action = actions[range] else { return }
+                action.handle = {
+                    action.callback(result)
+                    observation[type]?.1(.action(result))
+                }
+                base.actions[range] = action
+                
+            default:
+                guard let value = observation[type] else { return }
+                base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
+            }
         }
     }
     
@@ -134,7 +140,7 @@ extension AttributedStringWrapper where Base: UITextView {
     ///   - highlights: 高亮样式
     ///   - callback: 触发回调
     public func observe(_ checkings: [Checking] = .all, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        var observation = base.observation ?? [:]
+        var observation = base.observation
         checkings.forEach { observation[$0] = (highlights, callback) }
         base.observation = observation
     }
@@ -142,7 +148,7 @@ extension AttributedStringWrapper where Base: UITextView {
     /// 移除监听
     /// - Parameter checking: 检查类型
     public func remove(checking: Checking) {
-        base.observation?.removeValue(forKey: checking)
+        base.observation.removeValue(forKey: checking)
     }
 }
 
@@ -159,7 +165,7 @@ extension UITextView {
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
-        return !attributed.gestures.isEmpty && (!isEditable && !isSelectable)
+        return !actions.isEmpty && (!isEditable && !isSelectable)
     }
     
     /// 触摸信息
@@ -173,8 +179,8 @@ extension UITextView {
         set { associated.set(retain: &UITextViewActionsKey, newValue) }
     }
     /// 监听信息
-    fileprivate var observation: Observation? {
-        get { associated.get(&UITextViewObservationKey) }
+    fileprivate var observation: Observation {
+        get { associated.get(&UITextViewObservationKey) ?? [:] }
         set { associated.set(retain: &UITextViewObservationKey, newValue) }
     }
     

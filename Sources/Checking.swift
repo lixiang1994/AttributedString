@@ -11,10 +11,14 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
-import Foundation
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 extension AttributedString {
-    
+        
     public enum Checking: CaseIterable {
         #if os(iOS) || os(macOS)
         case action
@@ -32,7 +36,7 @@ extension AttributedString.Checking {
     
     public enum Result {
         #if os(iOS) || os(macOS)
-        case action
+        case action(AttributedString.Action.Result)
         #endif
         case date(Date)
         case link(URL)
@@ -103,28 +107,36 @@ extension AttributedString {
     /// - Parameter checkings: 检查类型
     /// - Returns: 匹配结果 (范围, 检查类型, 检查结果)
     func matching(_ checkings: [Checking]) -> [(NSRange, Checking, Checking.Result)] {
+        let checkings = Set(checkings)
         var result: [(NSRange, Checking, Checking.Result)] = []
         
+        // Actions
         #if os(iOS) || os(macOS)
-        let actions: [(NSRange, AttributedString.Action)] = value.get(.action)
+        let actions: [NSRange: AttributedString.Action] = value.get(.action)
         if checkings.contains(.action) {
-            result += actions.map { ($0.0, .action, .action) }
+            result += actions.map { ($0.key, .action, .action(value.get($0.key))) }
         }
         
         func contains(_ index: Int) -> Bool {
             // Action范围不允许 防止Action范围被拆分
-            return actions.contains(where: { $0.0.contains(index) })
+            return actions.contains(where: { $0.key.contains(index) })
         }
         #endif
         
+        // 正则表达式
         if let regex = try? NSRegularExpression(pattern: "", options: .caseInsensitive) {
-            let matches = regex.matches(in: value.string, options: .init(), range: .init(location: 0, length: value.length))
+            let matches = regex.matches(
+                in: value.string,
+                options: .init(),
+                range: .init(location: 0, length: value.length)
+            )
             
             for match in matches {
                 print(match.range)
             }
         }
         
+        // 数据检测器
         if let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) {
             let matches = detector.matches(
                 in: value.string,
@@ -132,7 +144,6 @@ extension AttributedString {
                 range: .init(location: 0, length: value.length)
             )
             
-            let checkings = Set(checkings)
             result += matches.compactMap {
                 guard let type = $0.resultType.map() else { return nil }
                 guard checkings.contains(type) else { return nil }
