@@ -2,8 +2,9 @@
 
 AttributedString - 基于Swift插值方式优雅的构建富文本
 
-[![](https://img.shields.io/cocoapods/l/AttributedString.svg)](LICENSE)&nbsp;
-![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)
+[![License](https://img.shields.io/cocoapods/l/AttributedString.svg)](LICENSE)&nbsp;
+![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)&nbsp;
+![Platform](https://img.shields.io/cocoapods/p/AttributedString.svg?style=flat)
 
 
 ## 特性
