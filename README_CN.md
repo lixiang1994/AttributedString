@@ -316,9 +316,9 @@ textView.attributed.observe([.link, .date], highlights: [.foreground(.blue)]) { 
 | verticalGlyphForm | `Bool`                               | 垂直排版 (当前在iOS上, 它始终是水平的)       |
 
 
-## 通过`Attribute.Checking`类提供的属性
+## 通过`Attribute.Checking`枚举提供的Case
 
-| 类型                                 | 描述                                         |
+| CASE                                 | 描述                                         |
 | ------------------------------------ | -------------------------------------------- |
 | `range(NSRange)`                              | 自定义范围                                                         |
 | `regex(String)`                                    | 正则表达式                                                         |
