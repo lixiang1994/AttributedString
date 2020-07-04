@@ -162,13 +162,15 @@ extension AttributedString {
                     let substring = value.attributedSubstring(from: match.range)
                     result[match.range] = (checking, .regex(substring))
                 }
-                
+            
+            #if os(iOS) || os(macOS)
             case .action:
                 let actions: [NSRange: AttributedString.Action] = value.get(.action)
                 for action in actions where !contains(action.key) {
                     result[action.key] = (.action, .action(value.get(action.key)))
                 }
-                
+            #endif
+            
             case .date, .link, .address, .phoneNumber, .transitInformation:
                 guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return }
                 
@@ -200,7 +202,9 @@ fileprivate extension AttributedString.Checking {
         switch self {
         case .range:    return 0
         case .regex:    return 1
+        #if os(iOS) || os(macOS)
         case .action:   return 2
+        #endif
         default:        return 3
         }
     }

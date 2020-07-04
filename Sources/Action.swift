@@ -20,6 +20,8 @@ typealias GestureRecognizer = UIGestureRecognizer
 #elseif os(watchOS)
 import WatchKit
 typealias GestureRecognizer = WKGestureRecognizer
+#elseif os(tvOS)
+import TVUIKit
 #endif
 
 #if os(iOS) || os(macOS)
