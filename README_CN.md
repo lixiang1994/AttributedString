@@ -107,9 +107,9 @@ textView.attributed.text = """
 ```swift
 textView.attributed.text = """
 
-\("foregroundColor", .color(.white))
+\("foregroundColor", .foreground(.white))
 
-\("foregroundColor", .color(.red))
+\("foregroundColor", .foreground(.red))
 
 """
 ```
@@ -162,6 +162,26 @@ let b: AttributedString = .init("456", .background(.red))
 let c: AttributedString = .init("789", .background(.gray))
 textView.attributed.text = a + b
 textView.attributed.text += c
+```
+
+#### 检查:
+
+```swift
+var string: AttributedString = .init("我的电话号码是+86 18611401994.", .background(.blue))
+string.add(attributes: [.foreground(color)], checkings: [.phoneNumber])
+textView.attributed.text = string
+```
+
+```swift
+var string: AttributedString = .init("打开 https://www.apple.com 和 https://github.com/lixiang1994/AttributedString", .background(.blue))
+string.add(attributes: [.foreground(color)], checkings: [.link])
+textView.attributed.text = string
+```
+
+```swift
+var string: AttributedString = .init("123456789", .background(.blue))
+string.add(attributes: [.foreground(color)], checkings: [.regex("[0-6]")])
+textView.attributed.text = string
 ```
 
 #### 动作: (仅支持 iOS: UILabel / UITextView 和 macOS: NSTextField)
@@ -232,14 +252,14 @@ func clicked(_ result: AttributedString.Action.Result) {
     }
 }
 
-label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action([.color(.blue)], clicked))"
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action([.foreground(.blue)], clicked))"
 ```
 
 ##### 自定义: 
 
 ```swift
 // 触发方式为 按住, 高亮样式为 蓝色背景色和白色文字
-let custom = AttributedString.Action(.press, highlights: [.background(.blue), .color(.white)]) { (result) in
+let custom = AttributedString.Action(.press, highlights: [.background(.blue), .foreground(.white)]) { (result) in
     switch result.content {
     case .string(let value):
         print("按住了文本: \(value) range: \(result.range)")
@@ -251,6 +271,20 @@ let custom = AttributedString.Action(.press, highlights: [.background(.blue), .c
 
 label.attributed.text = "This is \("Custom", .font(.systemFont(ofSize: 20)), .action(custom))"
 textView.attributed.text = "This is a picture \(.image(image, .original(.center)), action: custom) Displayed in original size."
+```
+
+#### 监听: (仅支持 iOS: UILabel / UITextView 和 macOS: NSTextField)
+
+```swift
+// 监听 电话号码类型的点击事件 并设置点击时高亮样式为蓝色字体
+label.attributed.observe([.phoneNumber], highlights: [.foreground(.blue)]) { (result) in
+    print("当前点击了 \(result)")
+}
+
+// 监听 链接和时间类型的点击事件 并设置点击时高亮样式为蓝色字体
+textView.attributed.observe([.link, .date], highlights: [.foreground(.blue)]) { (result) in
+    print("当前点击了 \(result)")
+}
 ```
 
 更多示例请查看工程应用.
@@ -282,6 +316,18 @@ textView.attributed.text = "This is a picture \(.image(image, .original(.center)
 | verticalGlyphForm | `Bool`                               | 垂直排版 (当前在iOS上, 它始终是水平的)       |
 
 
+## 通过`Attribute.Checking`类提供的属性
+
+| 类型                                 | 描述                                         |
+| ------------------------------------ | -------------------------------------------- |
+| `range(NSRange)`                              | 自定义范围                                                         |
+| `regex(String)`                                    | 正则表达式                                                         |
+| `action`                                                | 动作                                                                    |
+| `date`                                                   | 时间 (基于`NSDataDetector`)                         |
+| `link`                                                     | 链接 (基于`NSDataDetector`)                         |
+| `address`                                             | 地址 (基于`NSDataDetector`)                         |
+| `phoneNumber`                                  | 电话 (基于`NSDataDetector`)                         |
+| `transitInformation`                            | 航班 (基于`NSDataDetector`)                         |
 
 
 ## 贡献

@@ -107,9 +107,9 @@ textView.attributed.text = """
 ```swift
 textView.attributed.text = """
 
-\("foregroundColor", .color(.white))
+\("foregroundColor", .foreground(.white))
 
-\("foregroundColor", .color(.red))
+\("foregroundColor", .foreground(.red))
 
 """
 ```
@@ -163,6 +163,27 @@ let c: AttributedString = .init("789", .background(.gray))
 textView.attributed.text = a + b
 textView.attributed.text += c
 ```
+
+#### Checking:
+
+```swift
+var string: AttributedString = .init("my phone number is +86 18611401994.", .background(.blue))
+string.add(attributes: [.foreground(color)], checkings: [.phoneNumber])
+textView.attributed.text = string
+```
+
+```swift
+var string: AttributedString = .init("open https://www.apple.com and https://github.com/lixiang1994/AttributedString", .background(.blue))
+string.add(attributes: [.foreground(color)], checkings: [.link])
+textView.attributed.text = string
+```
+
+```swift
+var string: AttributedString = .init("123456789", .background(.blue))
+string.add(attributes: [.foreground(color)], checkings: [.regex("[0-6]")])
+textView.attributed.text = string
+```
+
 
 #### Action: (Only supports iOS: UILabel / UITextView & macOS: NSTextField)
 
@@ -232,13 +253,13 @@ func clicked(_ result: AttributedString.Action.Result) {
     }
 }
 
-label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action([.color(.blue)], clicked))"
+label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .action([.foreground(.blue)], clicked))"
 ```
 
 ##### Custom: 
 
 ```swift
-let custom = AttributedString.Action(.press, highlights: [.background(.blue), .color(.white)]) { (result) in
+let custom = AttributedString.Action(.press, highlights: [.background(.blue), .foreground(.white)]) { (result) in
     switch result.content {
     case .string(let value):
         print("Currently pressed text: \(value) range: \(result.range)")
@@ -250,6 +271,18 @@ let custom = AttributedString.Action(.press, highlights: [.background(.blue), .c
 
 label.attributed.text = "This is \("Custom", .font(.systemFont(ofSize: 20)), .action(custom))"
 textView.attributed.text = "This is a picture \(.image(image, .original(.center)), action: custom) Displayed in original size."
+```
+
+#### Observe: (Only supports iOS: UILabel / UITextView & macOS: NSTextField)
+
+```swift
+label.attributed.observe([.phoneNumber], highlights: [.foreground(.blue)]) { (result) in
+    print("Currently clicked \(result)")
+}
+
+textView.attributed.observe([.link], highlights: [.foreground(.blue)]) { (result) in
+    print("Currently clicked \(result)")
+}
 ```
 
 For more examples, see the sample application.
@@ -281,6 +314,18 @@ The following properties are available:
 | verticalGlyphForm | `Bool`                               | vertical glyph (Currently on iOS, it's always horizontal.)   |
 
 
+## Cases available via `Attribute.Checking` enumerated
+
+| CASE                                 | DESCRIPTION                                         |
+| ------------------------------------ | -------------------------------------------- |
+| `range(NSRange)`                              | custom range                                                         |
+| `regex(String)`                                    | regular expression                                                         |
+| `action`                                                | action                                                                    |
+| `date`                                                   | date (Based on `NSDataDetector`)                         |
+| `link`                                                     | link (Based on `NSDataDetector`)                         |
+| `address`                                             | address (Based on `NSDataDetector`)                         |
+| `phoneNumber`                                  | phone number (Based on `NSDataDetector`)                         |
+| `transitInformation`                            | transit Information (Based on `NSDataDetector`)                         |
 
 
 ## Contributing
