@@ -182,14 +182,14 @@ extension AttributedString {
     }
 }
 
-extension Dictionary where Key == NSAttributedString.Key, Value == Any {
+fileprivate extension Dictionary where Key == NSAttributedString.Key, Value == Any {
     
     static func == (lhs: [NSAttributedString.Key: Any], rhs: [NSAttributedString.Key: Any]) -> Bool {
         lhs.keys == rhs.keys ? NSDictionary(dictionary: lhs).isEqual(to: rhs) : false
     }
 }
 
-extension Dictionary where Key == NSRange, Value == [NSAttributedString.Key: Any]  {
+fileprivate extension Dictionary where Key == NSRange, Value == [NSAttributedString.Key: Any]  {
     
     static func == (lhs: [NSRange: [NSAttributedString.Key: Any]], rhs: [NSRange: [NSAttributedString.Key: Any]]) -> Bool {
         guard lhs.count == rhs.count else {
