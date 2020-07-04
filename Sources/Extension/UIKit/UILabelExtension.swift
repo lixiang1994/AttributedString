@@ -26,6 +26,8 @@ extension UILabel: AttributedStringCompatible {
 
 extension AttributedStringWrapper where Base: UILabel {
     
+    #if os(iOS)
+    
     public var text: AttributedString? {
         get { base.touched?.0 ?? AttributedString(base.attributedText) }
         set {
@@ -51,10 +53,8 @@ extension AttributedStringWrapper where Base: UILabel {
                 base.touched = touched
                 base.attributedText = temp
                 
-                #if os(iOS)
                 setupActions(string)
                 setupGestureRecognizers()
-                #endif
                 
             } else {
                 base.touched = nil
@@ -67,42 +67,26 @@ extension AttributedStringWrapper where Base: UILabel {
                 )
                 base.attributedText = string?.value
                 
-                #if os(iOS)
                 setupActions(string)
                 setupGestureRecognizers()
-                #endif
             }
         }
     }
     
-    #if os(iOS)
+    #else
     
-    private func setupGestureRecognizers() {
-        base.isUserInteractionEnabled = true
-        
-        gestures.forEach { base.removeGestureRecognizer($0) }
-        gestures = []
-        
-        Set(base.actions.values.map({ $0.trigger })).forEach {
-            switch $0 {
-            case .click:
-                let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
-                gesture.cancelsTouchesInView = false
-                base.addGestureRecognizer(gesture)
-                gestures.append(gesture)
-                
-            case .press:
-                let gesture = UILongPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
-                gesture.cancelsTouchesInView = false
-                base.addGestureRecognizer(gesture)
-                gestures.append(gesture)
-            }
+    public var text: AttributedString? {
+        get { AttributedString(base.attributedText) }
+        set {
+            base.attributedText = nil
+            // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
+            let string = AttributedString(
+                newValue?.value,
+                .font(base.font),
+                .paragraph(.alignment(base.textAlignment))
+            )
+            base.attributedText = string?.value
         }
-    }
-    
-    private(set) var gestures: [UIGestureRecognizer] {
-        get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
-        set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
     }
     
     #endif
@@ -111,6 +95,11 @@ extension AttributedStringWrapper where Base: UILabel {
 #if os(iOS)
 
 extension AttributedStringWrapper where Base: UILabel {
+    
+    private(set) var gestures: [UIGestureRecognizer] {
+        get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
+        set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
+    }
     
     /// 设置动作
     private func setupActions(_ string: AttributedString?) {
@@ -143,6 +132,30 @@ extension AttributedStringWrapper where Base: UILabel {
         }
     }
     
+    /// 设置手势识别
+    private func setupGestureRecognizers() {
+        base.isUserInteractionEnabled = true
+        
+        gestures.forEach { base.removeGestureRecognizer($0) }
+        gestures = []
+        
+        Set(base.actions.values.map({ $0.trigger })).forEach {
+            switch $0 {
+            case .click:
+                let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+                
+            case .press:
+                let gesture = UILongPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+            }
+        }
+    }
+    
     /// 添加监听
     /// - Parameters:
     ///   - checking: 检查类型
@@ -151,7 +164,6 @@ extension AttributedStringWrapper where Base: UILabel {
     public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
         observe([checking], highlights: highlights, with: callback)
     }
-    
     /// 添加监听
     /// - Parameters:
     ///   - checkings: 检查类型
@@ -167,6 +179,11 @@ extension AttributedStringWrapper where Base: UILabel {
     /// - Parameter checking: 检查类型
     public func remove(checking: Checking) {
         base.observation.removeValue(forKey: checking)
+    }
+    /// 移除监听
+    /// - Parameter checkings: 检查类型
+    public func remove(checkings: [Checking]) {
+        checkings.forEach { base.observation.removeValue(forKey: $0) }
     }
 }
 
@@ -259,6 +276,7 @@ fileprivate extension UILabel {
         textContainer.lineFragmentPadding = 0.0
         textContainer.maximumNumberOfLines = numberOfLines
         
+        // Debug
 //        subviews.forEach({ $0.removeFromSuperview() })
 //        let view = DebugView(frame: bounds)
 //        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }

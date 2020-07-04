@@ -101,11 +101,25 @@ extension AttributedString {
         
         value = string
     }
+    
+    public mutating func set(attributes: [Attribute], checkings: [Checking] = .defalut) {
+        var temp: [NSAttributedString.Key: Any] = [:]
+        attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+        
+        let matched = matching(checkings)
+        
+        let string = NSMutableAttributedString(attributedString: value)
+        matched.forEach {
+            string.setAttributes(temp, range: $0.0)
+        }
+        
+        value = string
+    }
 }
 
 extension AttributedString {
     
-    /// 匹配检查
+    /// 匹配检查 (Range 不会出现覆盖情况, 优先级 action > regex > other)
     /// - Parameter checkings: 检查类型
     /// - Returns: 匹配结果 (范围, 检查类型, 检查结果)
     func matching(_ checkings: [Checking]) -> [NSRange: (Checking, Checking.Result)] {
@@ -120,7 +134,7 @@ extension AttributedString {
             guard !result.keys.isEmpty else {
                 return false
             }
-            guard result[range] == nil else {
+            guard result[range] != nil else {
                 return false
             }
             return result.keys.contains(where: { $0.overlap(range) })
@@ -128,8 +142,8 @@ extension AttributedString {
         
         // Actions
         #if os(iOS) || os(macOS)
-        let actions: [NSRange: AttributedString.Action] = value.get(.action)
         if checkings.contains(.action) {
+            let actions: [NSRange: AttributedString.Action] = value.get(.action)
             for action in actions where !contains(action.key) {
                 result[action.key] = (.action, .action(value.get(action.key)))
             }

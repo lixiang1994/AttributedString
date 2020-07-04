@@ -2210,7 +2210,7 @@
                             <outlet property="textView" destination="Q84-7g-O8D" id="h6G-af-UF0"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Highlighted" id="pJu-pa-9kf">
+                    <navigationItem key="navigationItem" title="Checking" id="pJu-pa-9kf">
                         <barButtonItem key="rightBarButtonItem" title="Change Tint" id="MfC-fc-h1i">
                             <connections>
                                 <action selector="changeTintAction:" destination="QfH-3Z-ORs" id="3eu-vs-ise"/>

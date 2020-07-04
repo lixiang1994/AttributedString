@@ -29,13 +29,16 @@ public struct AttributedString {
     
     public var length: Int {
         value.length
-    
     }
     
     /// String
     
-    public init(_ value: String) {
-        self.value = .init(string: value)
+    public init(string value: String, _ attributes: Attribute...) {
+        self.value = AttributedString(string: value, with: attributes).value
+    }
+    
+    public init(string value: String, with attributes: [Attribute] = []) {
+        self.value = AttributedString(.init(string: value), with: attributes).value
     }
     
     /// NSAttributedString
@@ -43,8 +46,6 @@ public struct AttributedString {
     public init(_ value: NSAttributedString) {
         self.value = value
     }
-    
-    /// NSAttributedString + Attributes
     
     public init(_ value: NSAttributedString, _ attributes: Attribute...) {
         self.value = AttributedString(value, with: attributes).value
@@ -64,7 +65,7 @@ public struct AttributedString {
         self.value = AttributedString(.init(value), with: attributes).value
     }
     
-    /// AttributedString + Attributes
+    /// AttributedString
     
     public init(_ string: AttributedString, _ attributes: Attribute...) {
         self.value = AttributedString(wrap: .embedding(string), with: attributes).value

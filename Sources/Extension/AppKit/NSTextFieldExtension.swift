@@ -58,7 +58,52 @@ extension AttributedStringWrapper where Base: NSTextField {
         get { AttributedString(base.placeholderAttributedString) }
         set { base.placeholderAttributedString = newValue?.value }
     }
+}
+
+extension AttributedStringWrapper where Base: NSTextField {
     
+    private(set) var gestures: [NSGestureRecognizer] {
+        get { base.associated.get(&NSGestureRecognizerKey) ?? [] }
+        set { base.associated.set(retain: &NSGestureRecognizerKey, newValue) }
+    }
+    
+    private(set) var monitors: [Any] {
+        get { base.associated.get(&NSEventMonitorKey) ?? [] }
+        set { base.associated.set(retain: &NSEventMonitorKey, newValue) }
+    }
+    
+    /// 设置动作
+    private func setupActions(_ string: AttributedString?) {
+        // 清理原有动作记录
+        base.actions = [:]
+        
+        guard let string = string else {
+            return
+        }
+        // 获取全部动作
+        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
+        // 匹配检查
+        let observation = base.observation
+        let checkings = observation.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(checkings).forEach { (range, checking) in
+            let (type, result) = checking
+            switch result {
+            case .action(let result):
+                guard var action = actions[range] else { return }
+                action.handle = {
+                    action.callback(result)
+                    observation[type]?.1(.action(result))
+                }
+                base.actions[range] = action
+                
+            default:
+                guard let value = observation[type] else { return }
+                base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
+            }
+        }
+    }
+    
+    /// 设置手势识别
     private func setupGestureRecognizers() {
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
@@ -91,50 +136,6 @@ extension AttributedStringWrapper where Base: NSTextField {
             return event
         }) {
             monitors.append(monitor)
-        }
-    }
-    
-    private(set) var gestures: [NSGestureRecognizer] {
-        get { base.associated.get(&NSGestureRecognizerKey) ?? [] }
-        set { base.associated.set(retain: &NSGestureRecognizerKey, newValue) }
-    }
-    
-    private(set) var monitors: [Any] {
-        get { base.associated.get(&NSEventMonitorKey) ?? [] }
-        set { base.associated.set(retain: &NSEventMonitorKey, newValue) }
-    }
-}
-
-extension AttributedStringWrapper where Base: NSTextField {
-    
-    /// 设置动作
-    private func setupActions(_ string: AttributedString?) {
-        // 清理原有动作记录
-        base.actions = [:]
-        
-        guard let string = string else {
-            return
-        }
-        // 获取全部动作
-        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
-        // 匹配检查
-        let observation = base.observation
-        let checkings = observation.keys + (actions.isEmpty ? [] : [.action])
-        string.matching(checkings).forEach { (range, checking) in
-            let (type, result) = checking
-            switch result {
-            case .action(let result):
-                guard var action = actions[range] else { return }
-                action.handle = {
-                    action.callback(result)
-                    observation[type]?.1(.action(result))
-                }
-                base.actions[range] = action
-                
-            default:
-                guard let value = observation[type] else { return }
-                base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
-            }
         }
     }
     

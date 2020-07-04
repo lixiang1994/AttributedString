@@ -26,6 +26,8 @@ extension UITextView: AttributedStringCompatible {
 
 extension AttributedStringWrapper where Base: UITextView {
 
+    #if os(iOS)
+    
     public var text: AttributedString {
         get { base.touched?.0 ?? .init(base.attributedText) }
         set {
@@ -45,42 +47,16 @@ extension AttributedStringWrapper where Base: UITextView {
                 base.attributedText = newValue.value
             }
             
-            #if os(iOS)
             setupActions(newValue)
             setupGestureRecognizers()
-            #endif
         }
     }
     
-    #if os(iOS)
+    #else
     
-    private func setupGestureRecognizers() {
-        base.isUserInteractionEnabled = true
-        base.delaysContentTouches = false
-        
-        gestures.forEach { base.removeGestureRecognizer($0) }
-        gestures = []
-        
-        Set(base.actions.values.map({ $0.trigger })).forEach {
-            switch $0 {
-            case .click:
-                let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
-                gesture.cancelsTouchesInView = false
-                base.addGestureRecognizer(gesture)
-                gestures.append(gesture)
-                
-            case .press:
-                let gesture = UILongPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
-                gesture.cancelsTouchesInView = false
-                base.addGestureRecognizer(gesture)
-                gestures.append(gesture)
-            }
-        }
-    }
-    
-    private(set) var gestures: [UIGestureRecognizer] {
-        get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
-        set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
+    public var text: AttributedString {
+        get { .init(base.attributedText) }
+        set { base.attributedText = newValue.value }
     }
     
     #endif
@@ -89,6 +65,11 @@ extension AttributedStringWrapper where Base: UITextView {
 #if os(iOS)
 
 extension AttributedStringWrapper where Base: UITextView {
+    
+    private(set) var gestures: [UIGestureRecognizer] {
+        get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
+        set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
+    }
     
     /// 设置动作
     private func setupActions(_ string: AttributedString?) {
@@ -117,6 +98,31 @@ extension AttributedStringWrapper where Base: UITextView {
             default:
                 guard let value = observation[type] else { return }
                 base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
+            }
+        }
+    }
+    
+    /// 设置手势识别
+    private func setupGestureRecognizers() {
+        base.isUserInteractionEnabled = true
+        base.delaysContentTouches = false
+        
+        gestures.forEach { base.removeGestureRecognizer($0) }
+        gestures = []
+        
+        Set(base.actions.values.map({ $0.trigger })).forEach {
+            switch $0 {
+            case .click:
+                let gesture = UITapGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
+                
+            case .press:
+                let gesture = UILongPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
+                gesture.cancelsTouchesInView = false
+                base.addGestureRecognizer(gesture)
+                gestures.append(gesture)
             }
         }
     }
