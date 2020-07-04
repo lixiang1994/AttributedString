@@ -20,31 +20,38 @@ import UIKit
 extension AttributedString {
         
     public enum Checking: Hashable {
+        /// 自定义范围
+        case range(NSRange)
+        /// 正则表达式
+        case regex(String)
         #if os(iOS) || os(macOS)
         case action
         #endif
+        ///
         case date
         case link
         case address
         case phoneNumber
         case transitInformation
-        case regex(String)
     }
 }
 
 extension AttributedString.Checking {
     
     public enum Result {
+        /// 自定义范围
+        case range(NSAttributedString)
+        /// 正则表达式
+        case regex(NSAttributedString)
         #if os(iOS) || os(macOS)
         case action(AttributedString.Action.Result)
         #endif
+        
         case date(Date)
         case link(URL)
         case address(Address)
         case phoneNumber(String)
         case transitInformation(TransitInformation)
-        
-        case regex(String)
     }
 }
 
@@ -89,37 +96,33 @@ public extension Array where Element == AttributedString.Checking {
 extension AttributedString {
     
     public mutating func add(attributes: [Attribute], checkings: [Checking] = .defalut) {
+        guard !attributes.isEmpty, !checkings.isEmpty else { return }
+        
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         
         let matched = matching(checkings)
-        
         let string = NSMutableAttributedString(attributedString: value)
-        matched.forEach {
-            string.addAttributes(temp, range: $0.0)
-        }
-        
+        matched.forEach { string.addAttributes(temp, range: $0.0) }
         value = string
     }
     
     public mutating func set(attributes: [Attribute], checkings: [Checking] = .defalut) {
+        guard !attributes.isEmpty, !checkings.isEmpty else { return }
+        
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         
         let matched = matching(checkings)
-        
         let string = NSMutableAttributedString(attributedString: value)
-        matched.forEach {
-            string.setAttributes(temp, range: $0.0)
-        }
-        
+        matched.forEach { string.setAttributes(temp, range: $0.0) }
         value = string
     }
 }
 
 extension AttributedString {
     
-    /// 匹配检查 (Range 不会出现覆盖情况, 优先级 action > regex > other)
+    /// 匹配检查 (Key 不会出现覆盖情况, 优先级 range > action > regex > other)
     /// - Parameter checkings: 检查类型
     /// - Returns: 匹配结果 (范围, 检查类型, 检查结果)
     func matching(_ checkings: [Checking]) -> [NSRange: (Checking, Checking.Result)] {
@@ -127,7 +130,7 @@ extension AttributedString {
             return [:]
         }
         
-        let checkings = Set(checkings)
+        let checkings = checkings.filtered(duplication: \.self).sorted { $0.order < $1.order }
         var result: [NSRange: (Checking, Checking.Result)] = [:]
         
         func contains(_ range: NSRange) -> Bool {
@@ -140,50 +143,66 @@ extension AttributedString {
             return result.keys.contains(where: { $0.overlap(range) })
         }
         
-        // Actions
-        #if os(iOS) || os(macOS)
-        if checkings.contains(.action) {
-            let actions: [NSRange: AttributedString.Action] = value.get(.action)
-            for action in actions where !contains(action.key) {
-                result[action.key] = (.action, .action(value.get(action.key)))
-            }
-        }
-        #endif
-        
-        // 正则表达式
         checkings.forEach { (checking) in
-            guard case .regex(let string) = checking else { return }
-            guard let regex = try? NSRegularExpression(pattern: string, options: .caseInsensitive) else { return }
-            
-            let matches = regex.matches(
-                in: value.string,
-                options: .init(),
-                range: .init(location: 0, length: value.length)
-            )
-            
-            for match in matches where !contains(match.range) {
-                let substring = value.attributedSubstring(from: match.range)
-                result[match.range] = (checking, .regex(substring.string))
-            }
-        }
-        
-        // 数据检测器
-        if let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) {
-            let matches = detector.matches(
-                in: value.string,
-                options: .init(),
-                range: .init(location: 0, length: value.length)
-            )
-            
-            for match in matches where !contains(match.range) {
-                guard let type = match.resultType.map() else { continue }
-                guard checkings.contains(type) else { continue }
-                guard let mapped = match.map() else { continue }
-                result[match.range] = (type, mapped)
+            switch checking {
+            case .range(let range) where !contains(range):
+                let substring = value.attributedSubstring(from: range)
+                result[range] = (checking, .range(substring))
+                
+            case .regex(let string):
+                guard let regex = try? NSRegularExpression(pattern: string, options: .caseInsensitive) else { return }
+                
+                let matches = regex.matches(
+                    in: value.string,
+                    options: .init(),
+                    range: .init(location: 0, length: value.length)
+                )
+                
+                for match in matches where !contains(match.range) {
+                    let substring = value.attributedSubstring(from: match.range)
+                    result[match.range] = (checking, .regex(substring))
+                }
+                
+            case .action:
+                let actions: [NSRange: AttributedString.Action] = value.get(.action)
+                for action in actions where !contains(action.key) {
+                    result[action.key] = (.action, .action(value.get(action.key)))
+                }
+                
+            case .date, .link, .address, .phoneNumber, .transitInformation:
+                guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return }
+                
+                let matches = detector.matches(
+                    in: value.string,
+                    options: .init(),
+                    range: .init(location: 0, length: value.length)
+                )
+                
+                for match in matches where !contains(match.range) {
+                    guard let type = match.resultType.map() else { continue }
+                    guard checkings.contains(type) else { continue }
+                    guard let mapped = match.map() else { continue }
+                    result[match.range] = (type, mapped)
+                }
+                
+            default:
+                break
             }
         }
         
         return result
+    }
+}
+
+fileprivate extension AttributedString.Checking {
+    
+    var order: Int {
+        switch self {
+        case .range:    return 0
+        case .regex:    return 1
+        case .action:   return 2
+        default:        return 3
+        }
     }
 }
 

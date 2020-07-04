@@ -241,35 +241,6 @@ extension AttributedString.Action.Trigger {
     }
 }
 
-extension AttributedString {
-    
-    /// 设置Action
-    /// - Parameters:
-    ///   - range: 范围
-    ///   - action: Action
-    mutating func set(range: NSRange, action: Action) {
-        let string = NSMutableAttributedString(attributedString: value)
-        string.addAttribute(.action, value: action, range: range)
-        value = string
-    }
-    
-    /// 添加Action (如果该范围内已存在Action则不再添加 防止覆盖)
-    /// - Parameters:
-    ///   - range: 范围
-    ///   - action: Action
-    @discardableResult
-    mutating func add(range: NSRange, action: Action) -> Bool {
-        guard value.attribute(.action, at: range.location, effectiveRange: nil) == nil else {
-            return false
-        }
-        
-        let string = NSMutableAttributedString(attributedString: value)
-        string.addAttribute(.action, value: action, range: range)
-        value = string
-        return true
-    }
-}
-
 extension NSAttributedString {
     
     func get(_ range: NSRange) -> AttributedString.Action.Result {
