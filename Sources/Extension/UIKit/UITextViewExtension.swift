@@ -156,7 +156,11 @@ extension AttributedStringWrapper where Base: UITextView {
                 
             default:
                 guard let value = checkings[type] else { return }
-                base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
+                var action = Action(.click, highlights: value.0)
+                action.handle = {
+                    value.1(result)
+                }
+                base.actions[range] = action
             }
         }
     }
