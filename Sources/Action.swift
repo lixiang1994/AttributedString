@@ -44,6 +44,12 @@ extension AttributedString {
             self.highlights = highlights
             self.callback = callback
         }
+        
+        init(_ trigger: Trigger = .click, highlights: [Highlight] = .defalut) {
+            self.trigger = trigger
+            self.highlights = highlights
+            self.callback = { _ in }
+        }
     }
 }
 
