@@ -59,20 +59,10 @@ extension AttributedStringWrapper where Base: UITextView {
                 }
                 let attachments: [NSRange: AttributedString.ViewAttachment] = newValue.value.get(.attachment)
                 
-                let layoutManager = base.layoutManager
-                let textContainer = base.textContainer
-                let textContainerInset = base.textContainerInset
                 var temp : [NSRange: WrapperView] = [:]
                 for (range, attachment) in attachments {
-                    let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
-                    var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
-                    rect.origin.x += textContainerInset.left
-                    rect.origin.y += textContainerInset.top
-                    let view = WrapperView(frame: rect)
-                    view.backgroundColor = .red
+                    let view = WrapperView(attachment.view)
                     base.addSubview(view)
-                    attachment.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                    view.addSubview(attachment.view)
                     temp[range] = view
                 }
                 
@@ -82,23 +72,10 @@ extension AttributedStringWrapper where Base: UITextView {
                     }
                     
                     for (range, view) in temp {
-                        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
-                        var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
-                        rect.origin.x += textContainerInset.left
-                        rect.origin.y += textContainerInset.top
-                        view.frame = rect
-                    }
-                }
-                observations["attributedText"] = base.observe(\.attributedText, options: [.new, .old]) { (object, changed) in
-                    guard changed.newValue != changed.oldValue else {
-                        return
-                    }
-                    
-                    for (range, view) in temp {
-                        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
-                        var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
-                        rect.origin.x += textContainerInset.left
-                        rect.origin.y += textContainerInset.top
+                        let glyphRange = object.layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+                        var rect = object.layoutManager.boundingRect(forGlyphRange: glyphRange, in: object.textContainer)
+                        rect.origin.x += object.textContainerInset.left
+                        rect.origin.y += object.textContainerInset.top
                         view.frame = rect
                     }
                 }
@@ -319,14 +296,25 @@ fileprivate extension UITextView {
 
 fileprivate class WrapperView: UIView {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    let view: UIView
+    
+    init(_ view: UIView) {
+        self.view = view
+        super.init(frame: .zero)
+        
         clipsToBounds = true
-        backgroundColor = .clear
+        backgroundColor = .lightGray
+        
+        addSubview(view)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        view.frame = bounds
     }
 }
 

@@ -53,19 +53,12 @@ extension AttributedString {
        
         public struct Style {
             
+            public typealias Alignment = Attachment.Alignment
+            
             fileprivate enum Mode {
                 case proposed
                 case original
                 case custom(CGSize)
-            }
-            
-            /// 对齐
-            public enum Alignment {
-                case center // Visually centered
-                
-                case origin
-                
-                case offset(CGPoint)
             }
             
             fileprivate let mode: Mode
@@ -119,16 +112,7 @@ extension AttributedString {
             }
             
             func point(_ size: CGSize) -> CGPoint {
-                switch style.alignment {
-                case .origin:
-                    return .zero
-                    
-                case .center:
-                    return .init(0, -size.height / 4.0)
-                    
-                case .offset(let value):
-                    return value
-                }
+                return style.alignment.point(size, with: lineFrag.height)
             }
             
             switch style.mode {
@@ -154,17 +138,22 @@ extension AttributedString {
     
     public class ViewAttachment: NSTextAttachment {
         
+        public typealias Alignment = Attachment.Alignment
+        
         let view: UIView
+        
+        fileprivate let alignment: Alignment
         
         /// Custom View  (Only  support UITextView)
         /// - Parameter view: 视图
         /// - Returns: 视图附件
-        public static func view(_ view: UIView) -> ViewAttachment {
-            return .init(view)
+        public static func view(_ view: UIView, with alignment: Alignment = .origin) -> ViewAttachment {
+            return .init(view, with: alignment)
         }
         
-        init(_ view: UIView) {
+        init(_ view: UIView, with alignment: Alignment = .origin) {
             self.view = view
+            self.alignment = alignment
             super.init(data: nil, ofType: nil)
             self.image = Image()
         }
@@ -175,11 +164,26 @@ extension AttributedString {
         
         public override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
             view.layoutIfNeeded()
-            return view.bounds
+            let size = view.bounds.size
+            return .init(alignment.point(size, with: lineFrag.height), size)
         }
     }
     
     #endif
+}
+
+extension AttributedString.Attachment {
+    
+    /// 对齐
+    public enum Alignment {
+        case center // Visually centered
+        
+        case origin // Baseline
+        
+        case bottom // Bottom
+        
+        case offset(CGPoint)
+    }
 }
 
 extension AttributedStringInterpolation {
@@ -213,6 +217,35 @@ extension AttributedString {
     
     public init(_ attachment: ImageAttachment) {
         self.value = .init(attachment: attachment)
+    }
+}
+
+fileprivate extension AttributedString.Attachment.Alignment {
+    
+    /// 计算坐标
+    /// - Parameters:
+    ///   - size: 大小
+    ///   - lineHeight: 行高
+    /// - Returns: 位置坐标
+    func point(_ size: CGSize, with lineHeight: CGFloat) -> CGPoint {
+        var font = UIFont.systemFont(ofSize: 18)
+        let fontSize = font.pointSize / font.lineHeight * lineHeight
+        font = .systemFont(ofSize: fontSize)
+        
+        switch self {
+        case .bottom:
+            return .zero
+            
+        case .origin:
+            return .init(0, font.descender)
+            
+        case .center:
+            // https://code-examples.net/zh-CN/q/18e57cb
+            return .init(0, (font.capHeight - size.height) / 2)
+            
+        case .offset(let value):
+            return value
+        }
     }
 }
 

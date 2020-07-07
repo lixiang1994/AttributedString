@@ -2094,38 +2094,38 @@
                                 <rect key="frame" x="0.0" y="88" width="375" height="724"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="mmc-nl-05h">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="204.66666666666666"/>
+                                        <rect key="frame" x="10" y="0.0" width="355" height="304.66666666666669"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Dx-gZ-MkJ">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="21.666666666666668"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="355" height="21.666666666666668"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RJG-iN-YyO" customClass="Label" customModule="Demo" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="31.666666666666671" width="375" height="20.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="31.666666666666671" width="355" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8tE-Zz-ye4">
-                                                <rect key="frame" x="0.0" y="62" width="375" height="1"/>
+                                                <rect key="frame" x="0.0" y="62" width="355" height="1"/>
                                                 <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="dOB-cn-j6Y"/>
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TextView:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UkD-4v-HVR">
-                                                <rect key="frame" x="0.0" y="73" width="375" height="21.666666666666671"/>
+                                                <rect key="frame" x="0.0" y="73" width="355" height="21.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="This is TextView" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H35-D5-iDU">
-                                                <rect key="frame" x="0.0" y="104.66666666666666" width="375" height="100"/>
+                                                <rect key="frame" x="0.0" y="104.66666666666666" width="355" height="199.99999999999997"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="100" id="8Ab-Bx-619"/>
+                                                    <constraint firstAttribute="height" constant="200" id="8Ab-Bx-619"/>
                                                 </constraints>
                                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -2136,8 +2136,8 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="mmc-nl-05h" secondAttribute="trailing" id="5Gp-Ub-gGF"/>
-                                    <constraint firstItem="mmc-nl-05h" firstAttribute="leading" secondItem="Idg-QR-OKU" secondAttribute="leading" id="kkf-0L-hlm"/>
+                                    <constraint firstAttribute="trailing" secondItem="mmc-nl-05h" secondAttribute="trailing" constant="10" id="5Gp-Ub-gGF"/>
+                                    <constraint firstItem="mmc-nl-05h" firstAttribute="leading" secondItem="Idg-QR-OKU" secondAttribute="leading" constant="10" id="kkf-0L-hlm"/>
                                     <constraint firstItem="mmc-nl-05h" firstAttribute="top" secondItem="Idg-QR-OKU" secondAttribute="top" id="no1-VQ-iQw"/>
                                 </constraints>
                             </view>
@@ -2173,35 +2173,35 @@
                                 <rect key="frame" x="0.0" y="88" width="375" height="724"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Uph-ku-D9D">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="203.66666666666666"/>
+                                        <rect key="frame" x="10" y="0.0" width="355" height="203.66666666666666"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZtA-cW-m4d">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="21.666666666666668"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="355" height="21.666666666666668"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ml-Bw-5Tn">
-                                                <rect key="frame" x="0.0" y="31.666666666666671" width="375" height="19.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="31.666666666666671" width="355" height="19.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z43-48-Obr">
-                                                <rect key="frame" x="0.0" y="61" width="375" height="1"/>
+                                                <rect key="frame" x="0.0" y="61" width="355" height="1"/>
                                                 <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="ZIJ-zi-DtH"/>
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TextView:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jt5-NT-bMJ">
-                                                <rect key="frame" x="0.0" y="72" width="375" height="21.666666666666671"/>
+                                                <rect key="frame" x="0.0" y="72" width="355" height="21.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="This is TextView" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q84-7g-O8D">
-                                                <rect key="frame" x="0.0" y="103.66666666666666" width="375" height="100"/>
+                                                <rect key="frame" x="0.0" y="103.66666666666666" width="355" height="100"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="100" id="OPW-6P-SP3"/>
@@ -2215,8 +2215,8 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="Uph-ku-D9D" secondAttribute="trailing" id="6Bj-hA-YS0"/>
-                                    <constraint firstItem="Uph-ku-D9D" firstAttribute="leading" secondItem="k2l-OB-TqD" secondAttribute="leading" id="ADc-qa-MV3"/>
+                                    <constraint firstAttribute="trailing" secondItem="Uph-ku-D9D" secondAttribute="trailing" constant="10" id="6Bj-hA-YS0"/>
+                                    <constraint firstItem="Uph-ku-D9D" firstAttribute="leading" secondItem="k2l-OB-TqD" secondAttribute="leading" constant="10" id="ADc-qa-MV3"/>
                                     <constraint firstItem="Uph-ku-D9D" firstAttribute="top" secondItem="k2l-OB-TqD" secondAttribute="top" id="Efy-tD-QRo"/>
                                 </constraints>
                             </view>

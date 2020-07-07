@@ -253,8 +253,8 @@
 			isa = PBXGroup;
 			children = (
 				9B6E89A32382738E009EBEBE /* Extension */,
-				9B6E894F23823C40009EBEBE /* AttributedString.h */,
 				9B6E895023823C40009EBEBE /* Info.plist */,
+				9B6E894F23823C40009EBEBE /* AttributedString.h */,
 				9B6E899D23823FFD009EBEBE /* AttributedString.swift */,
 				9B6E89A123826D8E009EBEBE /* Interpolation.swift */,
 				9B6E89E02382C301009EBEBE /* Attribute.swift */,
@@ -274,9 +274,9 @@
 				9B6E89A5238273B2009EBEBE /* AppKit */,
 				9B6E89A42382739C009EBEBE /* UIKit */,
 				9B0A2A3723851EB6003D8A55 /* Extension.swift */,
+				9BA451E724B0412E00BE3F02 /* ArrayExtension.swift */,
 				9B87659F24850742009C51C2 /* ObjectExtension.swift */,
 				9B6E89DE23828F7C009EBEBE /* ShadowExtension.swift */,
-				9BA451E724B0412E00BE3F02 /* ArrayExtension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
