@@ -224,17 +224,10 @@ fileprivate extension UITextView {
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard isActionEnabled else { return }
-        guard let (string, range, action) = touched else { return }
+        guard let action = touched?.2 else { return }
         guard action.trigger.matching(sender) else { return }
-        
         // 点击 回调
-        let substring = string.value.attributedSubstring(from: range)
-        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
-            action.callback(.init(range: range, content: .attachment(attachment)))
-            
-        } else {
-            action.callback(.init(range: range, content: .string(substring)))
-        }
+        action.handle?()
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
