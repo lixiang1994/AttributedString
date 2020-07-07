@@ -49,7 +49,7 @@ extension AttributedString {
         }
     }
     
-    public class ImageTextAttachment: NSTextAttachment {
+    public class ImageAttachment: NSTextAttachment {
        
         public struct Style {
             
@@ -93,7 +93,7 @@ extension AttributedString {
         
         private let style: Style
         
-        public static func image(_ image: Image, _ style: Style = .original()) -> ImageTextAttachment {
+        public static func image(_ image: Image, _ style: Style = .original()) -> ImageAttachment {
             return .init(image, style)
         }
         
@@ -148,31 +148,71 @@ extension AttributedString {
                 return .init(point(size), size)
             }
         }
-    }    
+    }
+    
+    #if os(iOS)
+    
+    public class ViewAttachment: NSTextAttachment {
+        
+        let view: UIView
+        
+        /// Custom View  (Only  support UITextView)
+        /// - Parameter view: 视图
+        /// - Returns: 视图附件
+        public static func view(_ view: UIView) -> ViewAttachment {
+            return .init(view)
+        }
+        
+        init(_ view: UIView) {
+            self.view = view
+            super.init(data: nil, ofType: nil)
+            self.image = Image()
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        public override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+            view.layoutIfNeeded()
+            return view.bounds
+        }
+    }
+    
+    #endif
 }
 
 extension AttributedStringInterpolation {
     
     public typealias Attachment = AttributedString.Attachment
-    public typealias ImageTextAttachment = AttributedString.ImageTextAttachment
-    
-    public mutating func appendInterpolation(_ value: ImageTextAttachment) {
-        self.value.append(.init(attachment: value))
-    }
+    public typealias ViewAttachment = AttributedString.ViewAttachment
+    public typealias ImageAttachment = AttributedString.ImageAttachment
     
     public mutating func appendInterpolation(_ value: Attachment) {
         self.value.append(.init(attachment: value.value))
+    }
+    
+    public mutating func appendInterpolation(_ value: ViewAttachment) {
+        self.value.append(.init(attachment: value))
+    }
+    
+    public mutating func appendInterpolation(_ value: ImageAttachment) {
+        self.value.append(.init(attachment: value))
     }
 }
 
 extension AttributedString {
     
-    public init(_ attachment: ImageTextAttachment) {
-        self.value = .init(attachment: attachment)
-    }
-
     public init(_ attachment: Attachment) {
         self.value = .init(attachment: attachment.value)
+    }
+    
+    public init(_ attachment: ViewAttachment) {
+        self.value = .init(attachment: attachment)
+    }
+    
+    public init(_ attachment: ImageAttachment) {
+        self.value = .init(attachment: attachment)
     }
 }
 

@@ -18,7 +18,8 @@ import UIKit
 private var UIGestureRecognizerKey: Void?
 private var UITextViewTouchedKey: Void?
 private var UITextViewActionsKey: Void?
-private var UITextViewObservationKey: Void?
+private var UITextViewCheckingsKey: Void?
+private var UITextViewObservationsKey: Void?
 
 extension UITextView: AttributedStringCompatible {
     
@@ -49,6 +50,59 @@ extension AttributedStringWrapper where Base: UITextView {
             
             setupActions(newValue)
             setupGestureRecognizers()
+        
+            observations = [:]
+        
+            do {
+                for view in base.subviews where view is WrapperView {
+                    view.removeFromSuperview()
+                }
+                let attachments: [NSRange: AttributedString.ViewAttachment] = newValue.value.get(.attachment)
+                
+                let layoutManager = base.layoutManager
+                let textContainer = base.textContainer
+                let textContainerInset = base.textContainerInset
+                var temp : [NSRange: WrapperView] = [:]
+                for (range, attachment) in attachments {
+                    let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+                    var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+                    rect.origin.x += textContainerInset.left
+                    rect.origin.y += textContainerInset.top
+                    let view = WrapperView(frame: rect)
+                    view.backgroundColor = .red
+                    base.addSubview(view)
+                    attachment.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    view.addSubview(attachment.view)
+                    temp[range] = view
+                }
+                
+                observations["bounds"] = base.observe(\.bounds, options: [.new, .old]) { (object, changed) in
+                    guard changed.newValue?.size != changed.oldValue?.size else {
+                        return
+                    }
+                    
+                    for (range, view) in temp {
+                        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+                        var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+                        rect.origin.x += textContainerInset.left
+                        rect.origin.y += textContainerInset.top
+                        view.frame = rect
+                    }
+                }
+                observations["attributedText"] = base.observe(\.attributedText, options: [.new, .old]) { (object, changed) in
+                    guard changed.newValue != changed.oldValue else {
+                        return
+                    }
+                    
+                    for (range, view) in temp {
+                        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+                        var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+                        rect.origin.x += textContainerInset.left
+                        rect.origin.y += textContainerInset.top
+                        view.frame = rect
+                    }
+                }
+            }
         }
     }
     
@@ -71,6 +125,11 @@ extension AttributedStringWrapper where Base: UITextView {
         set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
     }
     
+    private(set) var observations: [String: NSKeyValueObservation] {
+        get { base.associated.get(&UITextViewObservationsKey) ?? [:] }
+        set { base.associated.set(retain: &UITextViewObservationsKey, newValue) }
+    }
+    
     /// 设置动作
     private func setupActions(_ string: AttributedString?) {
         // 清理原有动作记录
@@ -82,21 +141,21 @@ extension AttributedStringWrapper where Base: UITextView {
         // 获取全部动作
         let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
         // 匹配检查
-        let observation = base.observation
-        let checkings = observation.keys + (actions.isEmpty ? [] : [.action])
-        string.matching(checkings).forEach { (range, checking) in
+        let checkings = base.checkings
+        let temp = checkings.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(temp).forEach { (range, checking) in
             let (type, result) = checking
             switch result {
             case .action(let result):
                 guard var action = actions[range] else { return }
                 action.handle = {
                     action.callback(result)
-                    observation[type]?.1(.action(result))
+                    checkings[type]?.1(.action(result))
                 }
                 base.actions[range] = action
                 
             default:
-                guard let value = observation[type] else { return }
+                guard let value = checkings[type] else { return }
                 base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
             }
         }
@@ -142,15 +201,15 @@ extension AttributedStringWrapper where Base: UITextView {
     ///   - highlights: 高亮样式
     ///   - callback: 触发回调
     public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        var observation = base.observation
-        checkings.forEach { observation[$0] = (highlights, callback) }
-        base.observation = observation
+        var temp = base.checkings
+        checkings.forEach { temp[$0] = (highlights, callback) }
+        base.checkings = temp
     }
     
     /// 移除监听
     /// - Parameter checking: 检查类型
     public func remove(checking: Checking) {
-        base.observation.removeValue(forKey: checking)
+        base.checkings.removeValue(forKey: checking)
     }
 }
 
@@ -163,7 +222,7 @@ extension UITextView {
     fileprivate typealias Action = AttributedString.Action
     fileprivate typealias Checking = AttributedString.Checking
     fileprivate typealias Highlight = AttributedString.Action.Highlight
-    fileprivate typealias Observation = [Checking: ([Highlight], (Checking.Result) -> Void)]
+    fileprivate typealias Checkings = [Checking: ([Highlight], (Checking.Result) -> Void)]
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
@@ -181,9 +240,9 @@ extension UITextView {
         set { associated.set(retain: &UITextViewActionsKey, newValue) }
     }
     /// 监听信息
-    fileprivate var observation: Observation {
-        get { associated.get(&UITextViewObservationKey) ?? [:] }
-        set { associated.set(retain: &UITextViewObservationKey, newValue) }
+    fileprivate var checkings: Checkings {
+        get { associated.get(&UITextViewCheckingsKey) ?? [:] }
+        set { associated.set(retain: &UITextViewCheckingsKey, newValue) }
     }
     
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -224,17 +283,10 @@ fileprivate extension UITextView {
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard isActionEnabled else { return }
-        guard let (string, range, action) = touched else { return }
+        guard let action = touched?.2 else { return }
         guard action.trigger.matching(sender) else { return }
-        
         // 点击 回调
-        let substring = string.value.attributedSubstring(from: range)
-        if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
-            action.callback(.init(range: range, content: .attachment(attachment)))
-            
-        } else {
-            action.callback(.init(range: range, content: .string(substring)))
-        }
+        action.handle?()
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
@@ -258,6 +310,19 @@ fileprivate extension UITextView {
             return nil
         }
         return (range, action)
+    }
+}
+
+fileprivate class WrapperView: UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        clipsToBounds = true
+        backgroundColor = .clear
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

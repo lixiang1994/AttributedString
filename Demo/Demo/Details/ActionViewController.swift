@@ -63,7 +63,8 @@ class ActionViewController: UIViewController {
         Please custom -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: custom).
         
         """
-        
+        let v = UIView.init(frame: .init(x: 10, y: 10, width: 100, height: 100))
+        v.backgroundColor = .red
         textView.attributed.text = """
         This is \("TextView", .font(.systemFont(ofSize: 20)), .action(clicked))
         
@@ -74,6 +75,12 @@ class ActionViewController: UIViewController {
         Please \("custom", .font(.systemFont(ofSize: 30)), .action(custom)).
         
         Please custom -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: custom).
+        
+        \("change", .action {
+        v.frame = .init(x: 20, y: 20, width: 200, height: 200)
+        })
+        
+        ..\(.view(v))..
         
         """
     }

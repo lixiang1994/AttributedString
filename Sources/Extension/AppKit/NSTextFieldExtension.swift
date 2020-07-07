@@ -14,7 +14,7 @@ private var NSGestureRecognizerKey: Void?
 private var NSEventMonitorKey: Void?
 private var NSTextFieldTouchedKey: Void?
 private var NSTextFieldActionsKey: Void?
-private var NSTextFieldObservationKey: Void?
+private var NSTextFieldCheckingsKey: Void?
 
 extension NSTextField: AttributedStringCompatible {
     
@@ -83,21 +83,21 @@ extension AttributedStringWrapper where Base: NSTextField {
         // 获取全部动作
         let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
         // 匹配检查
-        let observation = base.observation
-        let checkings = observation.keys + (actions.isEmpty ? [] : [.action])
-        string.matching(checkings).forEach { (range, checking) in
+        let checkings = base.checkings
+        let temp = checkings.keys + (actions.isEmpty ? [] : [.action])
+        string.matching(temp).forEach { (range, checking) in
             let (type, result) = checking
             switch result {
             case .action(let result):
                 guard var action = actions[range] else { return }
                 action.handle = {
                     action.callback(result)
-                    observation[type]?.1(.action(result))
+                    checkings[type]?.1(.action(result))
                 }
                 base.actions[range] = action
                 
             default:
-                guard let value = observation[type] else { return }
+                guard let value = checkings[type] else { return }
                 base.actions[range] = .init(.click, highlights: value.0) { _ in value.1(result) }
             }
         }
@@ -154,15 +154,15 @@ extension AttributedStringWrapper where Base: NSTextField {
     ///   - highlights: 高亮样式
     ///   - callback: 触发回调
     public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        var observation = base.observation
-        checkings.forEach { observation[$0] = (highlights, callback) }
-        base.observation = observation
+        var temp = base.checkings
+        checkings.forEach { temp[$0] = (highlights, callback) }
+        base.checkings = temp
     }
     
     /// 移除监听
     /// - Parameter checking: 检查类型
     public func remove(checking: Checking) {
-        base.observation.removeValue(forKey: checking)
+        base.checkings.removeValue(forKey: checking)
     }
 }
 
@@ -171,7 +171,7 @@ extension NSTextField {
     fileprivate typealias Action = AttributedString.Action
     fileprivate typealias Checking = AttributedString.Checking
     fileprivate typealias Highlight = AttributedString.Action.Highlight
-    fileprivate typealias Observation = [Checking: ([Highlight], (Checking.Result) -> Void)]
+    fileprivate typealias Checkings = [Checking: ([Highlight], (Checking.Result) -> Void)]
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
@@ -189,9 +189,9 @@ extension NSTextField {
         set { associated.set(retain: &NSTextFieldActionsKey, newValue) }
     }
     /// 监听信息
-    fileprivate var observation: Observation {
-        get { associated.get(&NSTextFieldObservationKey) ?? [:] }
-        set { associated.set(retain: &NSTextFieldObservationKey, newValue) }
+    fileprivate var checkings: Checkings {
+        get { associated.get(&NSTextFieldCheckingsKey) ?? [:] }
+        set { associated.set(retain: &NSTextFieldCheckingsKey, newValue) }
     }
     
     @objc
