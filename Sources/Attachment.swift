@@ -51,38 +51,7 @@ extension AttributedString {
     
     public class ImageAttachment: NSTextAttachment {
        
-        public struct Style {
-            
-            public typealias Alignment = Attachment.Alignment
-            
-            fileprivate enum Mode {
-                case proposed
-                case original
-                case custom(CGSize)
-            }
-            
-            fileprivate let mode: Mode
-            fileprivate let alignment: Alignment
-            
-            /// 建议的大小
-            /// - Parameter alignment: 对齐方式
-            public static func proposed(_ alignment: Alignment = .origin) -> Style {
-                return .init(mode: .proposed, alignment: alignment)
-            }
-            
-            /// 原始的大小
-            /// - Parameter alignment: 对齐方式
-            public static func original(_ alignment: Alignment = .origin) -> Style {
-                return .init(mode: .original, alignment: alignment)
-            }
-            
-            /// 自定义的
-            /// - Parameter alignment: 对齐
-            /// - Parameter size: 大小
-            public static func custom(_ alignment: Alignment = .origin, size: CGSize) -> Style {
-                return .init(mode: .custom(size), alignment: alignment)
-            }
-        }
+        public typealias Style = Attachment.Style
         
         private let style: Style
         
@@ -138,22 +107,23 @@ extension AttributedString {
     
     public class ViewAttachment: NSTextAttachment {
         
-        public typealias Alignment = Attachment.Alignment
+        public typealias Style = Attachment.Style
         
         let view: UIView
         
-        fileprivate let alignment: Alignment
+        private let style: Style
         
         /// Custom View  (Only  support UITextView)
         /// - Parameter view: 视图
         /// - Returns: 视图附件
-        public static func view(_ view: UIView, with alignment: Alignment = .origin) -> ViewAttachment {
-            return .init(view, with: alignment)
+        public static func view(_ view: UIView, _ style: Style = .original()) -> ViewAttachment {
+            return .init(view, with: style)
         }
         
-        init(_ view: UIView, with alignment: Alignment = .origin) {
+        init(_ view: UIView, with style: Style = .original()) {
+            view.layoutIfNeeded()
             self.view = view
-            self.alignment = alignment
+            self.style = style
             super.init(data: nil, ofType: nil)
             self.image = Image()
         }
@@ -163,9 +133,35 @@ extension AttributedString {
         }
         
         public override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
-            view.layoutIfNeeded()
-            let size = view.bounds.size
-            return .init(alignment.point(size, with: lineFrag.height), size)
+            guard image != nil else {
+                return super.attachmentBounds(
+                    for: textContainer,
+                    proposedLineFragment: lineFrag,
+                    glyphPosition: position,
+                    characterIndex: charIndex
+                )
+            }
+            
+            func point(_ size: CGSize) -> CGPoint {
+                return style.alignment.point(size, with: lineFrag.height)
+            }
+            
+            switch style.mode {
+            case .proposed:
+                let radio = view.bounds.width / view.bounds.height
+                let width = min(lineFrag.height * radio, lineFrag.width)
+                let height = width / radio
+                return .init(point(.init(width, height)), .init(width, height))
+                
+            case .original:
+                let radio = view.bounds.width / view.bounds.height
+                let width = min(view.bounds.width, lineFrag.width)
+                let height = width / radio
+                return .init(point(.init(width, height)), .init(width, height))
+                
+            case .custom(let size):
+                return .init(point(size), size)
+            }
         }
     }
     
@@ -183,6 +179,37 @@ extension AttributedString.Attachment {
         case bottom // Bottom
         
         case offset(CGPoint)
+    }
+    
+    public struct Style {
+        
+        enum Mode {
+            case proposed
+            case original
+            case custom(CGSize)
+        }
+        
+        fileprivate let mode: Mode
+        fileprivate let alignment: Alignment
+        
+        /// 建议的大小
+        /// - Parameter alignment: 对齐方式
+        public static func proposed(_ alignment: Alignment = .origin) -> Style {
+            return .init(mode: .proposed, alignment: alignment)
+        }
+        
+        /// 原始的大小
+        /// - Parameter alignment: 对齐方式
+        public static func original(_ alignment: Alignment = .origin) -> Style {
+            return .init(mode: .original, alignment: alignment)
+        }
+        
+        /// 自定义的
+        /// - Parameter alignment: 对齐
+        /// - Parameter size: 大小
+        public static func custom(_ alignment: Alignment = .origin, size: CGSize) -> Style {
+            return .init(mode: .custom(size), alignment: alignment)
+        }
     }
 }
 

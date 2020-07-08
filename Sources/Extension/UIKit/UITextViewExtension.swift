@@ -49,37 +49,8 @@ extension AttributedStringWrapper where Base: UITextView {
             }
             
             setupActions(newValue)
+            setupViewAttachments(newValue)
             setupGestureRecognizers()
-        
-            observations = [:]
-        
-            do {
-                for view in base.subviews where view is WrapperView {
-                    view.removeFromSuperview()
-                }
-                let attachments: [NSRange: AttributedString.ViewAttachment] = newValue.value.get(.attachment)
-                
-                var temp : [NSRange: WrapperView] = [:]
-                for (range, attachment) in attachments {
-                    let view = WrapperView(attachment.view)
-                    base.addSubview(view)
-                    temp[range] = view
-                }
-                
-                observations["bounds"] = base.observe(\.bounds, options: [.new, .old]) { (object, changed) in
-                    guard changed.newValue?.size != changed.oldValue?.size else {
-                        return
-                    }
-                    
-                    for (range, view) in temp {
-                        let glyphRange = object.layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
-                        var rect = object.layoutManager.boundingRect(forGlyphRange: glyphRange, in: object.textContainer)
-                        rect.origin.x += object.textContainerInset.left
-                        rect.origin.y += object.textContainerInset.top
-                        view.frame = rect
-                    }
-                }
-            }
         }
     }
     
@@ -164,6 +135,44 @@ extension AttributedStringWrapper where Base: UITextView {
                 base.addGestureRecognizer(gesture)
                 gestures.append(gesture)
             }
+        }
+    }
+    
+    /// 设置视图附件
+    private func setupViewAttachments(_ string: AttributedString?) {
+        // 清理原有监听
+        observations = [:]
+        
+        // 清理原有视图
+        for view in base.subviews where view is WrapperView {
+            view.removeFromSuperview()
+        }
+        
+        guard let string = string else {
+            return
+        }
+        // 获取视图附件
+        let attachments: [NSRange: AttributedString.ViewAttachment] = string.value.get(.attachment)
+        
+        guard !attachments.isEmpty else {
+            return
+        }
+        
+        // 添加子视图
+        attachments.forEach {
+            base.addSubview(WrapperView($0.value.view, with: $0.key))
+        }
+        // 刷新布局
+        base.layout()
+        
+        // 设置父视图监听
+        observations["bounds"] = base.observe(\.bounds, options: [.new, .old]) { (object, changed) in
+            guard changed.newValue != changed.oldValue else { return }
+            object.layout()
+        }
+        observations["frame"] = base.observe(\.frame, options: [.new, .old]) { (object, changed) in
+            guard changed.newValue?.size != changed.oldValue?.size else { return }
+            object.layout()
         }
     }
     
@@ -294,18 +303,48 @@ fileprivate extension UITextView {
     }
 }
 
+fileprivate extension UITextView {
+    
+    func layout() {
+        // 性能待优化
+        for view in subviews where view is WrapperView {
+            let view = view as! WrapperView
+            let range = layoutManager.glyphRange(forCharacterRange: view.range, actualCharacterRange: nil)
+            var rect = layoutManager.boundingRect(forGlyphRange: range, in: textContainer)
+            rect.origin.x += textContainerInset.left
+            rect.origin.y += textContainerInset.top
+            view.frame = rect
+        }
+    }
+}
+
+/// 包装视图
 fileprivate class WrapperView: UIView {
     
+    let range: NSRange
     let view: UIView
     
-    init(_ view: UIView) {
+    private var observation: [String: NSKeyValueObservation] = [:]
+    
+    init(_ view: UIView, with range: NSRange) {
         self.view = view
+        self.range = range
         super.init(frame: .zero)
         
         clipsToBounds = true
-        backgroundColor = .lightGray
+        backgroundColor = .clear
         
         addSubview(view)
+        
+        // 监听子视图位置变化 固定位置
+        observation["frame"] = view.observe(\.frame, options: [.new, .old]) { (object, changed) in
+            guard changed.newValue?.origin != changed.oldValue?.origin, changed.newValue?.origin != CGPoint.zero else {
+                return
+            }
+            var temp = object.frame
+            temp.origin = .zero
+            object.frame = temp
+        }
     }
     
     required init?(coder: NSCoder) {

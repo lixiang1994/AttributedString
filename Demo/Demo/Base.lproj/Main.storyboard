@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="M9o-2j-0MG">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" delaysContentTouches="NO" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="M9o-2j-0MG">
                                 <rect key="frame" x="0.0" y="88" width="375" height="641"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
@@ -1594,7 +1594,7 @@
         
         This is a picture -&gt; \(.image(#imageLiteral(resourceName: "huaji"))) -&gt; Displayed in original size.
         
-        This is a picture -&gt; \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 200, height: 200)))) -&gt; Displayed in custom size.
+        This is a picture -&gt; \(.image(#imageLiteral(resourceName: "huaji"), .custom(.center, size: .init(width: 50, height: 50)))) -&gt; Displayed in custom size.
         
         This is the recommended size image -&gt; \(.image(#imageLiteral(resourceName: "huaji"), .proposed(.center))).
         

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVKit
 import AttributedString
 
 class SimpleViewController: UIViewController {
@@ -15,9 +16,55 @@ class SimpleViewController: UIViewController {
     
     private var list: [Model] = []
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private let player = AVPlayer(
+        url: URL(string: "https://devstreaming-cdn.apple.com/videos/wwdc/2020/10648/3/B4DA06E5-8715-4478-B755-EDFF6EC473F9/master.m3u8")!
+    )
+    private var playerView: VideoPlayerView = .init()
+    
+    private func setup() {
+        tableView.separatorInset = .init(top: 0, left: 10, bottom: 0, right: 10)
+    }
+    
+    private func setupPlayer() {
+        let playerLayer = AVPlayerLayer(player: player)
+        playerView = VideoPlayerView({ (view) in
+            view.layer.addSublayer(playerLayer)
+        })
+        playerView.observe { (size, animation) in
+            if let animation = animation {
+                CATransaction.begin()
+                CATransaction.setAnimationDuration(animation.duration)
+                CATransaction.setAnimationTimingFunction(animation.timingFunction)
+                playerLayer.frame = .init(origin: .zero, size: size)
+                CATransaction.commit()
+                
+            } else {
+                playerLayer.frame = .init(origin: .zero, size: size)
+            }
+        }
+        playerView.observe { (contentMode) in
+            switch contentMode {
+            case .scaleToFill:
+                playerLayer.videoGravity = .resize
+                
+            case .scaleAspectFit:
+                playerLayer.videoGravity = .resizeAspect
+                
+            case .scaleAspectFill:
+                playerLayer.videoGravity = .resizeAspectFill
+                
+            default:
+                playerLayer.videoGravity = .resizeAspectFill
+            }
+        }
+        playerView.contentMode = .scaleAspectFit
+        playerView.backgroundColor = .black
         
+        // 更新播放视图大小
+        playerView.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 9 / 16 * view.bounds.width)
+    }
+    
+    private func setupAttributedString() {
         ///
         ///     .init(
         ///         """
@@ -72,6 +119,19 @@ class SimpleViewController: UIViewController {
             )
             
             \(.image(#imageLiteral(resourceName: "swift-image-1")))
+            """,
+            """
+            \("Unsafe Swift", .font(.systemFont(ofSize: 40, weight: .semibold)))
+            
+            \(
+            """
+            What exactly makes code “unsafe”? Join the Swift team as we take a look at the programming language's safety precautions — and when you might need to reach for unsafe operations. We'll take a look at APIs that can cause unexpected states if not used correctly, and how you can write code more specifically to avoid undefined behavior. Learn how to work with C APIs that use pointers and the steps to take when you want to use Swift's unsafe pointer APIs. To get the most out of this session, you should have some familiarity with Swift and the C programming language. And for more information on working with pointers, check out \"Safely Manage Pointers in Swift\".
+            """, .font(.systemFont(ofSize: 17))
+            )
+            
+            \(.view(playerView))
+            
+            That's cool! 😎
             """,
             """
             \("Features:", .font(.systemFont(ofSize: 30, weight: .semibold)))
@@ -131,15 +191,46 @@ class SimpleViewController: UIViewController {
             """
         ]
         
-        list = array.map { .init($0) }
+        let width = UIScreen.main.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 20
+        list = array.map { .init($0, width: width) }
         tableView.reloadData()
+    }
+    
+    private func reload() {
+        // 更新播放视图大小
+        playerView.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 9 / 16 * view.bounds.width)
+        // 获取最大宽度 重新设置内容
+        let width = UIScreen.main.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 20
+        list = list.map { .init($0.content, width: width) }
+        tableView.reloadData()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setup()
+        setupPlayer()
+        setupAttributedString()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        player.play()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        player.pause()
+    }
+    
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        reload()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
-        list = list.map { .init($0.content) }
-        tableView.reloadData()
+        reload()
     }
 }
 
@@ -186,11 +277,11 @@ extension SimpleViewController {
         let content: AttributedString
         let height: CGFloat
         
-        init(_ content: AttributedString) {
+        init(_ content: AttributedString, width: CGFloat) {
             self.content = content
             self.height = content.value.boundingRect(
                 with: .init(
-                    width: UIScreen.main.bounds.width - 20,
+                    width: width,
                     height: .greatestFiniteMagnitude
                 ),
                 options: [

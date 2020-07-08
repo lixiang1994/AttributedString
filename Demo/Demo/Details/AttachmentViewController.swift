@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AttributedString
 
 class AttachmentViewController: UIViewController {
 
@@ -15,14 +16,77 @@ class AttachmentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        textView.attributed.text = """
+        let customView = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
+        customView.backgroundColor = .red
         
-        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"))) -> Displayed in original size.
+        let customImageView = UIImageView(image: #imageLiteral(resourceName: "swift-image-1"))
+        customImageView.contentMode = .scaleAspectFill
+        customImageView.sizeToFit()
         
-        This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"), .custom(size: .init(width: 200, height: 200)))) -> Displayed in custom size.
+        let customLabel = UILabel()
+        customLabel.text = "1234567890"
+        customLabel.font = .systemFont(ofSize: 30, weight: .medium)
+        customLabel.backgroundColor = #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
+        customLabel.sizeToFit()
         
-        This is the recommended size image -> \(.image(#imageLiteral(resourceName: "huaji"), .proposed(.center)))).
+        func clicked() {
+            // 更改自定义视图的大小 (x y 无效)
+            customView.frame = .init(x: 100, y: 0, width: .random(in: 100 ... 200), height: .random(in: 100 ... 200))
+            // 更改自定义图片视图的图片
+            customImageView.image = #imageLiteral(resourceName: "swift-icon")
+            customImageView.sizeToFit()
+            // 更改自定义标签的文本
+            customLabel.text = "45678"
+            customLabel.sizeToFit()
+        }
         
-        """
+        textView.attributed.text = .init(
+            """
+            
+            This is a picture -> \(.image(#imageLiteral(resourceName: "huaji"))) -> Displayed in original size.
+            
+            This is a picture -> \(.image(#imageLiteral(resourceName: "swift-icon"), .custom(.center, size: .init(width: 50, height: 50)))) -> Displayed in custom size.
+            
+            This is the recommended size image -> \(.image(#imageLiteral(resourceName: "swift-icon"), .proposed(.center)))).
+            
+            -----------------------
+            
+            \("ViewAttachment only support UITextView (以下视图附件仅UITextView支持):", .font(.systemFont(ofSize: 24, weight: .medium)))
+            
+            \("Change something", .foreground(.blue), .action(clicked))
+            
+            aaaa\(.view(customView, .original(.center)))aaa
+            
+            bbbb\(.view(customLabel, .original(.origin)))bbb
+            
+            cccc\(.view(customImageView, .original(.origin)))ccc
+            
+            """,
+            .font(.systemFont(ofSize: 18))
+        )
+        
+        var s = AttributedString("")
+        for i in 0 ... 1000 {
+            s += AttributedString(
+                """
+                
+                \(i):\(.image(#imageLiteral(resourceName: "swift-icon"), .custom(.center, size: .init(width: 50, height: 50)))).
+                
+                """)
+        }
+        
+        for i in 0 ... 2000 {
+            let customView = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
+            customView.backgroundColor = .red
+            
+            s += AttributedString(
+                """
+                
+                \(i):\(.view(customView, .original(.center))).
+                
+                """)
+        }
+            
+        textView.attributed.text = s
     }
 }
