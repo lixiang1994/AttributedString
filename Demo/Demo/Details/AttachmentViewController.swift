@@ -16,6 +16,7 @@ class AttachmentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 创建一些自定义视图控件
         let customView = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
         customView.backgroundColor = .red
         
@@ -38,6 +39,9 @@ class AttachmentViewController: UIViewController {
             // 更改自定义标签的文本
             customLabel.text = "45678"
             customLabel.sizeToFit()
+            
+            // 主动调用刷新布局
+            textView.attributed.layout()
         }
         
         textView.attributed.text = .init(
@@ -64,29 +68,5 @@ class AttachmentViewController: UIViewController {
             """,
             .font(.systemFont(ofSize: 18))
         )
-        
-        var s = AttributedString("")
-        for i in 0 ... 1000 {
-            s += AttributedString(
-                """
-                
-                \(i):\(.image(#imageLiteral(resourceName: "swift-icon"), .custom(.center, size: .init(width: 50, height: 50)))).
-                
-                """)
-        }
-        
-        for i in 0 ... 2000 {
-            let customView = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
-            customView.backgroundColor = .red
-            
-            s += AttributedString(
-                """
-                
-                \(i):\(.view(customView, .original(.center))).
-                
-                """)
-        }
-            
-        textView.attributed.text = s
     }
 }

@@ -216,20 +216,25 @@ extension AttributedString.Attachment {
 extension AttributedStringInterpolation {
     
     public typealias Attachment = AttributedString.Attachment
-    public typealias ViewAttachment = AttributedString.ViewAttachment
     public typealias ImageAttachment = AttributedString.ImageAttachment
     
     public mutating func appendInterpolation(_ value: Attachment) {
         self.value.append(.init(attachment: value.value))
     }
     
+    public mutating func appendInterpolation(_ value: ImageAttachment) {
+        self.value.append(.init(attachment: value))
+    }
+    
+    #if os(iOS)
+    
+    public typealias ViewAttachment = AttributedString.ViewAttachment
+    
     public mutating func appendInterpolation(_ value: ViewAttachment) {
         self.value.append(.init(attachment: value))
     }
     
-    public mutating func appendInterpolation(_ value: ImageAttachment) {
-        self.value.append(.init(attachment: value))
-    }
+    #endif
 }
 
 extension AttributedString {
@@ -238,13 +243,17 @@ extension AttributedString {
         self.value = .init(attachment: attachment.value)
     }
     
+    public init(_ attachment: ImageAttachment) {
+        self.value = .init(attachment: attachment)
+    }
+    
+    #if os(iOS)
+    
     public init(_ attachment: ViewAttachment) {
         self.value = .init(attachment: attachment)
     }
     
-    public init(_ attachment: ImageAttachment) {
-        self.value = .init(attachment: attachment)
-    }
+    #endif
 }
 
 fileprivate extension AttributedString.Attachment.Alignment {
@@ -255,8 +264,8 @@ fileprivate extension AttributedString.Attachment.Alignment {
     ///   - lineHeight: 行高
     /// - Returns: 位置坐标
     func point(_ size: CGSize, with lineHeight: CGFloat) -> CGPoint {
-        var font = UIFont.systemFont(ofSize: 18)
-        let fontSize = font.pointSize / font.lineHeight * lineHeight
+        var font = Font.systemFont(ofSize: 18)
+        let fontSize = font.pointSize / (abs(font.descender) + abs(font.ascender)) * lineHeight
         font = .systemFont(ofSize: fontSize)
         
         switch self {

@@ -96,6 +96,39 @@ extension AttributedStringWrapper where Base: UILabel {
 
 extension AttributedStringWrapper where Base: UILabel {
     
+    /// 添加监听
+    /// - Parameters:
+    ///   - checking: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        observe([checking], highlights: highlights, with: callback)
+    }
+    /// 添加监听
+    /// - Parameters:
+    ///   - checkings: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        var temp = base.checkings
+        checkings.forEach { temp[$0] = (highlights, callback) }
+        base.checkings = temp
+    }
+    
+    /// 移除监听
+    /// - Parameter checking: 检查类型
+    public func remove(checking: Checking) {
+        base.checkings.removeValue(forKey: checking)
+    }
+    /// 移除监听
+    /// - Parameter checkings: 检查类型
+    public func remove(checkings: [Checking]) {
+        checkings.forEach { base.checkings.removeValue(forKey: $0) }
+    }
+}
+
+extension AttributedStringWrapper where Base: UILabel {
+    
     private(set) var gestures: [UIGestureRecognizer] {
         get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
         set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
@@ -158,36 +191,6 @@ extension AttributedStringWrapper where Base: UILabel {
                 gestures.append(gesture)
             }
         }
-    }
-    
-    /// 添加监听
-    /// - Parameters:
-    ///   - checking: 检查类型
-    ///   - highlights: 高亮样式
-    ///   - callback: 触发回调
-    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        observe([checking], highlights: highlights, with: callback)
-    }
-    /// 添加监听
-    /// - Parameters:
-    ///   - checkings: 检查类型
-    ///   - highlights: 高亮样式
-    ///   - callback: 触发回调
-    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        var temp = base.checkings
-        checkings.forEach { temp[$0] = (highlights, callback) }
-        base.checkings = temp
-    }
-    
-    /// 移除监听
-    /// - Parameter checking: 检查类型
-    public func remove(checking: Checking) {
-        base.checkings.removeValue(forKey: checking)
-    }
-    /// 移除监听
-    /// - Parameter checkings: 检查类型
-    public func remove(checkings: [Checking]) {
-        checkings.forEach { base.checkings.removeValue(forKey: $0) }
     }
 }
 

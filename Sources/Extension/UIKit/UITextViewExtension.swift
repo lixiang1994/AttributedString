@@ -20,6 +20,7 @@ private var UITextViewTouchedKey: Void?
 private var UITextViewActionsKey: Void?
 private var UITextViewCheckingsKey: Void?
 private var UITextViewObservationsKey: Void?
+private var UITextViewAttachmentViewsKey: Void?
 
 extension UITextView: AttributedStringCompatible {
     
@@ -45,6 +46,7 @@ extension AttributedStringWrapper where Base: UITextView {
                 base.attributedText = temp
                 
             } else {
+                base.touched = nil
                 base.attributedText = newValue.value
             }
             
@@ -68,6 +70,40 @@ extension AttributedStringWrapper where Base: UITextView {
 
 extension AttributedStringWrapper where Base: UITextView {
     
+    /// 添加监听
+    /// - Parameters:
+    ///   - checking: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        observe([checking], highlights: highlights, with: callback)
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checkings: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        var temp = base.checkings
+        checkings.forEach { temp[$0] = (highlights, callback) }
+        base.checkings = temp
+    }
+    
+    /// 移除监听
+    /// - Parameter checking: 检查类型
+    public func remove(checking: Checking) {
+        base.checkings.removeValue(forKey: checking)
+    }
+    
+    /// 刷新布局 (如果有ViewAttachment的话)
+    public func layout() {
+        base.layout()
+    }
+}
+
+extension AttributedStringWrapper where Base: UITextView {
+    
     private(set) var gestures: [UIGestureRecognizer] {
         get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
         set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
@@ -79,13 +115,10 @@ extension AttributedStringWrapper where Base: UITextView {
     }
     
     /// 设置动作
-    private func setupActions(_ string: AttributedString?) {
+    private func setupActions(_ string: AttributedString) {
         // 清理原有动作记录
         base.actions = [:]
         
-        guard let string = string else {
-            return
-        }
         // 获取全部动作
         let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
         // 匹配检查
@@ -139,18 +172,16 @@ extension AttributedStringWrapper where Base: UITextView {
     }
     
     /// 设置视图附件
-    private func setupViewAttachments(_ string: AttributedString?) {
+    private func setupViewAttachments(_ string: AttributedString) {
         // 清理原有监听
         observations = [:]
         
         // 清理原有视图
-        for view in base.subviews where view is WrapperView {
+        for view in base.subviews where view is AttachmentView {
             view.removeFromSuperview()
         }
+        base.attachmentViews = [:]
         
-        guard let string = string else {
-            return
-        }
         // 获取视图附件
         let attachments: [NSRange: AttributedString.ViewAttachment] = string.value.get(.attachment)
         
@@ -160,7 +191,9 @@ extension AttributedStringWrapper where Base: UITextView {
         
         // 添加子视图
         attachments.forEach {
-            base.addSubview(WrapperView($0.value.view, with: $0.key))
+            let view = AttachmentView($0.value.view)
+            base.addSubview(view)
+            base.attachmentViews[$0.key] = view
         }
         // 刷新布局
         base.layout()
@@ -168,38 +201,12 @@ extension AttributedStringWrapper where Base: UITextView {
         // 设置父视图监听
         observations["bounds"] = base.observe(\.bounds, options: [.new, .old]) { (object, changed) in
             guard changed.newValue != changed.oldValue else { return }
-            object.layout()
+            object.layout(true)
         }
         observations["frame"] = base.observe(\.frame, options: [.new, .old]) { (object, changed) in
             guard changed.newValue?.size != changed.oldValue?.size else { return }
-            object.layout()
+            object.layout(true)
         }
-    }
-    
-    /// 添加监听
-    /// - Parameters:
-    ///   - checking: 检查类型
-    ///   - highlights: 高亮样式
-    ///   - callback: 触发回调
-    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        observe([checking], highlights: highlights, with: callback)
-    }
-    
-    /// 添加监听
-    /// - Parameters:
-    ///   - checkings: 检查类型
-    ///   - highlights: 高亮样式
-    ///   - callback: 触发回调
-    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        var temp = base.checkings
-        checkings.forEach { temp[$0] = (highlights, callback) }
-        base.checkings = temp
-    }
-    
-    /// 移除监听
-    /// - Parameter checking: 检查类型
-    public func remove(checking: Checking) {
-        base.checkings.removeValue(forKey: checking)
     }
 }
 
@@ -257,6 +264,9 @@ extension UITextView {
         guard let touched = self.touched else { return }
         self.touched = nil
         attributedText = touched.0.value
+        layoutIfNeeded()
+        // 刷新布局
+        layout()
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -265,6 +275,9 @@ extension UITextView {
         guard let touched = self.touched else { return }
         self.touched = nil
         attributedText = touched.0.value
+        layoutIfNeeded()
+        // 刷新布局
+        layout()
     }
 }
 
@@ -305,30 +318,59 @@ fileprivate extension UITextView {
 
 fileprivate extension UITextView {
     
-    func layout() {
-        // 性能待优化
-        for view in subviews where view is WrapperView {
-            let view = view as! WrapperView
-            let range = layoutManager.glyphRange(forCharacterRange: view.range, actualCharacterRange: nil)
-            var rect = layoutManager.boundingRect(forGlyphRange: range, in: textContainer)
+    /// 附件视图
+    var attachmentViews: [NSRange: AttachmentView] {
+        get { associated.get(&UITextViewAttachmentViewsKey) ?? [:] }
+        set { associated.set(retain: &UITextViewAttachmentViewsKey, newValue) }
+    }
+    
+    /// 布局
+    /// - Parameter isVisible: 是否仅可视范围
+    func layout(_ isVisible: Bool = false) {
+        guard !attachmentViews.isEmpty else {
+            return
+        }
+        
+        func update(_ range: NSRange, _ view: AttachmentView) {
+            view.isHidden = false
+            
+            let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+            var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
             rect.origin.x += textContainerInset.left
             rect.origin.y += textContainerInset.top
             view.frame = rect
         }
+        
+        if isVisible {
+            // 获取可见范围
+            let offset = CGPoint(contentOffset.x - textContainerInset.left, contentOffset.y - textContainerInset.top)
+            let visible = layoutManager.glyphRange(forBoundingRect: .init(offset, bounds.size), in: textContainer)
+            for (range, view) in attachmentViews {
+                // 更新可见范围内的视图位置 同时隐藏可见范围外的视图
+                if visible.contains(range.location) {
+                    update(range, view)
+                    
+                } else {
+                    view.isHidden = true
+                }
+            }
+            
+        } else {
+            // 更新全部视图位置 (实际为UITextView渲染最大范围)
+            attachmentViews.forEach(update)
+        }
     }
 }
 
-/// 包装视图
-fileprivate class WrapperView: UIView {
+/// 附件视图
+private class AttachmentView: UIView {
     
-    let range: NSRange
     let view: UIView
     
     private var observation: [String: NSKeyValueObservation] = [:]
     
-    init(_ view: UIView, with range: NSRange) {
+    init(_ view: UIView) {
         self.view = view
-        self.range = range
         super.init(frame: .zero)
         
         clipsToBounds = true
@@ -338,7 +380,9 @@ fileprivate class WrapperView: UIView {
         
         // 监听子视图位置变化 固定位置
         observation["frame"] = view.observe(\.frame, options: [.new, .old]) { (object, changed) in
-            guard changed.newValue?.origin != changed.oldValue?.origin, changed.newValue?.origin != CGPoint.zero else {
+            guard
+                changed.newValue?.origin != changed.oldValue?.origin,
+                changed.newValue?.origin != CGPoint.zero else {
                 return
             }
             var temp = object.frame

@@ -62,6 +62,35 @@ extension AttributedStringWrapper where Base: NSTextField {
 
 extension AttributedStringWrapper where Base: NSTextField {
     
+    /// 添加监听
+    /// - Parameters:
+    ///   - checking: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        observe([checking], highlights: highlights, with: callback)
+    }
+    
+    /// 添加监听
+    /// - Parameters:
+    ///   - checkings: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+        var temp = base.checkings
+        checkings.forEach { temp[$0] = (highlights, callback) }
+        base.checkings = temp
+    }
+    
+    /// 移除监听
+    /// - Parameter checking: 检查类型
+    public func remove(checking: Checking) {
+        base.checkings.removeValue(forKey: checking)
+    }
+}
+
+extension AttributedStringWrapper where Base: NSTextField {
+    
     private(set) var gestures: [NSGestureRecognizer] {
         get { base.associated.get(&NSGestureRecognizerKey) ?? [] }
         set { base.associated.set(retain: &NSGestureRecognizerKey, newValue) }
@@ -141,32 +170,6 @@ extension AttributedStringWrapper where Base: NSTextField {
         }) {
             monitors.append(monitor)
         }
-    }
-    
-    /// 添加监听
-    /// - Parameters:
-    ///   - checking: 检查类型
-    ///   - highlights: 高亮样式
-    ///   - callback: 触发回调
-    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        observe([checking], highlights: highlights, with: callback)
-    }
-    
-    /// 添加监听
-    /// - Parameters:
-    ///   - checkings: 检查类型
-    ///   - highlights: 高亮样式
-    ///   - callback: 触发回调
-    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
-        var temp = base.checkings
-        checkings.forEach { temp[$0] = (highlights, callback) }
-        base.checkings = temp
-    }
-    
-    /// 移除监听
-    /// - Parameter checking: 检查类型
-    public func remove(checking: Checking) {
-        base.checkings.removeValue(forKey: checking)
     }
 }
 
