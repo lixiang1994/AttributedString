@@ -25,7 +25,7 @@ extension AttributedString {
         case image(Image, bounds: CGRect)
         case data(Data, type: String)
         case file(FileWrapper)
-        case custom(NSTextAttachment)
+        case attachment(NSTextAttachment)
         
         var value: NSTextAttachment {
             switch self {
@@ -43,7 +43,7 @@ extension AttributedString {
                 temp.fileWrapper = wrapper
                 return temp
                 
-            case let .custom(value):
+            case let .attachment(value):
                 return value
             }
         }

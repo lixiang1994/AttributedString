@@ -127,9 +127,27 @@ textView.attributed.text = """
 """
 ```
 
-#### Image:	(Does not include watchOS)
+#### Attachment: (Does not include watchOS)
 
 ```swift
+// AttributedString.Attachment
+
+textView.attributed.text = """
+
+\(.data(xxxx, type: "zip"))
+
+\(.file(try!.init(url: .init(fileURLWithPath: "xxxxx"), options: [])))
+
+\(.attachment(NSTextAttachment()))
+
+"""
+```
+
+#### Attachment Image: (Does not include watchOS)
+
+```swift
+// AttributedString.ImageAttachment
+
 textView.attributed.text = """
 
 \(.image(UIImage(named: "xxxx")))
@@ -137,6 +155,22 @@ textView.attributed.text = """
 \(.image(UIImage(named: "xxxx"), .custom(size: .init(width: 200, height: 200))))
 
 \(.image(UIImage(named: "xxxx"), .proposed(.center))).
+
+"""
+```
+
+#### Attachment View: (Only supports iOS: UITextView)
+
+```swift
+// AttributedString.ViewAttachment
+
+textView.attributed.text = """
+
+\(.view(xxxxView))
+
+\(.view(xxxxView, .custom(size: .init(width: 200, height: 200))))
+
+\(.view(xxxxView, .proposed(.center))).
 
 """
 ```
