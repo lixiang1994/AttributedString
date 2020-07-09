@@ -244,6 +244,7 @@ fileprivate extension NSTextField {
         let textStorage = NSTextStorage(attributedString: attributedString.value)
         let textContainer = NSTextContainer(size: bounds.size)
         let layoutManager = NSLayoutManager()
+        layoutManager.usesFontLeading = false // 不使用字体的头 因为非系统字体会出现问题
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
         textContainer.lineBreakMode = lineBreakMode
