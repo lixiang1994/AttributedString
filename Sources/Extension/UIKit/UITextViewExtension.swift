@@ -412,7 +412,6 @@ private class AttachmentView: UIView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         view.center = .init(bounds.width * 0.5, bounds.height * 0.5)
-        let radio = bounds.width / view.bounds.width
         view.transform = .init(
             scaleX: bounds.width / view.bounds.width,
             y: bounds.height / view.bounds.height

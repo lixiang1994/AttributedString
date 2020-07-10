@@ -197,10 +197,11 @@ class SimpleViewController: UIViewController {
     }
     
     private func reload() {
-        // 更新播放视图大小
-        playerView.frame = .init(x: 0, y: 0, width: view.bounds.width, height: 9 / 16 * view.bounds.width)
         // 获取最大宽度 重新设置内容
         let width = UIScreen.main.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 20
+        // 更新播放视图大小
+        playerView.frame = .init(x: 0, y: 0, width: width, height: 9 / 16 * width)
+        // 更新列表数据 (重新计算高度)
         list = list.map { .init($0.content, width: width) }
         tableView.reloadData()
     }
