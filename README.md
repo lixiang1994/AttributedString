@@ -16,6 +16,7 @@
 - [x] Support for all `NSAttributedString.Key` functions.
 - [x] Support iOS & macOS & watchOS & tvOS.
 - [x] Support text and attachment click or press event callback, support highlight style.
+- [x] Support view attachment, you can add custom view to `UITextView`.
 - [x] Continue to add more new features.
 
 ## Screenshot
