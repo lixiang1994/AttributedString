@@ -15,6 +15,7 @@ AttributedString - 基于Swift插值方式优雅的构建富文本
 - [x] 支持全部`NSAttributedString.Key`特性.
 - [x] 支持 iOS & macOS & watchOS & tvOS.
 - [x] 支持文本和附件点击或长按事件回调, 支持高亮样式.
+- [x] 支持视图附件, 可以将自定义视图通过富文本添加到`UITextView`中.
 - [x] 更多新特性的不断加入.
 
 
