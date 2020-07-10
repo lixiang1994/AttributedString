@@ -33,6 +33,7 @@ class AttachmentViewController: UIViewController {
         func clicked() {
             // 更改自定义视图的大小 (x y 无效)
             customView.frame = .init(x: 100, y: 0, width: .random(in: 100 ... 200), height: .random(in: 100 ... 200))
+            
             // 更改自定义图片视图的图片
             customImageView.image = #imageLiteral(resourceName: "swift-icon")
             customImageView.sizeToFit()
@@ -40,7 +41,7 @@ class AttachmentViewController: UIViewController {
             customLabel.text = "45678"
             customLabel.sizeToFit()
             
-            // 主动调用刷新布局
+            // 请主动调用刷新布局
             textView.attributed.layout()
         }
         

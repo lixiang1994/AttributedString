@@ -277,12 +277,15 @@ fileprivate extension UILabel {
         let textStorage = NSTextStorage(attributedString: attributedString.value)
         let textContainer = NSTextContainer(size: bounds.size)
         let layoutManager = NSLayoutManager()
-        layoutManager.usesFontLeading = false // 不使用字体的头 因为非系统字体会出现问题
-        layoutManager.addTextContainer(textContainer)
-        textStorage.addLayoutManager(layoutManager)
         textContainer.lineBreakMode = lineBreakMode
         textContainer.lineFragmentPadding = 0.0
         textContainer.maximumNumberOfLines = numberOfLines
+        layoutManager.usesFontLeading = false // 不使用字体的头 因为非系统字体会出现问题
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+        
+        // 确保布局
+        layoutManager.ensureLayout(for: textContainer)
         
         // Debug
 //        subviews.forEach({ $0.removeFromSuperview() })

@@ -198,14 +198,13 @@ extension AttributedStringWrapper where Base: UITextView {
         // 刷新布局
         base.layout()
         
-        // 设置父视图监听
+        // 设置视图相关监听 同步更新布局
         observations["bounds"] = base.observe(\.bounds, options: [.new, .old]) { (object, changed) in
-            guard changed.newValue != changed.oldValue else { return }
             object.layout(true)
         }
         observations["frame"] = base.observe(\.frame, options: [.new, .old]) { (object, changed) in
             guard changed.newValue?.size != changed.oldValue?.size else { return }
-            object.layout(true)
+            object.layout()
         }
     }
 }
@@ -264,8 +263,6 @@ extension UITextView {
         guard let touched = self.touched else { return }
         self.touched = nil
         attributedText = touched.0.value
-        layoutIfNeeded()
-        // 刷新布局
         layout()
     }
     
@@ -275,8 +272,6 @@ extension UITextView {
         guard let touched = self.touched else { return }
         self.touched = nil
         attributedText = touched.0.value
-        layoutIfNeeded()
-        // 刷新布局
         layout()
     }
 }
@@ -293,6 +288,8 @@ fileprivate extension UITextView {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
+        // 确保布局
+        layoutManager.ensureLayout(for: textContainer)
         // 获取点击坐标 并排除各种偏移
         var point = point
         point.x -= textContainerInset.left
@@ -333,8 +330,9 @@ fileprivate extension UITextView {
         
         func update(_ range: NSRange, _ view: AttachmentView) {
             view.isHidden = false
-            
+            // 获取字形范围
             let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+            // 获取边界大小
             var rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
             rect.origin.x += textContainerInset.left
             rect.origin.y += textContainerInset.top
@@ -345,9 +343,12 @@ fileprivate extension UITextView {
             // 获取可见范围
             let offset = CGPoint(contentOffset.x - textContainerInset.left, contentOffset.y - textContainerInset.top)
             let visible = layoutManager.glyphRange(forBoundingRect: .init(offset, bounds.size), in: textContainer)
+            // 更新可见范围内的视图位置 同时隐藏可见范围外的视图
             for (range, view) in attachmentViews {
-                // 更新可见范围内的视图位置 同时隐藏可见范围外的视图
                 if visible.contains(range.location) {
+                    // 确保布局
+                    layoutManager.ensureLayout(forCharacterRange: range)
+                    // 更新视图
                     update(range, view)
                     
                 } else {
@@ -356,7 +357,16 @@ fileprivate extension UITextView {
             }
             
         } else {
-            // 更新全部视图位置 (实际为UITextView渲染最大范围)
+            // 完成布局刷新
+            layoutIfNeeded()
+            // 废弃当前布局 重新计算
+            layoutManager.invalidateLayout(
+                forCharacterRange: .init(location: 0, length: textStorage.length),
+                actualCharacterRange: nil
+            )
+            // 确保布局
+            layoutManager.ensureLayout(for: textContainer)
+            // 更新全部视图位置
             attachmentViews.forEach(update)
         }
     }
@@ -371,7 +381,7 @@ private class AttachmentView: UIView {
     
     init(_ view: UIView) {
         self.view = view
-        super.init(frame: .zero)
+        super.init(frame: view.bounds)
         
         clipsToBounds = true
         backgroundColor = .clear
@@ -379,15 +389,13 @@ private class AttachmentView: UIView {
         addSubview(view)
         
         // 监听子视图位置变化 固定位置
-        observation["frame"] = view.observe(\.frame, options: [.new, .old]) { (object, changed) in
-            guard
-                changed.newValue?.origin != changed.oldValue?.origin,
-                changed.newValue?.origin != CGPoint.zero else {
-                return
-            }
-            var temp = object.frame
-            temp.origin = .zero
-            object.frame = temp
+        observation["frame"] = view.observe(\.frame) { [weak self] (object, changed) in
+            guard let self = self else { return }
+            self.update()
+        }
+        observation["bounds"] = view.observe(\.bounds) { [weak self] (object, changed) in
+            guard let self = self else { return }
+            self.update()
         }
     }
     
@@ -397,7 +405,19 @@ private class AttachmentView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        view.frame = bounds
+        update()
+    }
+    
+    private func update() {
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        view.center = .init(bounds.width * 0.5, bounds.height * 0.5)
+        let radio = bounds.width / view.bounds.width
+        view.transform = .init(
+            scaleX: bounds.width / view.bounds.width,
+            y: bounds.height / view.bounds.height
+        )
+        CATransaction.commit()
     }
 }
 

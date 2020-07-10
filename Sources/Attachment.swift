@@ -110,7 +110,6 @@ extension AttributedString {
         public typealias Style = Attachment.Style
         
         let view: UIView
-        
         private let style: Style
         
         /// Custom View  (Only  support UITextView)
@@ -121,7 +120,6 @@ extension AttributedString {
         }
         
         init(_ view: UIView, with style: Style = .original()) {
-            view.layoutIfNeeded()
             self.view = view
             self.style = style
             super.init(data: nil, ofType: nil)
@@ -145,6 +143,8 @@ extension AttributedString {
             func point(_ size: CGSize) -> CGPoint {
                 return style.alignment.point(size, with: lineFrag.height)
             }
+            
+            view.layoutIfNeeded()
             
             switch style.mode {
             case .proposed:
@@ -192,13 +192,13 @@ extension AttributedString.Attachment {
         fileprivate let mode: Mode
         fileprivate let alignment: Alignment
         
-        /// 建议的大小
+        /// 建议的大小 (一般为当前行的高度)
         /// - Parameter alignment: 对齐方式
         public static func proposed(_ alignment: Alignment = .origin) -> Style {
             return .init(mode: .proposed, alignment: alignment)
         }
         
-        /// 原始的大小
+        /// 原始的大小 (但会限制最大宽度不超过单行最大宽度, 如果超过则会使用单行最大宽度 并等比例缩放内容)
         /// - Parameter alignment: 对齐方式
         public static func original(_ alignment: Alignment = .origin) -> Style {
             return .init(mode: .original, alignment: alignment)
@@ -276,7 +276,6 @@ fileprivate extension AttributedString.Attachment.Alignment {
             return .init(0, font.descender)
             
         case .center:
-            // https://code-examples.net/zh-CN/q/18e57cb
             return .init(0, (font.capHeight - size.height) / 2)
             
         case .offset(let value):
