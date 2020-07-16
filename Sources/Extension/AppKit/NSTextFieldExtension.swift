@@ -67,18 +67,33 @@ extension AttributedStringWrapper where Base: NSTextField {
     ///   - checking: 检查类型
     ///   - highlights: 高亮样式
     ///   - callback: 触发回调
-    public func observe(_ checking: Checking, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+    public func observe(_ checking: Checking,
+                        highlights: [Highlight] = .defalut,
+                        with callback: @escaping (Checking.Result) -> Void) {
         observe([checking], highlights: highlights, with: callback)
     }
-    
     /// 添加监听
     /// - Parameters:
     ///   - checkings: 检查类型
     ///   - highlights: 高亮样式
     ///   - callback: 触发回调
-    public func observe(_ checkings: [Checking] = .defalut, highlights: [Highlight] = .defalut, with callback: @escaping (Checking.Result) -> Void) {
+    public func observe(_ checkings: [Checking] = .defalut,
+                        highlights: [Highlight] = .defalut,
+                        with callback: @escaping (Checking.Result) -> Void) {
         var temp = base.checkings
-        checkings.forEach { temp[$0] = (highlights, callback) }
+        checkings.forEach { temp[$0] = (highlights, { callback($0.1) }) }
+        base.checkings = temp
+    }
+    /// 添加监听
+    /// - Parameters:
+    ///   - checkings: 检查类型
+    ///   - highlights: 高亮样式
+    ///   - callback: 触发回调
+    public func observe(_ checkings: [Checking] = .defalut,
+                        highlights: [Highlight] = .defalut,
+                        with callback: @escaping (NSRange, Checking.Result) -> Void) {
+        var temp = base.checkings
+        checkings.forEach { temp[$0] = (highlights, { callback($0.0, $0.1) }) }
         base.checkings = temp
     }
     
@@ -120,8 +135,8 @@ extension AttributedStringWrapper where Base: NSTextField {
             case .action(let result):
                 guard var action = actions[range] else { return }
                 action.handle = {
-                    action.callback(result)
-                    checkings[type]?.1(.action(result))
+                    action.callback(.init(range: range, content: result))
+                    checkings[type]?.1((range, .action(result)))
                 }
                 base.actions[range] = action
                 
@@ -129,7 +144,7 @@ extension AttributedStringWrapper where Base: NSTextField {
                 guard let value = checkings[type] else { return }
                 var action = Action(.click, highlights: value.0)
                 action.handle = {
-                    value.1(result)
+                    value.1((range, result))
                 }
                 base.actions[range] = action
             }
@@ -178,7 +193,7 @@ extension NSTextField {
     fileprivate typealias Action = AttributedString.Action
     fileprivate typealias Checking = AttributedString.Checking
     fileprivate typealias Highlight = AttributedString.Action.Highlight
-    fileprivate typealias Checkings = [Checking: ([Highlight], (Checking.Result) -> Void)]
+    fileprivate typealias Checkings = [Checking: ([Highlight], ((NSRange, Checking.Result)) -> Void)]
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {

@@ -25,9 +25,13 @@ extension AttributedString {
         /// 正则表达式
         case regex(String)
         #if os(iOS) || os(macOS)
+        /// 动作
         case action
         #endif
-        ///
+        #if !os(watchOS)
+        /// 附件
+        case attachment
+        #endif
         case date
         case link
         case address
@@ -44,9 +48,11 @@ extension AttributedString.Checking {
         /// 正则表达式
         case regex(NSAttributedString)
         #if os(iOS) || os(macOS)
-        case action(AttributedString.Action.Result)
+        case action(AttributedString.Action.Result.Content)
         #endif
-        
+        #if !os(watchOS)
+        case attachment(NSTextAttachment)
+        #endif
         case date(Date)
         case link(URL)
         case address(Address)
@@ -167,11 +173,34 @@ extension AttributedString {
             case .action:
                 let actions: [NSRange: AttributedString.Action] = value.get(.action)
                 for action in actions where !contains(action.key) {
-                    result[action.key] = (.action, .action(value.get(action.key)))
+                    result[action.key] = (.action, .action(value.get(action.key).content))
+                }
+            #endif
+                
+            #if !os(watchOS)
+            case .attachment:
+                let attachments: [NSRange: NSTextAttachment] = value.get(.attachment)
+                func allow(_ range: NSRange, _ attachment: NSTextAttachment) -> Bool {
+                    #if os(iOS)
+                    return !contains(range) && !(attachment is ViewAttachment)
+                    #else
+                    return !contains(range)
+                    #endif
+                }
+                for attachment in attachments where allow(attachment.key, attachment.value) {
+                    result[attachment.key] = (.attachment, .attachment(attachment.value))
                 }
             #endif
             
-            case .date, .link, .address, .phoneNumber, .transitInformation:
+            case .link:
+                // 优先获取Link属性的值
+                let links: [NSRange: URL] = value.get(.link)
+                for link in links where !contains(link.key) {
+                    result[link.key] = (.link, .link(link.value))
+                }
+                fallthrough
+                
+            case .date, .address, .phoneNumber, .transitInformation:
                 guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return }
                 
                 let matches = detector.matches(
