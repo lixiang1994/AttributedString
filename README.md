@@ -6,7 +6,7 @@
 ![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)&nbsp;
 ![Platform](https://img.shields.io/cocoapods/p/AttributedString.svg?style=flat)
 
-## [天朝子民](README_CN.md)
+## [🇨🇳天朝子民](README_CN.md)
 
 ## Features
 
