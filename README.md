@@ -3,8 +3,11 @@
 # AttributedString - 基于Swift插值方式优雅的构建富文本
 
 [![License](https://img.shields.io/cocoapods/l/AttributedString.svg)](LICENSE)&nbsp;
-![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)&nbsp;
-![Platform](https://img.shields.io/cocoapods/p/AttributedString.svg?style=flat)
+![Swift](https://img.shields.io/badge/Swift-5.2-orange.svg)&nbsp;
+![Platform](https://img.shields.io/cocoapods/p/AttributedString.svg?style=flat)&nbsp;
+[![Swift Package Manager](https://img.shields.io/badge/Swift_Package_Manager-compatible-4BC51D.svg?style=flat")](https://swift.org/package-manager/)&nbsp;
+[![Carthage](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Cocoapods](https://img.shields.io/cocoapods/v/AttributedString.svg)](https://cocoapods.org)&nbsp;
 
 ## [🇨🇳天朝子民](README_CN.md)
 
