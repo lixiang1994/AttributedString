@@ -33,41 +33,28 @@ extension AttributedStringWrapper where Base: UILabel {
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
             if var touched = base.touched, touched.0.isContentEqual(to: newValue) {
-                guard let new = newValue else {
+                guard let string = newValue else {
                     base.touched = nil
                     return
                 }
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
-                let temp = NSMutableAttributedString(attributedString: new.value)
+                let temp = NSMutableAttributedString(attributedString: string.value)
                 base.attributedText?.get(touched.1).forEach { (range, attributes) in
                     temp.setAttributes(attributes, range: range)
                 }
-                // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
-                base.attributedText = nil
-                let string = AttributedString(
-                    new,
-                    .font(base.font),
-                    .paragraph(.alignment(base.textAlignment))
-                )
+                base.attributedText = temp
+                
                 touched.0 = string
                 base.touched = touched
-                base.attributedText = temp
                 
                 setupActions(string)
                 setupGestureRecognizers()
                 
             } else {
                 base.touched = nil
-                base.attributedText = nil
-                // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
-                let string = AttributedString(
-                    newValue?.value,
-                    .font(base.font),
-                    .paragraph(.alignment(base.textAlignment))
-                )
-                base.attributedText = string?.value
+                base.attributedText = newValue?.value
                 
-                setupActions(string)
+                setupActions(newValue)
                 setupGestureRecognizers()
             }
         }
@@ -77,16 +64,7 @@ extension AttributedStringWrapper where Base: UILabel {
     
     public var text: AttributedString? {
         get { AttributedString(base.attributedText) }
-        set {
-            base.attributedText = nil
-            // UILabel 需要先将attributedText置为空 才能拿到真实的默认字体与对齐方式等
-            let string = AttributedString(
-                newValue?.value,
-                .font(base.font),
-                .paragraph(.alignment(base.textAlignment))
-            )
-            base.attributedText = string?.value
-        }
+        set { base.attributedText = newValue?.value }
     }
     
     #endif
@@ -223,7 +201,7 @@ extension UILabel {
     
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
-        return !actions.isEmpty && !(adjustsFontSizeToFitWidth && numberOfLines == 1)
+        return !actions.isEmpty
     }
     
     /// 当前触摸
@@ -275,6 +253,66 @@ extension UILabel {
     }
 }
 
+private extension UILabel {
+    // Runtime Headers
+    // https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/UIKitCore.framework/UILabel.h
+    // https://github.com/nst/iOS-Runtime-Headers/blob/fbb634c78269b0169efdead80955ba64eaaa2f21/PrivateFrameworks/UIKitCore.framework/_UILabelScaledMetrics.h
+    
+    private var synthesizedAttributedText: NSAttributedString? {
+        guard
+            let data = Data(base64Encoded: .init("=QHelRFZlRXdilmc0RXQkVmepNXZoRnb5N3X".reversed())),
+            let name = String(data: data, encoding: .utf8),
+            let synthesizedAttributedTextIvar = class_getInstanceVariable(UILabel.self, name),
+            let synthesizedAttributedText = object_getIvar(self, synthesizedAttributedTextIvar) else {
+            return nil
+        }
+        return synthesizedAttributedText as? NSAttributedString
+    }
+    
+    private var scaledAttributedText: NSAttributedString? {
+        guard
+            let scaledMetricsData = Data(base64Encoded: .init("=M3YpJHdl1EZlxWYjN3X".reversed())),
+            let scaledMetricsName = String(data: scaledMetricsData, encoding: .utf8),
+            let scaledMetricsIvar = class_getInstanceVariable(UILabel.self, scaledMetricsName),
+            let scaledMetrics = object_getIvar(self, scaledMetricsIvar) else {
+            return nil
+        }
+        guard
+            let scaledAttributedTextData = Data(base64Encoded: .init("0hXZURWZ0VnYpJHd0FEZlxWYjN3X".reversed())),
+            let scaledAttributedTextName = String(data: scaledAttributedTextData, encoding: .utf8),
+            let scaledMetricsClass = object_getClass(scaledMetrics),
+            let scaledAttributedTextIvar = class_getInstanceVariable(scaledMetricsClass, scaledAttributedTextName),
+            let scaledAttributedText = object_getIvar(scaledMetrics, scaledAttributedTextIvar) else {
+            return nil
+        }
+        return scaledAttributedText as? NSAttributedString
+    }
+    
+    private func adaptation(_ string: NSAttributedString?) -> NSAttributedString? {
+        /**
+            由于富文本中的lineBreakMode对于UILabel和TextKit的行为是不一致的, UILabel默认的.byTruncatingTail在TextKit中则无法多行显示.
+            所以将富文本中的lineBreakMode全部替换为TextKit默认的.byWordWrapping, 以解决多行显示问题.
+            富文本中的lineBreakMode改为.byWordWrapping后 实际的表现TextKit 与 UILabel是一致的.
+        */
+        guard let string = string else {
+            return nil
+        }
+        
+        let mutable = NSMutableAttributedString(attributedString: string)
+        mutable.enumerateAttribute(
+            .paragraphStyle,
+            in: .init(location: 0, length: mutable.length),
+            options: .longestEffectiveRangeNotRequired
+        ) { (value, range, stop) in
+            guard let old = value as? NSParagraphStyle else { return }
+            guard let new = old.mutableCopy() as? NSMutableParagraphStyle else { return }
+            new.lineBreakMode = .byWordWrapping
+            mutable.addAttribute(.paragraphStyle, value: new, range: range)
+        }
+        return mutable
+    }
+}
+
 fileprivate extension UILabel {
     
     @objc
@@ -287,7 +325,8 @@ fileprivate extension UILabel {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        guard let attributedString = AttributedString(attributedText) else { return nil }
+        let text = adaptation(scaledAttributedText ?? synthesizedAttributedText) ?? attributedText
+        guard let attributedString = AttributedString(text) else { return nil }
         
         // 构建同步Label设置的TextKit
         let textStorage = NSTextStorage(attributedString: attributedString.value)
@@ -303,18 +342,18 @@ fileprivate extension UILabel {
         // 确保布局
         layoutManager.ensureLayout(for: textContainer)
         
-        // Debug
-//        subviews.forEach({ $0.removeFromSuperview() })
-//        let view = DebugView(frame: bounds)
-//        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
-//        addSubview(view)
-        
         // 获取文本所占高度
         let height = layoutManager.usedRect(for: textContainer).height
         
         // 获取点击坐标 并排除各种偏移
         var point = point
         point.y -= (bounds.height - height) / 2
+        
+        // Debug
+//        subviews.forEach({ $0.removeFromSuperview() })
+//        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
+//        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
+//        addSubview(view)
         
         // 获取字形下标
         var fraction: CGFloat = 0
