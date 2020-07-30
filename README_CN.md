@@ -378,6 +378,7 @@ textView.attributed.observe([.link, .date], highlights: [.foreground(.blue)]) { 
 AttributedString 使用 MIT 协议. 有关更多信息，请参阅[LICENSE](LICENSE)文件.
 
 
+-----
 
-> 欢迎入群交流
+> ## 欢迎入群交流
 ![QQ](https://github.com/lixiang1994/Resources/blob/master/QQClub/QQClub.JPG)
