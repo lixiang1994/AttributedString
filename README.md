@@ -376,3 +376,7 @@ If you extended the functionality of AttributedString yourself and want others t
 ## License
 
 AttributedString is under MIT license. See the [LICENSE](LICENSE) file for more info.
+
+
+> 欢迎入群交流
+![QQ](https://github.com/lixiang1994/Resources/blob/master/QQClub/QQClub.JPG)
