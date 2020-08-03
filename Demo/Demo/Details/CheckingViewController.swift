@@ -39,7 +39,7 @@ class CheckingViewController: ViewController<CheckingView> {
             
             // 目前的问题是, 如果内容显示全 是OK的, 如果显示不全 就会有问题, 比如numberOfLines = x 或者 height较小.
             
-            let label = UILabel(frame: .init(x: 15, y: 80, width: 414 - 30, height: 750))
+            let label = UILabel(frame: .init(x: 12, y: 80, width: 414 - 24, height: 750))
             label.backgroundColor = .white
             view.addSubview(label)
             label.attributed.observe(.regex("a")) { (result) in
