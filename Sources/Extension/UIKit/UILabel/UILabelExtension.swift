@@ -31,6 +31,7 @@ extension AttributedStringWrapper where Base: UILabel {
     public var text: AttributedString? {
         get { base.touched?.0 ?? AttributedString(base.attributedText) }
         set {
+            // 字体补丁 交互所有字体的属性 更换为系统字体的值
             UIFont.Patch
             // 判断当前是否在触摸状态, 内容是否发生了变化
             if var touched = base.touched, touched.0.isContentEqual(to: newValue) {
@@ -309,6 +310,9 @@ private extension UILabel {
             guard let old = value as? NSParagraphStyle else { return }
             guard let new = old.mutableCopy() as? NSMutableParagraphStyle else { return }
             new.lineBreakMode = .byWordWrapping
+            if #available(iOS 11.0, *) {
+                new.setValue(1, forKey: "lineBreakStrategy")
+            }
             mutable.addAttribute(.paragraphStyle, value: new, range: range)
         }
         return mutable
@@ -330,15 +334,22 @@ fileprivate extension UILabel {
         let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText)
         guard let attributedString = AttributedString(text) else { return nil }
         
+        struct BaseLineInfo {
+            let firstBaseline: Double
+            let lastBaseline: Double
+            let referenceBounds: CGRect
+            let measuredNumberOfLines: Int64
+        }
+        
         // 构建同步Label设置的TextKit
         let textStorage = NSTextStorage(attributedString: attributedString.value)
-        let textContainer = NSTextContainer(size: bounds.size)
+        let textContainer = NSTextContainer(size: .init(bounds.size.width, bounds.size.height + 1))
         let layoutManager = NSLayoutManager()
-        layoutManager.delegate = UILabelLayoutManagerDelegate.shared    // 重新计算行高确保TextKit与UILabel显示一致
+        layoutManager.delegate = UILabelLayoutManagerDelegate.shared // 重新计算行高确保TextKit与UILabel显示一致
         textContainer.lineBreakMode = lineBreakMode
         textContainer.lineFragmentPadding = 0.0
         textContainer.maximumNumberOfLines = numberOfLines
-        layoutManager.usesFontLeading = false // 不使用字体的头 因为非系统字体会出现问题
+        layoutManager.usesFontLeading = false
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
         
@@ -353,10 +364,10 @@ fileprivate extension UILabel {
         point.y -= (bounds.height - height) / 2
         
         // Debug
-//        subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
-//        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
-//        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
-//        addSubview(view)
+        subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
+        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
+        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
+        addSubview(view)
         
         // 获取字形下标
         var fraction: CGFloat = 0

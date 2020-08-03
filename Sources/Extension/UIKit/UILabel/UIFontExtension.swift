@@ -63,6 +63,18 @@ extension UIFont {
     var a_xHeight: CGFloat {
         systemFont.a_xHeight
     }
+    
+    var debug: String {
+        return """
+        familyName: \(familyName)
+        lineHeight: \(lineHeight)
+        descender: \(descender)
+        leading: \(leading)
+        ascender: \(ascender)
+        capHeight: \(capHeight)
+        xHeight: \(xHeight)
+        """
+    }
 }
 
 #endif

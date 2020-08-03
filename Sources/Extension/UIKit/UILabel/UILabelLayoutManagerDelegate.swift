@@ -31,10 +31,10 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         }
         // 获取当前所有属性
         let attributes = getAttributes(layoutManager, with: textStorage, for: glyphRange)
+        // 如果有附件 直接跳过 可以解决附件导致的计算错误
         guard !attributes.contains(where: { $0.attributes[.attachment] != nil }) else {
             return false
         }
-        
         // 获取行高最大的属性
         guard
             let item = getMaxAttributes(attributes),
@@ -50,12 +50,7 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         var baseline = lineHeight + defaultFont.descender
         rect.size.height = lineHeight
         
-        // 某些字体 (比如 emoji) 的行高会比计算的大.
-        // 如果设置 UsedRect 为一行的高度, 最后一行就会消失.
-        // 所以只用比原有 UsedRect 高度更大的行高
-        // 这可能导致 UITextView 在最后一行下面有多余的填充, 可以通过将 maxLineHeight 设置为 getLineHeight(:, with:) 计算的行高.
-        used.size.height = max(lineHeight, used.height)
-        
+        used.size.height = lineHeight
         /**
         From apple's doc:
         https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/CustomTextProcessing/CustomTextProcessing.html
@@ -144,7 +139,7 @@ extension UILabelLayoutManagerDelegate {
                 glyphRange = NSRange(location: glyphRange.location, length: glyphRange.length - 1)
             }
         }
-        
+        // 循环遍历获取当前字形范围内的所有属性
         let targetRange = layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
         var array: [(NSRange, [NSAttributedString.Key: Any])] = []
         var lastIndex = -1
