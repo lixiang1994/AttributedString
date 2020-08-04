@@ -25,74 +25,106 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
                        baselineOffset: UnsafeMutablePointer<CGFloat>,
                        in textContainer: NSTextContainer,
                        forGlyphRange glyphRange: NSRange) -> Bool {
-        
-        guard let textStorage = layoutManager.textStorage else {
-            return false
-        }
-        // 获取当前所有属性
-        let attributes = getAttributes(layoutManager, with: textStorage, for: glyphRange)
-        // 如果有附件 直接跳过 可以解决附件导致的计算错误
-        guard !attributes.contains(where: { $0.attributes[.attachment] != nil }) else {
-            return false
-        }
-        // 获取行高最大的属性
-        guard
-            let item = getMaxAttributes(attributes),
-            let font = item.attributes[.font] as? UIFont,
-            let paragraph = item.attributes[.paragraphStyle] as? NSParagraphStyle else {
-            return false
-        }
-        var rect = lineFragmentRect.pointee
-        var used = lineFragmentUsedRect.pointee
-        
-        let defaultFont = UIFont.systemFont(ofSize: font.pointSize)
-        let lineHeight = getLineHeight(defaultFont, with: paragraph)
-        var baseline = lineHeight + defaultFont.descender
-        rect.size.height = lineHeight
-        
-        used.size.height = lineHeight
         /**
         From apple's doc:
         https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/CustomTextProcessing/CustomTextProcessing.html
         In addition to returning the line fragment rectangle itself, the layout manager returns a rectangle called the used rectangle. This is the portion of the line fragment rectangle that actually contains glyphs or other marks to be drawn. By convention, both rectangles include the line fragment padding and the interline space (which is calculated from the font’s line height metrics and the paragraph’s line spacing parameters). However, the paragraph spacing (before and after) and any space added around the text, such as that caused by center-spaced text, are included only in the line fragment rectangle, and are not included in the used rectangle.
         */
-                
-        // 行间距
-        rect.size.height += paragraph.lineSpacing
-        
-        // 段落间距
-        if paragraph.paragraphSpacing > 0 {
-            let lastIndex = layoutManager.characterIndexForGlyph(at: glyphRange.location + glyphRange.length - 1)
-            let substring = textStorage.attributedSubstring(from: .init(location: lastIndex, length: 1)).string
-            let isLineBreak = substring == "\n"
-            rect.size.height += isLineBreak ? paragraph.paragraphSpacing : 0
+        guard let textStorage = layoutManager.textStorage else {
+            return false
+        }
+        guard let maximum = getMaximum(layoutManager, with: textStorage, for: glyphRange) else {
+            return false
         }
         
         // 段落前间距
-        if glyphRange.location > 0, paragraph.paragraphSpacingBefore > 0 {
+        var paragraphSpacingBefore: CGFloat = 0
+        if glyphRange.location > 0, let paragraph = maximum.paragraph, paragraph.paragraphSpacingBefore > .ulpOfOne {
             let lastIndex = layoutManager.characterIndexForGlyph(at: glyphRange.location - 1)
             let substring = textStorage.attributedSubstring(from: .init(location: lastIndex, length: 1)).string
             let isLineBreak = substring == "\n"
-            let space = isLineBreak ? paragraph.paragraphSpacingBefore : 0
-            rect.size.height += space
-            used.origin.y += space
-            baseline += space
+            paragraphSpacingBefore = isLineBreak ? paragraph.paragraphSpacingBefore : 0
         }
+        
+        // 段落间距
+        var paragraphSpacing: CGFloat = 0
+        if let paragraph = maximum.paragraph, paragraph.paragraphSpacing > .ulpOfOne {
+            let lastIndex = layoutManager.characterIndexForGlyph(at: glyphRange.location + glyphRange.length - 1)
+            let substring = textStorage.attributedSubstring(from: .init(location: lastIndex, length: 1)).string
+            let isLineBreak = substring == "\n"
+            paragraphSpacing = isLineBreak ? paragraph.paragraphSpacing : 0
+        }
+        
+        var rect = lineFragmentRect.pointee
+        var used = lineFragmentUsedRect.pointee
+        used.size.height = max(maximum.lineHeight, used.height)
+        rect.size.height = used.height + maximum.lineSpacing + paragraphSpacing + paragraphSpacingBefore
         
         // 重新赋值最终结果
         lineFragmentRect.pointee = rect
         lineFragmentUsedRect.pointee = used
-        baselineOffset.pointee = baseline
         
-        return true
+        /**
+        From apple's doc:
+        true if you modified the layout information and want your modifications to be used or false if the original layout information should be used.
+        But actually returning false is also used. : )
+        We should do this to solve the problem of exclusionPaths not working.
+        */
+        return false
     }
     
+    // Implementing this method with a return value 0 will solve the problem of last line disappearing
+    // when both maxNumberOfLines and lineSpacing are set, since we didn't include the lineSpacing in the lineFragmentUsedRect.
     func layoutManager(_ layoutManager: NSLayoutManager, lineSpacingAfterGlyphAt glyphIndex: Int, withProposedLineFragmentRect rect: CGRect) -> CGFloat {
         return 0
     }
 }
 
 extension UILabelLayoutManagerDelegate {
+    
+    private struct Maximum {
+        let font: UIFont
+        let lineHeight: CGFloat
+        let lineSpacing: CGFloat
+        let paragraph: NSParagraphStyle?
+    }
+    
+    private func getMaximum(_ layoutManager: NSLayoutManager, with textStorage: NSTextStorage, for glyphRange: NSRange) -> Maximum? {
+        let characterRange = layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+        
+        var maximumLineHeightFont: UIFont?
+        var maximumLineHeight: CGFloat = 0
+        var maximumLineSpacing: CGFloat = 0
+        var paragraph: NSParagraphStyle?
+        textStorage.enumerateAttributes(in: characterRange, options: .longestEffectiveRangeNotRequired) {
+            (attributes, range, stop) in
+            // 实际计算使用的是 NSOriginalFont lineHeight.
+            print(attributes[.originalFont])
+            guard let font = (attributes[.originalFont] ?? attributes[.font]) as? UIFont else { return }
+            paragraph = paragraph ?? attributes[.paragraphStyle] as? NSParagraphStyle
+            
+            let lineHeight = getLineHeight(font, with: paragraph)
+            // 获取最大行高
+            if lineHeight > maximumLineHeight {
+                maximumLineHeightFont = font
+                maximumLineHeight = lineHeight
+            }
+            // 获取最大行间距
+            if let lineSpacing = paragraph?.lineSpacing, lineSpacing > maximumLineSpacing {
+                maximumLineSpacing = lineSpacing
+            }
+        }
+        
+        guard let font = maximumLineHeightFont else {
+            return nil
+        }
+        return .init(
+            font: font,
+            lineHeight: maximumLineHeight,
+            lineSpacing: maximumLineSpacing,
+            paragraph: paragraph
+        )
+    }
     
     private func getLineHeight(_ font: UIFont, with paragraph: NSParagraphStyle? = .none) -> CGFloat {
         guard let paragraph = paragraph else {
@@ -101,62 +133,22 @@ extension UILabelLayoutManagerDelegate {
         
         var lineHeight = font.lineHeight
         
-        if paragraph.lineHeightMultiple > 0 {
+        if paragraph.lineHeightMultiple > .ulpOfOne {
             lineHeight *= paragraph.lineHeightMultiple
         }
-        if paragraph.minimumLineHeight > 0 {
+        if paragraph.minimumLineHeight > .ulpOfOne {
             lineHeight = max(paragraph.minimumLineHeight, lineHeight)
         }
-        if paragraph.maximumLineHeight > 0 {
+        if paragraph.maximumLineHeight > .ulpOfOne {
             lineHeight = min(paragraph.maximumLineHeight, lineHeight)
         }
         return lineHeight
     }
+}
+
+extension NSAttributedString.Key {
     
-    private typealias Item = (range: NSRange, attributes: [NSAttributedString.Key: Any])
-    
-    private func getMaxAttributes(_ attributes: [Item]) -> Item? {
-        return attributes.max { (l, r) -> Bool in
-            guard
-                let lf = l.attributes[.font] as? UIFont,
-                let rf = r.attributes[.font] as? UIFont else {
-                return false
-            }
-            
-            let lp = l.attributes[.paragraphStyle] as? NSParagraphStyle
-            let rp = r.attributes[.paragraphStyle] as? NSParagraphStyle
-            return getLineHeight(lf, with: lp) < getLineHeight(rf, with: rp)
-        }
-    }
-    
-    private func getAttributes(_ layoutManager: NSLayoutManager, with textStorage: NSTextStorage, for glyphRange: NSRange) -> [Item] {
-        var glyphRange = glyphRange
-        
-        // 排除换行符。系统不能用它计算直线。
-        if glyphRange.length > 1 {
-            let lastIndex = glyphRange.location + glyphRange.length - 1
-            if layoutManager.propertyForGlyph(at: lastIndex) == .controlCharacter {
-                glyphRange = NSRange(location: glyphRange.location, length: glyphRange.length - 1)
-            }
-        }
-        // 循环遍历获取当前字形范围内的所有属性
-        let targetRange = layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
-        var array: [(NSRange, [NSAttributedString.Key: Any])] = []
-        var lastIndex = -1
-        var effectiveRange = NSRange(location: targetRange.location, length: 0)
-        while (effectiveRange.location + effectiveRange.length < targetRange.location + targetRange.length) {
-            var current = effectiveRange.location + effectiveRange.length
-            if current <= lastIndex {
-                current += 1
-            }
-            let attributes = textStorage.attributes(at: current, effectiveRange: &effectiveRange)
-            if !attributes.isEmpty {
-                array.append((effectiveRange, attributes))
-            }
-            lastIndex = current
-        }
-        return array
-    }
+    static let originalFont: NSAttributedString.Key = .init("NSOriginalFont")
 }
 
 #endif

@@ -87,8 +87,6 @@
 		9BE7D4C92488E0FC00DE1176 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE7D4C52488E0FC00DE1176 /* Action.swift */; };
 		9BEBB11324D511A000355C22 /* UILabelLayoutManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEBB11224D511A000355C22 /* UILabelLayoutManagerDelegate.swift */; };
 		9BEBB11424D511A000355C22 /* UILabelLayoutManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEBB11224D511A000355C22 /* UILabelLayoutManagerDelegate.swift */; };
-		9BEBB11624D5135D00355C22 /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEBB11524D5135D00355C22 /* UIFontExtension.swift */; };
-		9BEBB11724D5135D00355C22 /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEBB11524D5135D00355C22 /* UIFontExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,7 +150,6 @@
 		9BBC525E24A053A600CBDFFF /* Checking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checking.swift; sourceTree = "<group>"; };
 		9BE7D4C52488E0FC00DE1176 /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		9BEBB11224D511A000355C22 /* UILabelLayoutManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelLayoutManagerDelegate.swift; sourceTree = "<group>"; };
-		9BEBB11524D5135D00355C22 /* UIFontExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,7 +318,6 @@
 			children = (
 				9B6E89AB238274CB009EBEBE /* UILabelExtension.swift */,
 				9BEBB11224D511A000355C22 /* UILabelLayoutManagerDelegate.swift */,
-				9BEBB11524D5135D00355C22 /* UIFontExtension.swift */,
 			);
 			path = UILabel;
 			sourceTree = "<group>";
@@ -652,7 +648,6 @@
 				9BEBB11424D511A000355C22 /* UILabelLayoutManagerDelegate.swift in Sources */,
 				9B267BE724408357002F571E /* ShadowExtension.swift in Sources */,
 				9B267BE824408357002F571E /* UIButtonExtension.swift in Sources */,
-				9BEBB11724D5135D00355C22 /* UIFontExtension.swift in Sources */,
 				9B8765A324850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B267BB32440811F002F571E /* CGSizeExtension.swift in Sources */,
 				9B267BB42440811F002F571E /* CGRectExtension.swift in Sources */,
@@ -709,7 +704,6 @@
 				9BEBB11324D511A000355C22 /* UILabelLayoutManagerDelegate.swift in Sources */,
 				9B6E89A223826D8E009EBEBE /* Interpolation.swift in Sources */,
 				9B6E89B3238276B0009EBEBE /* CGPointExtension.swift in Sources */,
-				9BEBB11624D5135D00355C22 /* UIFontExtension.swift in Sources */,
 				9B8765A024850742009C51C2 /* ObjectExtension.swift in Sources */,
 				9B6E89DF23828F7C009EBEBE /* ShadowExtension.swift in Sources */,
 				9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */,

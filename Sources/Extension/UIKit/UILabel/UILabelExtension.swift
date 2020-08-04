@@ -31,8 +31,6 @@ extension AttributedStringWrapper where Base: UILabel {
     public var text: AttributedString? {
         get { base.touched?.0 ?? AttributedString(base.attributedText) }
         set {
-            // 字体补丁 交互所有字体的属性 更换为系统字体的值
-            UIFont.Patch
             // 判断当前是否在触摸状态, 内容是否发生了变化
             if var touched = base.touched, touched.0.isContentEqual(to: newValue) {
                 guard let string = newValue else {
@@ -334,22 +332,14 @@ fileprivate extension UILabel {
         let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText)
         guard let attributedString = AttributedString(text) else { return nil }
         
-        struct BaseLineInfo {
-            let firstBaseline: Double
-            let lastBaseline: Double
-            let referenceBounds: CGRect
-            let measuredNumberOfLines: Int64
-        }
-        
         // 构建同步Label设置的TextKit
         let textStorage = NSTextStorage(attributedString: attributedString.value)
-        let textContainer = NSTextContainer(size: .init(bounds.size.width, bounds.size.height + 1))
+        let textContainer = NSTextContainer(size: .init(bounds.size.width, bounds.size.height))
         let layoutManager = NSLayoutManager()
         layoutManager.delegate = UILabelLayoutManagerDelegate.shared // 重新计算行高确保TextKit与UILabel显示一致
         textContainer.lineBreakMode = lineBreakMode
         textContainer.lineFragmentPadding = 0.0
         textContainer.maximumNumberOfLines = numberOfLines
-        layoutManager.usesFontLeading = false
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
         
