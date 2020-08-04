@@ -333,15 +333,17 @@ fileprivate extension UILabel {
         guard let attributedString = AttributedString(text) else { return nil }
         
         // 构建同步Label设置的TextKit
-        let textStorage = NSTextStorage(attributedString: attributedString.value)
+        let textStorage = NSTextStorage()
         let textContainer = NSTextContainer(size: .init(bounds.size.width, bounds.size.height))
         let layoutManager = NSLayoutManager()
-        layoutManager.delegate = UILabelLayoutManagerDelegate.shared // 重新计算行高确保TextKit与UILabel显示一致
+        layoutManager.delegate = UILabelLayoutManagerDelegate.shared // 重新计算行高确保TextKit与UILabel显示同步
         textContainer.lineBreakMode = lineBreakMode
         textContainer.lineFragmentPadding = 0.0
         textContainer.maximumNumberOfLines = numberOfLines
+        layoutManager.usesFontLeading = false   // UILabel没有使用FontLeading排版
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
+        textStorage.setAttributedString(attributedString.value) // 放在最后添加富文本 TextKit的坑
         
         // 确保布局
         layoutManager.ensureLayout(for: textContainer)

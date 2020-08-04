@@ -57,8 +57,10 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         
         var rect = lineFragmentRect.pointee
         var used = lineFragmentUsedRect.pointee
-        used.size.height = max(maximum.lineHeight, used.height)
-        rect.size.height = used.height + maximum.lineSpacing + paragraphSpacing + paragraphSpacingBefore
+        // 以最大的高度为准 (可解决附件问题), 同时根据最大行数是否为1来判断rect和used是否需要一致, 以解决1行数多余的行间距问题.
+        let temp = max(maximum.lineHeight, used.height)
+        rect.size.height = temp + maximum.lineSpacing + paragraphSpacing + paragraphSpacingBefore
+        used.size.height = textContainer.maximumNumberOfLines == 1 ? temp : rect.height
         
         // 重新赋值最终结果
         lineFragmentRect.pointee = rect
@@ -98,8 +100,7 @@ extension UILabelLayoutManagerDelegate {
         var paragraph: NSParagraphStyle?
         textStorage.enumerateAttributes(in: characterRange, options: .longestEffectiveRangeNotRequired) {
             (attributes, range, stop) in
-            // 实际计算使用的是 NSOriginalFont lineHeight.
-            print(attributes[.originalFont])
+            // 使用 NSOriginalFont 的行高进行计算 https://juejin.im/post/6844903838252531725
             guard let font = (attributes[.originalFont] ?? attributes[.font]) as? UIFont else { return }
             paragraph = paragraph ?? attributes[.paragraphStyle] as? NSParagraphStyle
             
@@ -148,6 +149,7 @@ extension UILabelLayoutManagerDelegate {
 
 extension NSAttributedString.Key {
     
+    /// 参考: https://juejin.im/post/6844903838252531725
     static let originalFont: NSAttributedString.Key = .init("NSOriginalFont")
 }
 
