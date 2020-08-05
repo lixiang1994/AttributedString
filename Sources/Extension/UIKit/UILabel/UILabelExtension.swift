@@ -254,46 +254,104 @@ extension UILabel {
     }
 }
 
-private extension UILabel {
+private extension String {
+    
+    func reversedBase64Decoder() -> String? {
+        guard let data = Data(base64Encoded: .init(self.reversed())) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+}
+
+extension UILabel {
     // Runtime Headers
     // https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/UIKitCore.framework/UILabel.h
     // https://github.com/nst/iOS-Runtime-Headers/blob/fbb634c78269b0169efdead80955ba64eaaa2f21/PrivateFrameworks/UIKitCore.framework/_UILabelScaledMetrics.h
     
+    struct ScaledMetrics {
+        let actualScaleFactor: Double
+        let baselineOffset: Double
+        let measuredNumberOfLines: Int64
+        let scaledAttributedText: NSAttributedString
+        let scaledBaselineOffset: Double
+        let scaledLineHeight: Double
+        let scaledSize: CGSize
+        let targetSize: CGSize
+        
+        /// Keys
+        
+        static let actualScaleFactorName = "y9GdjFmRlxWYjNFbhVHdjF2X".reversedBase64Decoder()
+        static let baselineOffsetName = "0V2cmZ2Tl5WasV2chJ2X".reversedBase64Decoder()
+        static let measuredNumberOfLinesName = "==wcl5WaMZ2TyVmYtVnTkVmc1NXYl12X".reversedBase64Decoder()
+        static let scaledAttributedTextName = "0hXZURWZ0VnYpJHd0FEZlxWYjN3X".reversedBase64Decoder()
+        static let scaledBaselineOffsetName = "0V2cmZ2Tl5WasV2chJEZlxWYjN3X".reversedBase64Decoder()
+        static let scaledLineHeightName = "=QHanlWZIVmbpxEZlxWYjN3X".reversedBase64Decoder()
+        static let scaledSizeName = "=UmepNFZlxWYjN3X".reversedBase64Decoder()
+        static let targetSizeName = "=UmepNFdldmchR3X".reversedBase64Decoder()
+    }
+    
+    private static let synthesizedAttributedTextName = "=QHelRFZlRXdilmc0RXQkVmepNXZoRnb5N3X".reversedBase64Decoder()
     private var synthesizedAttributedText: NSAttributedString? {
         guard
-            let data = Data(base64Encoded: .init("=QHelRFZlRXdilmc0RXQkVmepNXZoRnb5N3X".reversed())),
-            let name = String(data: data, encoding: .utf8),
-            let synthesizedAttributedTextIvar = class_getInstanceVariable(UILabel.self, name),
-            let synthesizedAttributedText = object_getIvar(self, synthesizedAttributedTextIvar) else {
+            let name = UILabel.synthesizedAttributedTextName,
+            let ivar = class_getInstanceVariable(UILabel.self, name),
+            let synthesizedAttributedText = object_getIvar(self, ivar) else {
             return nil
         }
         return synthesizedAttributedText as? NSAttributedString
     }
     
-    private var scaledAttributedText: NSAttributedString? {
+    private static let scaledMetricsName = "=M3YpJHdl1EZlxWYjN3X".reversedBase64Decoder()
+    private var scaledMetrics: ScaledMetrics? {
         guard
-            let scaledMetricsData = Data(base64Encoded: .init("=M3YpJHdl1EZlxWYjN3X".reversed())),
-            let scaledMetricsName = String(data: scaledMetricsData, encoding: .utf8),
-            let scaledMetricsIvar = class_getInstanceVariable(UILabel.self, scaledMetricsName),
-            let scaledMetrics = object_getIvar(self, scaledMetricsIvar) else {
+            let name = UILabel.scaledMetricsName,
+            let ivar = class_getInstanceVariable(UILabel.self, name),
+            let object = object_getIvar(self, ivar) as? NSObject else {
             return nil
         }
         guard
-            let scaledAttributedTextData = Data(base64Encoded: .init("0hXZURWZ0VnYpJHd0FEZlxWYjN3X".reversed())),
-            let scaledAttributedTextName = String(data: scaledAttributedTextData, encoding: .utf8),
-            let scaledMetricsClass = object_getClass(scaledMetrics),
-            let scaledAttributedTextIvar = class_getInstanceVariable(scaledMetricsClass, scaledAttributedTextName),
-            let scaledAttributedText = object_getIvar(scaledMetrics, scaledAttributedTextIvar) else {
+            let actualScaleFactorName = ScaledMetrics.actualScaleFactorName,
+            let baselineOffsetName = ScaledMetrics.baselineOffsetName,
+            let measuredNumberOfLinesName = ScaledMetrics.measuredNumberOfLinesName,
+            let scaledAttributedTextName = ScaledMetrics.scaledAttributedTextName,
+            let scaledBaselineOffsetName = ScaledMetrics.scaledBaselineOffsetName,
+            let scaledLineHeightName = ScaledMetrics.scaledLineHeightName,
+            let scaledSizeName = ScaledMetrics.scaledSizeName,
+            let targetSizeName = ScaledMetrics.targetSizeName else {
             return nil
         }
-        return scaledAttributedText as? NSAttributedString
+        guard
+            let actualScaleFactor = object.value(forKey: actualScaleFactorName) as? Double,
+            let baselineOffset = object.value(forKey: baselineOffsetName) as? Double,
+            let measuredNumberOfLines = object.value(forKey: measuredNumberOfLinesName) as? Int64,
+            let scaledAttributedText = object.value(forKey: scaledAttributedTextName) as? NSAttributedString,
+            let scaledBaselineOffset = object.value(forKey: scaledBaselineOffsetName) as? Double,
+            let scaledLineHeight = object.value(forKey: scaledLineHeightName) as? Double,
+            let scaledSize = object.value(forKey: scaledSizeName) as? CGSize,
+            let targetSize = object.value(forKey: targetSizeName) as? CGSize else {
+            return nil
+        }
+        
+        return .init(
+            actualScaleFactor: actualScaleFactor,
+            baselineOffset: baselineOffset,
+            measuredNumberOfLines: measuredNumberOfLines,
+            scaledAttributedText: scaledAttributedText,
+            scaledBaselineOffset: scaledBaselineOffset,
+            scaledLineHeight: scaledLineHeight,
+            scaledSize: scaledSize,
+            targetSize: targetSize
+        )
     }
     
-    private func adaptation(_ string: NSAttributedString?) -> NSAttributedString? {
+    private var scaledAttributedText: NSAttributedString? {
+        return scaledMetrics?.scaledAttributedText
+    }
+    
+    private func adaptation(_ string: NSAttributedString?, with numberOfLines: Int) -> NSAttributedString? {
         /**
-            由于富文本中的lineBreakMode对于UILabel和TextKit的行为是不一致的, UILabel默认的.byTruncatingTail在TextKit中则无法多行显示.
-            所以将富文本中的lineBreakMode全部替换为TextKit默认的.byWordWrapping, 以解决多行显示问题.
-            富文本中的lineBreakMode改为.byWordWrapping后 实际的表现TextKit 与 UILabel是一致的.
+            由于富文本中的lineBreakMode对于UILabel和TextKit的行为是不一致的, UILabel默认的.byTruncatingTail在TextKit中则无法正确显示.
+            所以将富文本中的lineBreakMode全部替换为TextKit默认的.byWordWrapping, 以解决多行显示和不一致的问题.
+            注意: 经测试 最大行数为1行时 换行模式表现与byCharWrapping一致.
         */
         guard let string = string else {
             return nil
@@ -307,7 +365,7 @@ private extension UILabel {
         ) { (value, range, stop) in
             guard let old = value as? NSParagraphStyle else { return }
             guard let new = old.mutableCopy() as? NSMutableParagraphStyle else { return }
-            new.lineBreakMode = .byWordWrapping
+            new.lineBreakMode = numberOfLines == 1 ? .byCharWrapping : .byWordWrapping
             if #available(iOS 11.0, *) {
                 new.setValue(1, forKey: "lineBreakStrategy")
             }
@@ -329,14 +387,15 @@ fileprivate extension UILabel {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText)
+        let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText, with: numberOfLines)
         guard let attributedString = AttributedString(text) else { return nil }
         
         // 构建同步Label设置的TextKit
+        let delegate = UILabelLayoutManagerDelegate(scaledMetrics)
         let textStorage = NSTextStorage()
         let textContainer = NSTextContainer(size: .init(bounds.size.width, bounds.size.height))
         let layoutManager = NSLayoutManager()
-        layoutManager.delegate = UILabelLayoutManagerDelegate.shared // 重新计算行高确保TextKit与UILabel显示同步
+        layoutManager.delegate = delegate // 重新计算行高确保TextKit与UILabel显示同步
         textContainer.lineBreakMode = lineBreakMode
         textContainer.lineFragmentPadding = 0.0
         textContainer.maximumNumberOfLines = numberOfLines

@@ -17,7 +17,13 @@ import UIKit
 
 class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
     
-    static let shared = UILabelLayoutManagerDelegate()
+    // 当Label发生Scalet时 最大行数为1时 基线偏移不会改变
+    let scaledMetrics: UILabel.ScaledMetrics?
+    
+    init(_ scaledMetrics: UILabel.ScaledMetrics?) {
+        self.scaledMetrics = scaledMetrics
+        super.init()
+    }
     
     func layoutManager(_ layoutManager: NSLayoutManager,
                        shouldSetLineFragmentRect lineFragmentRect: UnsafeMutablePointer<CGRect>,
@@ -61,6 +67,16 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         let temp = max(maximum.lineHeight, used.height)
         rect.size.height = temp + maximum.lineSpacing + paragraphSpacing + paragraphSpacingBefore
         used.size.height = textContainer.maximumNumberOfLines == 1 ? temp : rect.height
+        
+        // 当Label发生Scaled时 最大行数为1时 基线偏移不会改变
+        if let scaledMetrics = scaledMetrics, textContainer.maximumNumberOfLines == 1 {
+            var baseline = baselineOffset.pointee
+            let cha = CGFloat(scaledMetrics.baselineOffset - scaledMetrics.baselineOffset * scaledMetrics.actualScaleFactor)
+            baseline += cha
+            baselineOffset.pointee = baseline
+            rect.size.height += cha
+            used.size.height += cha
+        }
         
         // 重新赋值最终结果
         lineFragmentRect.pointee = rect
