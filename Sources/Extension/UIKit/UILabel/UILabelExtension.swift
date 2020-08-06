@@ -295,10 +295,10 @@ fileprivate extension UILabel {
         point.y -= (bounds.height - height) / 2
         
         // Debug
-        subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
-        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
-        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
-        addSubview(view)
+//        subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
+//        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
+//        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
+//        addSubview(view)
         
         // 获取字形下标
         var fraction: CGFloat = 0
