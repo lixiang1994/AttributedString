@@ -254,6 +254,91 @@ extension UILabel {
     }
 }
 
+fileprivate extension UILabel {
+    
+    @objc
+    func attributedAction(_ sender: UIGestureRecognizer) {
+        guard isActionEnabled else { return }
+        guard let action = touched?.2 else { return }
+        guard action.trigger.matching(sender) else { return }
+        // 点击 回调
+        action.handle?()
+    }
+    
+    func matching(_ point: CGPoint) -> (NSRange, Action)? {
+        let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText, with: numberOfLines)
+        guard let attributedString = AttributedString(text) else { return nil }
+        
+        // 构建同步Label的TextKit
+        // 注: 目前还剩一个截断处理没解决 比如 "a\n\n\nb" numberOfLines=2
+        let delegate = UILabelLayoutManagerDelegate(scaledMetrics)
+        let textStorage = NSTextStorage()
+        let textContainer = NSTextContainer(size: bounds.size)
+        let layoutManager = NSLayoutManager()
+        layoutManager.delegate = delegate // 重新计算行高确保TextKit与UILabel显示同步
+        textContainer.lineBreakMode = lineBreakMode
+        textContainer.lineFragmentPadding = 0.0
+        textContainer.maximumNumberOfLines = numberOfLines
+        layoutManager.usesFontLeading = false   // UILabel没有使用FontLeading排版
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+        textStorage.setAttributedString(attributedString.value) // 放在最后添加富文本 TextKit的坑
+        
+        // 确保布局
+        layoutManager.ensureLayout(for: textContainer)
+        
+        // 获取文本所占高度
+        let height = layoutManager.usedRect(for: textContainer).height
+        
+        // 获取点击坐标 并排除各种偏移
+        var point = point
+        point.y -= (bounds.height - height) / 2
+        
+        // Debug
+        subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
+        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
+        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
+        addSubview(view)
+        
+        // 获取字形下标
+        var fraction: CGFloat = 0
+        let glyphIndex = layoutManager.glyphIndex(for: point, in: textContainer, fractionOfDistanceThroughGlyph: &fraction)
+        // 获取字符下标
+        let index = layoutManager.characterIndexForGlyph(at: glyphIndex)
+        // 通过字形距离判断是否在字形范围内
+        guard fraction > 0, fraction < 1 else {
+            return nil
+        }
+        // 获取点击的字符串范围和回调事件
+        guard
+            let range = actions.keys.first(where: { $0.contains(index) }),
+            let action = actions[range] else {
+            return nil
+        }
+        return (range, action)
+    }
+}
+
+class DebugView: UIView {
+    
+    var draw: (() -> Void)?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.2983732877)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.draw?()
+    }
+}
+
 private extension String {
     
     func reversedBase64Decoder() -> String? {
@@ -349,9 +434,9 @@ extension UILabel {
     
     private func adaptation(_ string: NSAttributedString?, with numberOfLines: Int) -> NSAttributedString? {
         /**
-            由于富文本中的lineBreakMode对于UILabel和TextKit的行为是不一致的, UILabel默认的.byTruncatingTail在TextKit中则无法正确显示.
-            所以将富文本中的lineBreakMode全部替换为TextKit默认的.byWordWrapping, 以解决多行显示和不一致的问题.
-            注意: 经测试 最大行数为1行时 换行模式表现与byCharWrapping一致.
+        由于富文本中的lineBreakMode对于UILabel和TextKit的行为是不一致的, UILabel默认的.byTruncatingTail在TextKit中则无法正确显示.
+        所以将富文本中的lineBreakMode全部替换为TextKit默认的.byWordWrapping, 以解决多行显示和不一致的问题.
+        注意: 经测试 最大行数为1行时 换行模式表现与byCharWrapping一致.
         */
         guard let string = string else {
             return nil
@@ -372,90 +457,6 @@ extension UILabel {
             mutable.addAttribute(.paragraphStyle, value: new, range: range)
         }
         return mutable
-    }
-}
-
-fileprivate extension UILabel {
-    
-    @objc
-    func attributedAction(_ sender: UIGestureRecognizer) {
-        guard isActionEnabled else { return }
-        guard let action = touched?.2 else { return }
-        guard action.trigger.matching(sender) else { return }
-        // 点击 回调
-        action.handle?()
-    }
-    
-    func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText, with: numberOfLines)
-        guard let attributedString = AttributedString(text) else { return nil }
-        
-        // 构建同步Label设置的TextKit
-        let delegate = UILabelLayoutManagerDelegate(scaledMetrics)
-        let textStorage = NSTextStorage()
-        let textContainer = NSTextContainer(size: .init(bounds.size.width, bounds.size.height))
-        let layoutManager = NSLayoutManager()
-        layoutManager.delegate = delegate // 重新计算行高确保TextKit与UILabel显示同步
-        textContainer.lineBreakMode = lineBreakMode
-        textContainer.lineFragmentPadding = 0.0
-        textContainer.maximumNumberOfLines = numberOfLines
-        layoutManager.usesFontLeading = false   // UILabel没有使用FontLeading排版
-        layoutManager.addTextContainer(textContainer)
-        textStorage.addLayoutManager(layoutManager)
-        textStorage.setAttributedString(attributedString.value) // 放在最后添加富文本 TextKit的坑
-        
-        // 确保布局
-        layoutManager.ensureLayout(for: textContainer)
-        
-        // 获取文本所占高度
-        let height = layoutManager.usedRect(for: textContainer).height
-        
-        // 获取点击坐标 并排除各种偏移
-        var point = point
-        point.y -= (bounds.height - height) / 2
-        
-        // Debug
-        subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
-        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
-        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
-        addSubview(view)
-        
-        // 获取字形下标
-        var fraction: CGFloat = 0
-        let glyphIndex = layoutManager.glyphIndex(for: point, in: textContainer, fractionOfDistanceThroughGlyph: &fraction)
-        // 获取字符下标
-        let index = layoutManager.characterIndexForGlyph(at: glyphIndex)
-        // 通过字形距离判断是否在字形范围内
-        guard fraction > 0, fraction < 1 else {
-            return nil
-        }
-        // 获取点击的字符串范围和回调事件
-        guard
-            let range = actions.keys.first(where: { $0.contains(index) }),
-            let action = actions[range] else {
-            return nil
-        }
-        return (range, action)
-    }
-}
-
-class DebugView: UIView {
-    var draw: (() -> Void)?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        isUserInteractionEnabled = false
-//        backgroundColor = .clear
-        backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.2983732877)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        self.draw?()
     }
 }
 

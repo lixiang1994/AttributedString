@@ -11,13 +11,13 @@
 //  Copyright © 2020 LEE. All rights reserved.
 //
 
-#if os(iOS) || os(tvOS)
+#if os(iOS)
 
 import UIKit
 
 class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
     
-    // 当Label发生Scalet时 最大行数为1时 基线偏移不会改变
+    // 当Label发生Scaled时
     let scaledMetrics: UILabel.ScaledMetrics?
     
     init(_ scaledMetrics: UILabel.ScaledMetrics?) {
@@ -63,19 +63,19 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         
         var rect = lineFragmentRect.pointee
         var used = lineFragmentUsedRect.pointee
-        // 以最大的高度为准 (可解决附件问题), 同时根据最大行数是否为1来判断rect和used是否需要一致, 以解决1行数多余的行间距问题.
+        // 以最大的高度为准 (可解决附件问题), 同时根据最大行数是否为1来判断used是否需要增加行间距, 以解决1行时应该无行间距的问题.
         let temp = max(maximum.lineHeight, used.height)
         rect.size.height = temp + maximum.lineSpacing + paragraphSpacing + paragraphSpacingBefore
-        used.size.height = textContainer.maximumNumberOfLines == 1 ? temp : rect.height
+        used.size.height = textContainer.maximumNumberOfLines == 1 ? temp : temp + maximum.lineSpacing
         
-        // 当Label发生Scaled时 最大行数为1时 基线偏移不会改变
+        // 当Label发生Scaled时 最大行数为1时 基线偏移不会按比例计算
         if let scaledMetrics = scaledMetrics, textContainer.maximumNumberOfLines == 1 {
+            // 使用原始基线偏移 使用Scaled的尺寸高度
             var baseline = baselineOffset.pointee
-            let cha = CGFloat(scaledMetrics.baselineOffset - scaledMetrics.baselineOffset * scaledMetrics.actualScaleFactor)
-            baseline += cha
+            baseline = CGFloat(scaledMetrics.baselineOffset)
             baselineOffset.pointee = baseline
-            rect.size.height += cha
-            used.size.height += cha
+            rect.size.height = scaledMetrics.scaledSize.height
+            used.size.height = scaledMetrics.scaledSize.height
         }
         
         // 重新赋值最终结果
@@ -163,7 +163,7 @@ extension UILabelLayoutManagerDelegate {
     }
 }
 
-extension NSAttributedString.Key {
+fileprivate extension NSAttributedString.Key {
     
     /// 参考: https://juejin.im/post/6844903838252531725
     static let originalFont: NSAttributedString.Key = .init("NSOriginalFont")
