@@ -705,6 +705,16 @@
             </objects>
             <point key="canvasLocation" x="4006" y="884"/>
         </scene>
+        <!--Debug-->
+        <scene sceneID="y9E-gb-Gq7">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Debug" id="4lO-aE-flU" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="EcA-zL-7ER"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JWQ-K9-scr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136" y="717"/>
+        </scene>
         <!--All-->
         <scene sceneID="FNM-vb-w9f">
             <objects>
@@ -755,6 +765,7 @@
                     <connections>
                         <segue destination="HkE-AT-DVp" kind="relationship" relationship="viewControllers" id="9Bf-7k-Oka"/>
                         <segue destination="1v5-re-jXN" kind="relationship" relationship="viewControllers" id="kDK-Lj-Hex"/>
+                        <segue destination="4lO-aE-flU" kind="relationship" relationship="viewControllers" id="lhv-nv-x6C"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IV8-48-QV7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

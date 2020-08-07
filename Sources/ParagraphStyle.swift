@@ -25,6 +25,13 @@ extension AttributedString.Attribute {
     public static func paragraph(_ value: ParagraphStyle...) -> Self {
         return .init(attributes: [.paragraphStyle: ParagraphStyle.get(value)])
     }
+    
+    /// 段落
+    /// - Parameter value: 段落样式
+    /// - Returns: 属性
+    public static func paragraph(_ value: [ParagraphStyle]) -> Self {
+        return .init(attributes: [.paragraphStyle: ParagraphStyle.get(value)])
+    }
 }
 
 extension AttributedString.Attribute {

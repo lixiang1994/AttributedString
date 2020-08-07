@@ -191,14 +191,24 @@ class SimpleViewController: UIViewController {
             """
         ]
         
-        let width = UIScreen.main.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 20
+        let width: CGFloat
+        if #available(iOS 11.0, *) {
+            width = UIScreen.main.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 20
+        } else {
+            width = UIScreen.main.bounds.width - 20
+        }
         list = array.map { .init($0, width: width) }
         tableView.reloadData()
     }
     
     private func reload() {
         // 获取最大宽度 重新设置内容
-        let width = UIScreen.main.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 20
+        let width: CGFloat
+        if #available(iOS 11.0, *) {
+            width = UIScreen.main.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right - 20
+        } else {
+            width = UIScreen.main.bounds.width - 20
+        }
         // 更新播放视图大小
         playerView.frame = .init(x: 0, y: 0, width: width, height: 9 / 16 * width)
         // 更新列表数据 (重新计算高度)
@@ -224,6 +234,7 @@ class SimpleViewController: UIViewController {
         player.pause()
     }
     
+    @available(iOS 11.0, *)
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         reload()

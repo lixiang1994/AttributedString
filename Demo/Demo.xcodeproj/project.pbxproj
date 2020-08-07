@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B15B7B524DD01280038DAF7 /* DebugLabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B15B7B424DD01280038DAF7 /* DebugLabelViewController.swift */; };
+		9B15B7B724DD01960038DAF7 /* Debug.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B15B7B624DD01960038DAF7 /* Debug.storyboard */; };
+		9B15B7B924DD1D9B0038DAF7 /* DebugLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B15B7B824DD1D9B0038DAF7 /* DebugLabelView.swift */; };
 		9B1C4964238405A7002CDC4B /* ParagraphStyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */; };
 		9B1C49662384065D002CDC4B /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1C49652384065D002CDC4B /* AttachmentViewController.swift */; };
 		9B6E898A23823F47009EBEBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E898923823F47009EBEBE /* AppDelegate.swift */; };
@@ -54,6 +57,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9B15B7B424DD01280038DAF7 /* DebugLabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLabelViewController.swift; sourceTree = "<group>"; };
+		9B15B7B624DD01960038DAF7 /* Debug.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Debug.storyboard; sourceTree = "<group>"; };
+		9B15B7B824DD1D9B0038DAF7 /* DebugLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLabelView.swift; sourceTree = "<group>"; };
 		9B1C4963238405A7002CDC4B /* ParagraphStyleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphStyleViewController.swift; sourceTree = "<group>"; };
 		9B1C49652384065D002CDC4B /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		9B6E898623823F47009EBEBE /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +105,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9B15B7B324DD00CE0038DAF7 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				9B15B7B424DD01280038DAF7 /* DebugLabelViewController.swift */,
+				9B15B7B824DD1D9B0038DAF7 /* DebugLabelView.swift */,
+				9B15B7B624DD01960038DAF7 /* Debug.storyboard */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		9B6E897D23823F47009EBEBE = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +135,7 @@
 		9B6E898823823F47009EBEBE /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				9B15B7B324DD00CE0038DAF7 /* Debug */,
 				9BD90EFC2383FA57000DBD29 /* Details */,
 				9B6E89D023827CE2009EBEBE /* Cell */,
 				9B6E898923823F47009EBEBE /* AppDelegate.swift */,
@@ -237,6 +254,7 @@
 			files = (
 				9B6E899623823F48009EBEBE /* LaunchScreen.storyboard in Resources */,
 				9B6E899323823F48009EBEBE /* Assets.xcassets in Resources */,
+				9B15B7B724DD01960038DAF7 /* Debug.storyboard in Resources */,
 				9B6E899123823F47009EBEBE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B74C1B024A83D9A00242418 /* ViewController.swift in Sources */,
+				9B15B7B524DD01280038DAF7 /* DebugLabelViewController.swift in Sources */,
 				9BD90F04238404EA000DBD29 /* LinkViewController.swift in Sources */,
 				9BD90F0A23840510000DBD29 /* StrikethroughViewController.swift in Sources */,
 				9BD90F0E23840529000DBD29 /* BaselineOffsetViewController.swift in Sources */,
@@ -259,6 +278,7 @@
 				9B1C4964238405A7002CDC4B /* ParagraphStyleViewController.swift in Sources */,
 				9BD90F1223840540000DBD29 /* StrokeViewController.swift in Sources */,
 				9B6E898A23823F47009EBEBE /* AppDelegate.swift in Sources */,
+				9B15B7B924DD1D9B0038DAF7 /* DebugLabelView.swift in Sources */,
 				9BB7011724B5C9360018DD68 /* VideoPlayerView.swift in Sources */,
 				9BD90F1A2384056F000DBD29 /* WritingDirectionViewController.swift in Sources */,
 				9B1C49662384065D002CDC4B /* AttachmentViewController.swift in Sources */,
