@@ -23,17 +23,31 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         UIFont(name: "Times New Roman", size: 17.0) ?? .systemFont(ofSize: 17.0)
     ]
     
-    private var currentFont: UIFont? {
+    private var font: UIFont? {
         didSet {
-            let font = currentFont?.withSize(currentFontSize)
-            container.label.font = font
-            container.fontNameLabel.text = font?.fontName
+            let temp = font?.withSize(fontSize)
+            container.label.font = temp
+            container.fontNameLabel.text = temp?.fontName
         }
     }
-    private var currentFontSize: CGFloat = 17.0 {
+    private var fontSize: CGFloat = 17.0 {
         didSet {
-            currentFont = currentFont?.withSize(currentFontSize)
-            container.fontSizeLabel.text = String(format: "%.2f", currentFontSize)
+            font = font?.withSize(fontSize)
+            container.fontSizeLabel.text = String(format: "%.2f", fontSize)
+        }
+    }
+    private var numberOfLines: Int {
+        get { container.label.numberOfLines }
+        set {
+            container.label.numberOfLines = newValue
+            container.numberOfLinesLabel.text = "\(newValue)"
+        }
+    }
+    private var textAlignment: NSTextAlignment {
+        get { container.label.textAlignment }
+        set {
+            container.label.textAlignment = newValue
+            container.textAlignmentLabel.text = newValue.description
         }
     }
     
@@ -52,7 +66,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     
     private func setup() {
         // 设置当前字体
-        currentFont = fonts.first
+        font = fonts.first
     }
     
     private func update() {
@@ -60,6 +74,11 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
             attributedString,
             with: attributes + [.paragraph(paragraphs)]
         )
+    }
+    
+    @IBAction func pageControlAction(_ sender: UIPageControl) {
+        let x = container.scrollView.bounds.width * .init(sender.currentPage)
+        container.scrollView.contentOffset = .init(x: x, y: 0)
     }
     
     @IBAction func widthSwitchAction(_ sender: UISwitch) {
@@ -81,10 +100,17 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     @IBAction func fontNameSliderAction(_ sender: UISlider) {
-        currentFont = fonts[.init(sender.value)]
+        font = fonts[.init(sender.value)]
     }
     @IBAction func fontSizeSliderAction(_ sender: UISlider) {
-        currentFontSize = .init(sender.value)
+        fontSize = .init(sender.value)
+    }
+    
+    @IBAction func numberOfLinesSliderAction(_ sender: UISlider) {
+        numberOfLines = .init(sender.value)
+    }
+    @IBAction func textAlignmentSliderAction(_ sender: UISlider) {
+        textAlignment = NSTextAlignment(rawValue: .init(sender.value)) ?? .natural
     }
     
     @IBAction func lineSpacingSliderAction(_ sender: UISlider) {
@@ -96,5 +122,27 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         paragraphs.append(.lineHeightMultiple(.init(sender.value)))
         container.lineHeightMultipleLabel.text = String(format: "%.2f", sender.value)
         update()
+    }
+}
+
+extension DebugLabelViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = (scrollView.contentOffset.x + scrollView.bounds.width * 0.5).rounded(.down)
+        container.pageControl.currentPage = .init(offset / scrollView.bounds.width)
+    }
+}
+
+private extension NSTextAlignment {
+    
+    var description: String {
+        switch self {
+        case .left:         return "left"
+        case .center:       return "center"
+        case .right:        return "right"
+        case .justified:    return "justified"
+        case .natural:      return "natural"
+        @unknown default:   return "unknown"
+        }
     }
 }

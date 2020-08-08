@@ -11,21 +11,27 @@ import UIKit
 class DebugLabelView: UIView {
 
     @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var pageControl: UIPageControl!
     
     @IBOutlet weak var labelWidth: NSLayoutConstraint!
     @IBOutlet weak var labelHeight: NSLayoutConstraint!
-    
+    /// Page 1
     @IBOutlet weak var currentWidthLabel: UILabel!
     @IBOutlet weak var currentHeightLabel: UILabel!
     @IBOutlet weak var currentWidthSlider: UISlider!
     @IBOutlet weak var currentHeightSlider: UISlider!
-    
+    /// Page 2
     @IBOutlet weak var fontNameLabel: UILabel!
     @IBOutlet weak var fontNameSlider: UISlider!
     @IBOutlet weak var fontSizeLabel: UILabel!
     @IBOutlet weak var fontSizeSlider: UISlider!
-    
-    
+    /// Page 3
+    @IBOutlet weak var numberOfLinesLabel: UILabel!
+    @IBOutlet weak var numberOfLinesSlider: UISlider!
+    @IBOutlet weak var textAlignmentLabel: UILabel!
+    @IBOutlet weak var textAlignmentSlider: UISlider!
+    /// Page 4
     @IBOutlet weak var lineSpacingLabel: UILabel!
     @IBOutlet weak var lineSpacingSlider: UISlider!
     @IBOutlet weak var lineHeightMultipleLabel: UILabel!
@@ -49,6 +55,8 @@ class DebugLabelView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        // 设置最大选项页数
+        pageControl.numberOfPages = .init(scrollView.contentSize.width / scrollView.bounds.width)
         // 设置最大可调宽高
         currentWidthSlider.minimumValue = 0
         currentWidthSlider.maximumValue = Float(bounds.width - 40)
