@@ -34,6 +34,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         didSet {
             font = font?.withSize(fontSize)
             container.fontSizeLabel.text = String(format: "%.2f", fontSize)
+            container.fontSizeSlider.value = .init(fontSize)
         }
     }
     private var numberOfLines: Int {
@@ -41,6 +42,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         set {
             container.label.numberOfLines = newValue
             container.numberOfLinesLabel.text = "\(newValue)"
+            container.numberOfLinesSlider.value = .init(newValue)
         }
     }
     private var textAlignment: NSTextAlignment {
@@ -48,8 +50,52 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         set {
             container.label.textAlignment = newValue
             container.textAlignmentLabel.text = newValue.description
+            container.textAlignmentSlider.value = .init(newValue.rawValue)
         }
     }
+    private var lineBreakMode: NSLineBreakMode {
+        get { container.label.lineBreakMode }
+        set {
+            container.label.lineBreakMode = newValue
+            container.lineBreakModeLabel.text = newValue.description
+            container.lineBreakModeSlider.value = .init(newValue.rawValue)
+        }
+    }
+    private var adjustsFontSizeToFitWidth: Bool {
+        get { container.label.adjustsFontSizeToFitWidth }
+        set {
+            container.label.adjustsFontSizeToFitWidth = newValue
+            container.adjustsFontSizeToFitWidthSwitch.isOn = newValue
+            container.baselineAdjustmentSegmentedControl.isEnabled = newValue
+            container.minimumScaleFactorSlider.isEnabled = newValue
+            container.allowsDefaultTighteningForTruncationSwitch.isEnabled = newValue
+        }
+    }
+    private var baselineAdjustment: UIBaselineAdjustment {
+        get { container.label.baselineAdjustment }
+        set {
+            container.label.baselineAdjustment = newValue
+            container.baselineAdjustmentSegmentedControl.selectedSegmentIndex = newValue.rawValue
+        }
+    }
+    private var minimumScaleFactor: CGFloat {
+        get { container.label.minimumScaleFactor }
+        set {
+            container.label.minimumScaleFactor = newValue
+            container.minimumScaleFactorLabel.text = String(format: "%.2f", newValue)
+            container.minimumScaleFactorSlider.value = .init(newValue)
+        }
+    }
+    private var allowsDefaultTighteningForTruncation: Bool {
+        get { container.label.allowsDefaultTighteningForTruncation }
+        set {
+            container.label.allowsDefaultTighteningForTruncation = newValue
+            container.allowsDefaultTighteningForTruncationSwitch.isOn = newValue
+        }
+    }
+    
+    private var widthLayoutConstraint: NSLayoutConstraint?
+    private var heightLayoutConstraint: NSLayoutConstraint?
     
     private var attributes: [AttributedString.Attribute] = []
     private var paragraphs: [AttributedString.Attribute.ParagraphStyle] = []
@@ -65,8 +111,16 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     private func setup() {
-        // 设置当前字体
+        // 设置默认属性
         font = fonts.first
+        fontSize = 17.0
+        numberOfLines = 0
+        textAlignment = .natural
+        lineBreakMode = .byTruncatingTail
+        adjustsFontSizeToFitWidth = false
+        baselineAdjustment = .alignBaselines
+        minimumScaleFactor = 0.0
+        allowsDefaultTighteningForTruncation = false
     }
     
     private func update() {
@@ -82,20 +136,42 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     @IBAction func widthSwitchAction(_ sender: UISwitch) {
-        container.labelWidth.priority = sender.isOn ? .required : .defaultLow
+        if sender.isOn {
+            let layoutConstraint = container.label.widthAnchor.constraint(
+                equalToConstant: .init(container.currentWidthSlider.value)
+            )
+            widthLayoutConstraint = layoutConstraint
+            container.label.addConstraint(layoutConstraint)
+            
+        } else {
+            guard let layoutConstraint = widthLayoutConstraint else { return }
+            widthLayoutConstraint = nil
+            container.label.removeConstraint(layoutConstraint)
+        }
         container.currentWidthSlider.isEnabled = sender.isOn
     }
     @IBAction func heightSwitchAction(_ sender: UISwitch) {
-        container.labelHeight.priority = sender.isOn ? .required : .defaultLow
+        if sender.isOn {
+            let layoutConstraint = container.label.heightAnchor.constraint(
+                equalToConstant: .init(container.currentHeightSlider.value)
+            )
+            heightLayoutConstraint = layoutConstraint
+            container.label.addConstraint(layoutConstraint)
+            
+        } else {
+            guard let layoutConstraint = heightLayoutConstraint else { return }
+            heightLayoutConstraint = nil
+            container.label.removeConstraint(layoutConstraint)
+        }
         container.currentHeightSlider.isEnabled = sender.isOn
     }
     
     @IBAction func widthSliderAction(_ sender: UISlider) {
-        container.labelWidth.constant = CGFloat(sender.value)
+        widthLayoutConstraint?.constant = .init(sender.value)
         view.layoutIfNeeded()
     }
     @IBAction func heightSliderAction(_ sender: UISlider) {
-        container.labelHeight.constant = CGFloat(sender.value)
+        heightLayoutConstraint?.constant = .init(sender.value)
         view.layoutIfNeeded()
     }
     
@@ -111,6 +187,27 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     @IBAction func textAlignmentSliderAction(_ sender: UISlider) {
         textAlignment = NSTextAlignment(rawValue: .init(sender.value)) ?? .natural
+    }
+    @IBAction func lineBreakModeSliderAction(_ sender: UISlider) {
+        lineBreakMode = NSLineBreakMode(rawValue: .init(sender.value)) ?? .byTruncatingTail
+    }
+    
+    @IBAction func adjustsFontSizeToFitWidthSwitchAction(_ sender: UISwitch) {
+        adjustsFontSizeToFitWidth = sender.isOn
+        update()
+    }
+    @IBAction func baselineAdjustmentSegmentedAction(_ sender: UISegmentedControl) {
+        baselineAdjustment = UIBaselineAdjustment(rawValue: sender.selectedSegmentIndex) ?? .alignBaselines
+    }
+    @IBAction func minimumScaleFactorSlider(_ sender: UISlider) {
+        minimumScaleFactor = .init(sender.value)
+        // 需要关闭再开启才会更新
+        container.label.adjustsFontSizeToFitWidth.toggle()
+        container.label.adjustsFontSizeToFitWidth.toggle()
+        update()
+    }
+    @IBAction func allowsDefaultTighteningForTruncationSwitchAction(_ sender: UISwitch) {
+        allowsDefaultTighteningForTruncation = sender.isOn
     }
     
     @IBAction func lineSpacingSliderAction(_ sender: UISlider) {
@@ -137,12 +234,27 @@ private extension NSTextAlignment {
     
     var description: String {
         switch self {
-        case .left:         return "left"
-        case .center:       return "center"
-        case .right:        return "right"
-        case .justified:    return "justified"
-        case .natural:      return "natural"
-        @unknown default:   return "unknown"
+        case .left:                     return "left"
+        case .center:                   return "center"
+        case .right:                    return "right"
+        case .justified:                return "justified"
+        case .natural:                  return "natural"
+        @unknown default:               return "unknown"
+        }
+    }
+}
+
+private extension NSLineBreakMode {
+    
+    var description: String {
+        switch self {
+        case .byWordWrapping:           return "byWordWrapping"
+        case .byCharWrapping:           return "byCharWrapping"
+        case .byClipping:               return "byClipping"
+        case .byTruncatingHead:         return "byTruncatingHead"
+        case .byTruncatingTail:         return "byTruncatingTail"
+        case .byTruncatingMiddle:       return "byTruncatingMiddle"
+        @unknown default:               return "unknown"
         }
     }
 }

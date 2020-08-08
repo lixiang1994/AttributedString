@@ -14,8 +14,6 @@ class DebugLabelView: UIView {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    @IBOutlet weak var labelWidth: NSLayoutConstraint!
-    @IBOutlet weak var labelHeight: NSLayoutConstraint!
     /// Page 1
     @IBOutlet weak var currentWidthLabel: UILabel!
     @IBOutlet weak var currentHeightLabel: UILabel!
@@ -31,7 +29,16 @@ class DebugLabelView: UIView {
     @IBOutlet weak var numberOfLinesSlider: UISlider!
     @IBOutlet weak var textAlignmentLabel: UILabel!
     @IBOutlet weak var textAlignmentSlider: UISlider!
+    @IBOutlet weak var lineBreakModeLabel: UILabel!
+    @IBOutlet weak var lineBreakModeSlider: UISlider!
     /// Page 4
+    @IBOutlet weak var adjustsFontSizeToFitWidthSwitch: UISwitch!
+    @IBOutlet weak var baselineAdjustmentSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var minimumScaleFactorLabel: UILabel!
+    @IBOutlet weak var minimumScaleFactorSlider: UISlider!
+    @IBOutlet weak var allowsDefaultTighteningForTruncationSwitch: UISwitch!
+    
+    /// Page 5
     @IBOutlet weak var lineSpacingLabel: UILabel!
     @IBOutlet weak var lineSpacingSlider: UISlider!
     @IBOutlet weak var lineHeightMultipleLabel: UILabel!
