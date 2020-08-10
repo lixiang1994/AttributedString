@@ -22,6 +22,7 @@
 		9B6E89D623828178009EBEBE /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B6E89D423828178009EBEBE /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B74C1AE24A83A7100242418 /* CheckingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B74C1AD24A83A7100242418 /* CheckingViewController.swift */; };
 		9B74C1B024A83D9A00242418 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B74C1AF24A83D9A00242418 /* ViewController.swift */; };
+		9B80EA9D24E108A9006CC806 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B80EA9C24E108A9006CC806 /* Debug.swift */; };
 		9BB7011724B5C9360018DD68 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BB7011624B5C9360018DD68 /* VideoPlayerView.swift */; };
 		9BD90EFE23840402000DBD29 /* FontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90EFD23840402000DBD29 /* FontViewController.swift */; };
 		9BD90F00238404C9000DBD29 /* ForegroundColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */; };
@@ -73,6 +74,7 @@
 		9B6E89D423828178009EBEBE /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B74C1AD24A83A7100242418 /* CheckingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckingViewController.swift; sourceTree = "<group>"; };
 		9B74C1AF24A83D9A00242418 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9B80EA9C24E108A9006CC806 /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		9BB7011624B5C9360018DD68 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		9BD90EFD23840402000DBD29 /* FontViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontViewController.swift; sourceTree = "<group>"; };
 		9BD90EFF238404C9000DBD29 /* ForegroundColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForegroundColorViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			children = (
 				9B15B7B424DD01280038DAF7 /* DebugLabelViewController.swift */,
 				9B15B7B824DD1D9B0038DAF7 /* DebugLabelView.swift */,
+				9B80EA9C24E108A9006CC806 /* Debug.swift */,
 				9B15B7B624DD01960038DAF7 /* Debug.storyboard */,
 			);
 			path = Debug;
@@ -271,6 +274,7 @@
 				9BD90F04238404EA000DBD29 /* LinkViewController.swift in Sources */,
 				9BD90F0A23840510000DBD29 /* StrikethroughViewController.swift in Sources */,
 				9BD90F0E23840529000DBD29 /* BaselineOffsetViewController.swift in Sources */,
+				9B80EA9D24E108A9006CC806 /* Debug.swift in Sources */,
 				9B6E898E23823F47009EBEBE /* SimpleViewController.swift in Sources */,
 				9B6E89D223827D14009EBEBE /* TableViewCell.swift in Sources */,
 				9BD90F1623840556000DBD29 /* ObliquenessViewController.swift in Sources */,

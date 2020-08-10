@@ -9,6 +9,8 @@
 import UIKit
 import AttributedString
 
+private let key = "com.debug.label"
+
 class DebugLabelViewController: ViewController<DebugLabelView> {
     
     private let fonts: [UIFont] = [
@@ -23,79 +25,11 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         UIFont(name: "Times New Roman", size: 17.0) ?? .systemFont(ofSize: 17.0)
     ]
     
-    private var font: UIFont? {
+    private var info: Debug.Label = .init() {
         didSet {
-            let temp = font?.withSize(fontSize)
-            container.label.font = temp
-            container.fontNameLabel.text = temp?.fontName
+            container.set(info: info)
         }
     }
-    private var fontSize: CGFloat = 17.0 {
-        didSet {
-            font = font?.withSize(fontSize)
-            container.fontSizeLabel.text = String(format: "%.2f", fontSize)
-            container.fontSizeSlider.value = .init(fontSize)
-        }
-    }
-    private var numberOfLines: Int {
-        get { container.label.numberOfLines }
-        set {
-            container.label.numberOfLines = newValue
-            container.numberOfLinesLabel.text = "\(newValue)"
-            container.numberOfLinesSlider.value = .init(newValue)
-        }
-    }
-    private var textAlignment: NSTextAlignment {
-        get { container.label.textAlignment }
-        set {
-            container.label.textAlignment = newValue
-            container.textAlignmentLabel.text = newValue.description
-            container.textAlignmentSlider.value = .init(newValue.rawValue)
-        }
-    }
-    private var lineBreakMode: NSLineBreakMode {
-        get { container.label.lineBreakMode }
-        set {
-            container.label.lineBreakMode = newValue
-            container.lineBreakModeLabel.text = newValue.description
-            container.lineBreakModeSlider.value = .init(newValue.rawValue)
-        }
-    }
-    private var adjustsFontSizeToFitWidth: Bool {
-        get { container.label.adjustsFontSizeToFitWidth }
-        set {
-            container.label.adjustsFontSizeToFitWidth = newValue
-            container.adjustsFontSizeToFitWidthSwitch.isOn = newValue
-            container.baselineAdjustmentSegmentedControl.isEnabled = newValue
-            container.minimumScaleFactorSlider.isEnabled = newValue
-            container.allowsDefaultTighteningForTruncationSwitch.isEnabled = newValue
-        }
-    }
-    private var baselineAdjustment: UIBaselineAdjustment {
-        get { container.label.baselineAdjustment }
-        set {
-            container.label.baselineAdjustment = newValue
-            container.baselineAdjustmentSegmentedControl.selectedSegmentIndex = newValue.rawValue
-        }
-    }
-    private var minimumScaleFactor: CGFloat {
-        get { container.label.minimumScaleFactor }
-        set {
-            container.label.minimumScaleFactor = newValue
-            container.minimumScaleFactorLabel.text = String(format: "%.2f", newValue)
-            container.minimumScaleFactorSlider.value = .init(newValue)
-        }
-    }
-    private var allowsDefaultTighteningForTruncation: Bool {
-        get { container.label.allowsDefaultTighteningForTruncation }
-        set {
-            container.label.allowsDefaultTighteningForTruncation = newValue
-            container.allowsDefaultTighteningForTruncationSwitch.isOn = newValue
-        }
-    }
-    
-    private var widthLayoutConstraint: NSLayoutConstraint?
-    private var heightLayoutConstraint: NSLayoutConstraint?
     
     private var attributes: [AttributedString.Attribute] = []
     private var paragraphs: [AttributedString.Attribute.ParagraphStyle] = []
@@ -111,113 +45,84 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     private func setup() {
-        // 设置默认属性
-        font = fonts.first
-        fontSize = 17.0
-        numberOfLines = 0
-        textAlignment = .natural
-        lineBreakMode = .byTruncatingTail
-        adjustsFontSizeToFitWidth = false
-        baselineAdjustment = .alignBaselines
-        minimumScaleFactor = 0.0
-        allowsDefaultTighteningForTruncation = false
+        guard
+            let data = UserDefaults.standard.data(forKey: key),
+            let info = try? JSONDecoder().decode(Debug.Label.self, from: data) else {
+            return
+        }
+        self.info = info
     }
     
     private func update() {
-        container.label.attributed.text = .init(
+        container.set(text: .init(
             attributedString,
             with: attributes + [.paragraph(paragraphs)]
-        )
+        ))
+    }
+    
+    @IBAction func saveAction(_ sender: UIBarButtonItem) {
+        guard let json = try? JSONEncoder().encode(info) else { return }
+        UserDefaults.standard.setValue(json, forKey: key)
     }
     
     @IBAction func pageControlAction(_ sender: UIPageControl) {
-        let x = container.scrollView.bounds.width * .init(sender.currentPage)
-        container.scrollView.contentOffset = .init(x: x, y: 0)
+        container.set(page: sender.currentPage, scroll: true)
     }
     
     @IBAction func widthSwitchAction(_ sender: UISwitch) {
-        if sender.isOn {
-            let layoutConstraint = container.label.widthAnchor.constraint(
-                equalToConstant: .init(container.currentWidthSlider.value)
-            )
-            widthLayoutConstraint = layoutConstraint
-            container.label.addConstraint(layoutConstraint)
-            
-        } else {
-            guard let layoutConstraint = widthLayoutConstraint else { return }
-            widthLayoutConstraint = nil
-            container.label.removeConstraint(layoutConstraint)
-        }
-        container.currentWidthSlider.isEnabled = sender.isOn
+        info.width = sender.isOn ? container.labelWidth : .none
     }
     @IBAction func heightSwitchAction(_ sender: UISwitch) {
-        if sender.isOn {
-            let layoutConstraint = container.label.heightAnchor.constraint(
-                equalToConstant: .init(container.currentHeightSlider.value)
-            )
-            heightLayoutConstraint = layoutConstraint
-            container.label.addConstraint(layoutConstraint)
-            
-        } else {
-            guard let layoutConstraint = heightLayoutConstraint else { return }
-            heightLayoutConstraint = nil
-            container.label.removeConstraint(layoutConstraint)
-        }
-        container.currentHeightSlider.isEnabled = sender.isOn
+        info.height = sender.isOn ? container.labelHeight : .none
     }
-    
     @IBAction func widthSliderAction(_ sender: UISlider) {
-        widthLayoutConstraint?.constant = .init(sender.value)
-        view.layoutIfNeeded()
+        info.width = .init(sender.value)
     }
     @IBAction func heightSliderAction(_ sender: UISlider) {
-        heightLayoutConstraint?.constant = .init(sender.value)
-        view.layoutIfNeeded()
+        info.height = .init(sender.value)
     }
     
     @IBAction func fontNameSliderAction(_ sender: UISlider) {
-        font = fonts[.init(sender.value)]
+        info.font = fonts[.init(sender.value)].withSize(info.font?.pointSize ?? 17.0)
     }
     @IBAction func fontSizeSliderAction(_ sender: UISlider) {
-        fontSize = .init(sender.value)
+        info.font = info.font?.withSize(.init(sender.value))
     }
-    
     @IBAction func numberOfLinesSliderAction(_ sender: UISlider) {
-        numberOfLines = .init(sender.value)
+        info.numberOfLines = .init(sender.value)
     }
     @IBAction func textAlignmentSliderAction(_ sender: UISlider) {
-        textAlignment = NSTextAlignment(rawValue: .init(sender.value)) ?? .natural
+        info.textAlignment = NSTextAlignment(rawValue: .init(sender.value)) ?? .natural
     }
     @IBAction func lineBreakModeSliderAction(_ sender: UISlider) {
-        lineBreakMode = NSLineBreakMode(rawValue: .init(sender.value)) ?? .byTruncatingTail
+        info.lineBreakMode = NSLineBreakMode(rawValue: .init(sender.value)) ?? .byTruncatingTail
     }
     
     @IBAction func adjustsFontSizeToFitWidthSwitchAction(_ sender: UISwitch) {
-        adjustsFontSizeToFitWidth = sender.isOn
-        update()
+        info.adjustsFontSizeToFitWidth = sender.isOn
     }
     @IBAction func baselineAdjustmentSegmentedAction(_ sender: UISegmentedControl) {
-        baselineAdjustment = UIBaselineAdjustment(rawValue: sender.selectedSegmentIndex) ?? .alignBaselines
+        info.baselineAdjustment = UIBaselineAdjustment(rawValue: sender.selectedSegmentIndex) ?? .alignBaselines
     }
     @IBAction func minimumScaleFactorSlider(_ sender: UISlider) {
-        minimumScaleFactor = .init(sender.value)
+        info.minimumScaleFactor = .init(sender.value)
         // 需要关闭再开启才会更新
-        container.label.adjustsFontSizeToFitWidth.toggle()
-        container.label.adjustsFontSizeToFitWidth.toggle()
+//        container.aLabel.adjustsFontSizeToFitWidth.toggle()
+//        container.aLabel.adjustsFontSizeToFitWidth.toggle()
         update()
     }
     @IBAction func allowsDefaultTighteningForTruncationSwitchAction(_ sender: UISwitch) {
-        allowsDefaultTighteningForTruncation = sender.isOn
+        info.allowsDefaultTighteningForTruncation = sender.isOn
     }
     
     @IBAction func lineSpacingSliderAction(_ sender: UISlider) {
         paragraphs.append(.lineSpacing(.init(sender.value)))
-        container.lineSpacingLabel.text = String(format: "%.2f", sender.value)
+        info.lineSpacing = .init(sender.value)
         update()
     }
     @IBAction func lineHeightMultipleSliderAction(_ sender: UISlider) {
         paragraphs.append(.lineHeightMultiple(.init(sender.value)))
-        container.lineHeightMultipleLabel.text = String(format: "%.2f", sender.value)
+        info.lineHeightMultiple = .init(sender.value)
         update()
     }
 }
@@ -226,35 +131,6 @@ extension DebugLabelViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = (scrollView.contentOffset.x + scrollView.bounds.width * 0.5).rounded(.down)
-        container.pageControl.currentPage = .init(offset / scrollView.bounds.width)
-    }
-}
-
-private extension NSTextAlignment {
-    
-    var description: String {
-        switch self {
-        case .left:                     return "left"
-        case .center:                   return "center"
-        case .right:                    return "right"
-        case .justified:                return "justified"
-        case .natural:                  return "natural"
-        @unknown default:               return "unknown"
-        }
-    }
-}
-
-private extension NSLineBreakMode {
-    
-    var description: String {
-        switch self {
-        case .byWordWrapping:           return "byWordWrapping"
-        case .byCharWrapping:           return "byCharWrapping"
-        case .byClipping:               return "byClipping"
-        case .byTruncatingHead:         return "byTruncatingHead"
-        case .byTruncatingTail:         return "byTruncatingTail"
-        case .byTruncatingMiddle:       return "byTruncatingMiddle"
-        @unknown default:               return "unknown"
-        }
+        container.set(page: .init(offset / scrollView.bounds.width), scroll: false)
     }
 }

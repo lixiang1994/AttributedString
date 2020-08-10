@@ -7,43 +7,144 @@
 //
 
 import UIKit
+import AttributedString
 
 class DebugLabelView: UIView {
-
-    @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var pageControl: UIPageControl!
+    
+    var labelWidth: CGFloat {
+        .init(currentWidthSlider.value)
+    }
+    var labelHeight: CGFloat {
+        .init(currentHeightSlider.value)
+    }
+    
+    var font: UIFont = .systemFont(ofSize: 17) {
+        didSet {
+            let value = font.withSize(fontSize)
+            label.font = value
+            fontNameLabel.text = value.fontName
+        }
+    }
+    var fontSize: CGFloat = 17 {
+        didSet {
+            let value = fontSize
+            font = font.withSize(value)
+            fontSizeLabel.text = String(format: "%.2f", value)
+            fontSizeSlider.value = .init(value)
+        }
+    }
+    var numberOfLines: Int = 0 {
+        didSet {
+            let value = numberOfLines
+            label.numberOfLines = value
+            numberOfLinesLabel.text = "\(value)"
+            numberOfLinesSlider.value = .init(value)
+        }
+    }
+    var textAlignment: NSTextAlignment = .natural {
+        didSet {
+            let value = textAlignment
+            label.textAlignment = value
+            textAlignmentLabel.text = value.description
+            textAlignmentSlider.value = .init(value.rawValue)
+        }
+    }
+    var lineBreakMode: NSLineBreakMode = .byTruncatingTail {
+        didSet {
+            let value = lineBreakMode
+            label.lineBreakMode = value
+            lineBreakModeLabel.text = value.description
+            lineBreakModeSlider.value = .init(value.rawValue)
+        }
+    }
+    var adjustsFontSizeToFitWidth: Bool = false {
+        didSet {
+            let value = adjustsFontSizeToFitWidth
+            label.adjustsFontSizeToFitWidth = value
+            adjustsFontSizeToFitWidthSwitch.isOn = value
+            baselineAdjustmentSegmentedControl.isEnabled = value
+            minimumScaleFactorSlider.isEnabled = value
+            allowsDefaultTighteningForTruncationSwitch.isEnabled = value
+        }
+    }
+    var baselineAdjustment: UIBaselineAdjustment = .none {
+        didSet {
+            let value = baselineAdjustment
+            label.baselineAdjustment = value
+            baselineAdjustmentSegmentedControl.selectedSegmentIndex = value.rawValue
+        }
+    }
+    var minimumScaleFactor: CGFloat = 0 {
+        didSet {
+            let value = minimumScaleFactor
+            label.minimumScaleFactor = value
+            minimumScaleFactorLabel.text = String(format: "%.2f", value)
+            minimumScaleFactorSlider.value = .init(value)
+        }
+    }
+    var allowsDefaultTighteningForTruncation: Bool = false {
+        didSet {
+            let value = allowsDefaultTighteningForTruncation
+            label.allowsDefaultTighteningForTruncation = value
+            allowsDefaultTighteningForTruncationSwitch.isOn = value
+        }
+    }
+    
+    var lineSpacing: CGFloat = 0 {
+        didSet {
+            let value = lineSpacing
+            lineSpacingLabel.text = String(format: "%.2f", value)
+        }
+    }
+    
+    var lineHeightMultiple: CGFloat = 0 {
+        didSet {
+            let value = lineHeightMultiple
+            lineHeightMultipleLabel.text = String(format: "%.2f", value)
+        }
+    }
+    
+    @IBOutlet private weak var label: UILabel!
+    
+    @IBOutlet private weak var widthLayoutConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var heightLayoutConstraint: NSLayoutConstraint!
+    
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var pageControl: UIPageControl!
     
     /// Page 1
-    @IBOutlet weak var currentWidthLabel: UILabel!
-    @IBOutlet weak var currentHeightLabel: UILabel!
-    @IBOutlet weak var currentWidthSlider: UISlider!
-    @IBOutlet weak var currentHeightSlider: UISlider!
+    @IBOutlet private weak var currentWidthLabel: UILabel!
+    @IBOutlet private weak var currentHeightLabel: UILabel!
+    @IBOutlet private weak var currentWidthSlider: UISlider!
+    @IBOutlet private weak var currentHeightSlider: UISlider!
+    @IBOutlet private weak var currentWidthSwitch: UISwitch!
+    @IBOutlet private weak var currentHeightSwitch: UISwitch!
     /// Page 2
-    @IBOutlet weak var fontNameLabel: UILabel!
-    @IBOutlet weak var fontNameSlider: UISlider!
-    @IBOutlet weak var fontSizeLabel: UILabel!
-    @IBOutlet weak var fontSizeSlider: UISlider!
+    @IBOutlet private weak var fontNameLabel: UILabel!
+    @IBOutlet private weak var fontNameSlider: UISlider!
+    @IBOutlet private weak var fontSizeLabel: UILabel!
+    @IBOutlet private weak var fontSizeSlider: UISlider!
     /// Page 3
-    @IBOutlet weak var numberOfLinesLabel: UILabel!
-    @IBOutlet weak var numberOfLinesSlider: UISlider!
-    @IBOutlet weak var textAlignmentLabel: UILabel!
-    @IBOutlet weak var textAlignmentSlider: UISlider!
-    @IBOutlet weak var lineBreakModeLabel: UILabel!
-    @IBOutlet weak var lineBreakModeSlider: UISlider!
+    @IBOutlet private weak var numberOfLinesLabel: UILabel!
+    @IBOutlet private weak var numberOfLinesSlider: UISlider!
+    @IBOutlet private weak var textAlignmentLabel: UILabel!
+    @IBOutlet private weak var textAlignmentSlider: UISlider!
+    @IBOutlet private weak var lineBreakModeLabel: UILabel!
+    @IBOutlet private weak var lineBreakModeSlider: UISlider!
     /// Page 4
-    @IBOutlet weak var adjustsFontSizeToFitWidthSwitch: UISwitch!
-    @IBOutlet weak var baselineAdjustmentSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var minimumScaleFactorLabel: UILabel!
-    @IBOutlet weak var minimumScaleFactorSlider: UISlider!
-    @IBOutlet weak var allowsDefaultTighteningForTruncationSwitch: UISwitch!
+    @IBOutlet private weak var adjustsFontSizeToFitWidthSwitch: UISwitch!
+    @IBOutlet private weak var baselineAdjustmentSegmentedControl: UISegmentedControl!
+    @IBOutlet private weak var minimumScaleFactorLabel: UILabel!
+    @IBOutlet private weak var minimumScaleFactorSlider: UISlider!
+    @IBOutlet private weak var allowsDefaultTighteningForTruncationSwitch: UISwitch!
     
     /// Page 5
-    @IBOutlet weak var lineSpacingLabel: UILabel!
-    @IBOutlet weak var lineSpacingSlider: UISlider!
-    @IBOutlet weak var lineHeightMultipleLabel: UILabel!
-    @IBOutlet weak var lineHeightMultipleSlider: UISlider!
+    @IBOutlet private weak var lineSpacingLabel: UILabel!
+    @IBOutlet private weak var lineSpacingSlider: UISlider!
+    @IBOutlet private weak var lineHeightMultipleLabel: UILabel!
+    @IBOutlet private weak var lineHeightMultipleSlider: UISlider!
     
+    private var old: Debug.Label?
     private var labelBoundsObservation: NSKeyValueObservation?
     
     override func awakeFromNib() {
@@ -69,5 +170,121 @@ class DebugLabelView: UIView {
         currentWidthSlider.maximumValue = Float(bounds.width - 40)
         currentHeightSlider.minimumValue = 0
         currentHeightSlider.maximumValue = Float(bounds.height * 2)
+    }
+}
+
+extension DebugLabelView {
+    
+    /// 设置当前信息
+    /// - Parameter info: 配置信息
+    func set(info: Debug.Label) {
+        // size
+        if let value = info.width {
+            widthLayoutConstraint.constant = .init(value)
+            widthLayoutConstraint.priority = .required
+            currentWidthSwitch.isOn = true
+            currentWidthSlider.isEnabled = true
+            
+        } else {
+            widthLayoutConstraint.priority = .defaultLow
+            currentWidthSwitch.isOn = false
+            currentWidthSlider.isEnabled = false
+        }
+        if let value = info.height {
+            heightLayoutConstraint.constant = .init(value)
+            heightLayoutConstraint.priority = .required
+            currentHeightSwitch.isOn = true
+            currentHeightSlider.isEnabled = true
+            
+        } else {
+            heightLayoutConstraint.priority = .defaultLow
+            currentHeightSwitch.isOn = false
+            currentHeightSlider.isEnabled = false
+        }
+        
+        // normal
+        if let value = info.font {
+            font = value
+            fontSize = value.pointSize
+        }
+        if let value = info.numberOfLines {
+            numberOfLines = value
+        }
+        if let value = info.textAlignment {
+            textAlignment = value
+        }
+        if let value = info.lineBreakMode {
+            lineBreakMode = value
+        }
+        if let value = info.adjustsFontSizeToFitWidth {
+            adjustsFontSizeToFitWidth = value
+        }
+        if let value = info.baselineAdjustment {
+            baselineAdjustment = value
+        }
+        if let value = info.minimumScaleFactor {
+            minimumScaleFactor = value
+        }
+        if let value = info.allowsDefaultTighteningForTruncation {
+            allowsDefaultTighteningForTruncation = value
+        }
+        
+        // paragraphs
+        if let value = info.lineSpacing {
+            lineSpacing = value
+        }
+        if let value = info.lineHeightMultiple {
+            lineHeightMultiple = value
+        }
+        
+        // 刷新布局
+        layoutIfNeeded()
+    }
+    
+    /// 设置富文本
+    /// - Parameter text: 富文本
+    func set(text: AttributedString) {
+        // 富文本中如果包含段落样式 则无法进行多行字号缩放
+        label.attributed.text = text
+        layoutIfNeeded()
+    }
+    
+    /// 设置当前页数
+    /// - Parameter page: 页数
+    /// - Parameter scroll: 是否同步滚动
+    func set(page: Int, scroll: Bool) {
+        pageControl.currentPage = page
+        guard scroll else { return }
+        let x = scrollView.bounds.width * .init(page)
+        scrollView.contentOffset = .init(x: x, y: 0)
+    }
+}
+
+private extension NSTextAlignment {
+    
+    var description: String {
+        switch self {
+        case .left:                     return "left"
+        case .center:                   return "center"
+        case .right:                    return "right"
+        case .justified:                return "justified"
+        case .natural:                  return "natural"
+        @unknown default:               return "unknown"
+        }
+    }
+}
+
+private extension NSLineBreakMode {
+    
+    var description: String {
+        switch self {
+        case .byWordWrapping:           return "byWordWrapping"
+        case .byCharWrapping:           return "byCharWrapping"
+        case .byClipping:               return "byClipping"
+        case .byTruncatingHead:         return "byTruncatingHead"
+        case .byTruncatingTail:         return "byTruncatingTail"
+        case .byTruncatingMiddle:       return "byTruncatingMiddle"
+        @unknown default:               return "unknown"
+        }
     }
 }
