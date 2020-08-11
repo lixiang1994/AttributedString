@@ -271,7 +271,7 @@ fileprivate extension UILabel {
         
         // 构建同步Label的TextKit
         // 注: 目前还剩一个截断处理没解决 比如 "a\n\n\nb" numberOfLines=2
-        let delegate = UILabelLayoutManagerDelegate(scaledMetrics)
+        let delegate = UILabelLayoutManagerDelegate(scaledMetrics, with: baselineAdjustment)
         let textStorage = NSTextStorage()
         let textContainer = NSTextContainer(size: bounds.size)
         let layoutManager = NSLayoutManager()

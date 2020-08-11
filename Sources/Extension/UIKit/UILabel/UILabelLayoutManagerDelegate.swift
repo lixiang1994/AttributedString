@@ -19,9 +19,11 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
     
     // 当Label发生Scaled时
     let scaledMetrics: UILabel.ScaledMetrics?
+    let baselineAdjustment: UIBaselineAdjustment
     
-    init(_ scaledMetrics: UILabel.ScaledMetrics?) {
+    init(_ scaledMetrics: UILabel.ScaledMetrics?, with baselineAdjustment: UIBaselineAdjustment) {
         self.scaledMetrics = scaledMetrics
+        self.baselineAdjustment = baselineAdjustment
         super.init()
     }
     
@@ -70,12 +72,37 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         
         // 当Label发生Scaled时 最大行数为1时 基线偏移不会按比例计算
         if let scaledMetrics = scaledMetrics, textContainer.maximumNumberOfLines == 1 {
-            // 使用原始基线偏移 使用Scaled的尺寸高度
-            var baseline = baselineOffset.pointee
-            baseline = CGFloat(scaledMetrics.baselineOffset)
-            baselineOffset.pointee = baseline
-            rect.size.height = scaledMetrics.scaledSize.height
-            used.size.height = scaledMetrics.scaledSize.height
+            switch baselineAdjustment {
+            case .alignBaselines:
+                // 原始的基线偏移 使用Scaled的尺寸高度
+                var baseline = baselineOffset.pointee
+                baseline = .init(scaledMetrics.baselineOffset)
+                baselineOffset.pointee = baseline
+                rect.size.height = scaledMetrics.scaledSize.height
+                used.size.height = scaledMetrics.scaledSize.height
+                
+            case .alignCenters:
+                print(scaledMetrics)
+                // 居中的基线偏移 使用Scaled的尺寸高度
+                var baseline = baselineOffset.pointee
+                // 整行的占用高度 - 缩放的行高 = 上下边距; 上边距 = 上下边距 * 0.5; 居中的基线偏移 = 上边距 + 缩放的基线偏移
+                let margin = (scaledMetrics.scaledSize.height - .init(scaledMetrics.scaledLineHeight)) * 0.5
+                baseline = margin + .init(scaledMetrics.scaledBaselineOffset)
+                baselineOffset.pointee = baseline
+                rect.size.height = scaledMetrics.scaledSize.height
+                used.size.height = scaledMetrics.scaledSize.height
+                
+            case .none:
+                // 缩放的基线偏移 使用Scaled的尺寸高度
+                var baseline = baselineOffset.pointee
+                baseline = .init(scaledMetrics.scaledBaselineOffset)
+                baselineOffset.pointee = baseline
+                rect.size.height = scaledMetrics.scaledSize.height
+                used.size.height = scaledMetrics.scaledSize.height
+                
+            default:
+                break
+            }
         }
         
         // 重新赋值最终结果
