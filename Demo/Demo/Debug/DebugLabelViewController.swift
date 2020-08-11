@@ -15,6 +15,20 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     
     private var info: Debug.Label = .init() {
         didSet {
+            if let value = info.lineSpacing {
+                paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
+                paragraphs.append(.lineSpacing(value))
+                
+            } else {
+                paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
+            }
+            if let value = info.lineHeightMultiple {
+                paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
+                paragraphs.append(.lineHeightMultiple(value))
+                
+            } else {
+                paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
+            }
             container.set(info: info)
         }
     }
@@ -108,11 +122,13 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     @IBAction func lineSpacingSliderAction(_ sender: UISlider) {
+        paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
         paragraphs.append(.lineSpacing(.init(sender.value)))
         info.lineSpacing = .init(sender.value)
         update()
     }
     @IBAction func lineHeightMultipleSliderAction(_ sender: UISlider) {
+        paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
         paragraphs.append(.lineHeightMultiple(.init(sender.value)))
         info.lineHeightMultiple = .init(sender.value)
         update()

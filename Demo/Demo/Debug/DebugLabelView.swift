@@ -96,6 +96,7 @@ class DebugLabelView: UIView {
         didSet {
             let value = lineSpacing
             lineSpacingLabel.text = String(format: "%.2f", value)
+            lineSpacingSlider.value = .init(value)
         }
     }
     
@@ -103,6 +104,7 @@ class DebugLabelView: UIView {
         didSet {
             let value = lineHeightMultiple
             lineHeightMultipleLabel.text = String(format: "%.2f", value)
+            lineHeightMultipleSlider.value = .init(value)
         }
     }
     

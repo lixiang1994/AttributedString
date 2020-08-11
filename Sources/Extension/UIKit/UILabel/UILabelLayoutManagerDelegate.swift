@@ -65,12 +65,8 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         
         var rect = lineFragmentRect.pointee
         var used = lineFragmentUsedRect.pointee
-        // 以最大的高度为准 (可解决附件问题), 同时根据最大行数是否为1来判断used是否需要增加行间距, 以解决1行时应该无行间距的问题.
-        let temp = max(maximum.lineHeight, used.height)
-        rect.size.height = temp + maximum.lineSpacing + paragraphSpacing + paragraphSpacingBefore
-        used.size.height = textContainer.maximumNumberOfLines == 1 ? temp : temp + maximum.lineSpacing
         
-        // 当Label发生Scaled时 最大行数为1时 基线偏移不会按比例计算
+        // 当Label发生Scaled时 最大行数为1时
         if let scaledMetrics = scaledMetrics, textContainer.maximumNumberOfLines == 1 {
             switch baselineAdjustment {
             case .alignBaselines:
@@ -103,6 +99,12 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
             default:
                 break
             }
+            
+        } else {
+            // 以最大的高度为准 (可解决附件问题), 同时根据最大行数是否为1来判断used是否需要增加行间距, 以解决1行时应该无行间距的问题.
+            let temp = max(maximum.lineHeight, used.height)
+            rect.size.height = temp + maximum.lineSpacing + paragraphSpacing + paragraphSpacingBefore
+            used.size.height = temp
         }
         
         // 重新赋值最终结果

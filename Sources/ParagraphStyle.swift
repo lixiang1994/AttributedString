@@ -156,3 +156,10 @@ extension AttributedString.Attribute.ParagraphStyle {
         return .init(style: [.allowsDefaultTighteningForTruncation: value])
     }
 }
+
+extension AttributedString.Attribute.ParagraphStyle: Equatable {
+    
+    public static func == (lhs: AttributedString.Attribute.ParagraphStyle, rhs: AttributedString.Attribute.ParagraphStyle) -> Bool {
+        return lhs.style.keys == rhs.style.keys
+    }
+}
