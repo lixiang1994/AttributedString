@@ -106,6 +106,21 @@ extension Debug {
     }
 }
 
+extension Debug.Label {
+    
+    static let fonts: [UIFont] = [
+        .systemFont(ofSize: 17.0),
+        .systemFont(ofSize: 17.0, weight: .light),
+        .systemFont(ofSize: 17.0, weight: .medium),
+        .systemFont(ofSize: 17.0, weight: .semibold),
+        .systemFont(ofSize: 17.0, weight: .black),
+        UIFont(name: "Georgia", size: 17.0) ?? .systemFont(ofSize: 17.0),
+        UIFont(name: "Helvetica", size: 17.0) ?? .systemFont(ofSize: 17.0),
+        UIFont(name: "Helvetica Neue", size: 17.0) ?? .systemFont(ofSize: 17.0),
+        UIFont(name: "Times New Roman", size: 17.0) ?? .systemFont(ofSize: 17.0)
+    ]
+}
+
 private extension Data {
     
     func map() -> UIFontDescriptor? {

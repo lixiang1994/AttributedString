@@ -23,6 +23,8 @@ class DebugLabelView: UIView {
             let value = font.withSize(fontSize)
             label.font = value
             fontNameLabel.text = value.fontName
+            let index = Debug.Label.fonts.firstIndex(where: { $0.fontName == font.fontName })
+            fontNameSlider.value = .init(index ?? 0)
         }
     }
     var fontSize: CGFloat = 17 {
@@ -67,7 +69,7 @@ class DebugLabelView: UIView {
             allowsDefaultTighteningForTruncationSwitch.isEnabled = value
         }
     }
-    var baselineAdjustment: UIBaselineAdjustment = .none {
+    var baselineAdjustment: UIBaselineAdjustment = .alignBaselines {
         didSet {
             let value = baselineAdjustment
             label.baselineAdjustment = value
@@ -149,7 +151,9 @@ class DebugLabelView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        // 设置字体名称滑块最大值
+        fontNameSlider.maximumValue = .init(Debug.Label.fonts.count - 1)
+        // 设置label监听
         labelBoundsObservation = label.observe(\.bounds) { [weak self] (object, changed) in
             guard let self = self else { return }
             // 设置当前宽高
@@ -203,39 +207,19 @@ extension DebugLabelView {
         }
         
         // normal
-        if let value = info.font {
-            font = value
-            fontSize = value.pointSize
-        }
-        if let value = info.numberOfLines {
-            numberOfLines = value
-        }
-        if let value = info.textAlignment {
-            textAlignment = value
-        }
-        if let value = info.lineBreakMode {
-            lineBreakMode = value
-        }
-        if let value = info.adjustsFontSizeToFitWidth {
-            adjustsFontSizeToFitWidth = value
-        }
-        if let value = info.baselineAdjustment {
-            baselineAdjustment = value
-        }
-        if let value = info.minimumScaleFactor {
-            minimumScaleFactor = value
-        }
-        if let value = info.allowsDefaultTighteningForTruncation {
-            allowsDefaultTighteningForTruncation = value
-        }
+        font = info.font ?? .systemFont(ofSize: 17)
+        fontSize = info.font?.pointSize ?? 17
+        numberOfLines = info.numberOfLines ?? 0
+        textAlignment = info.textAlignment ?? .natural
+        lineBreakMode = info.lineBreakMode ?? .byTruncatingTail
+        adjustsFontSizeToFitWidth = info.adjustsFontSizeToFitWidth ?? false
+        baselineAdjustment = info.baselineAdjustment ?? .alignBaselines
+        minimumScaleFactor = info.minimumScaleFactor ?? 0
+        allowsDefaultTighteningForTruncation = info.allowsDefaultTighteningForTruncation ?? false
         
         // paragraphs
-        if let value = info.lineSpacing {
-            lineSpacing = value
-        }
-        if let value = info.lineHeightMultiple {
-            lineHeightMultiple = value
-        }
+        lineSpacing = info.lineSpacing ?? 0
+        lineHeightMultiple = info.lineHeightMultiple ?? 0
         
         // 刷新布局
         layoutIfNeeded()

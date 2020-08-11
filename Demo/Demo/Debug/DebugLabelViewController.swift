@@ -13,18 +13,6 @@ private let key = "com.debug.label"
 
 class DebugLabelViewController: ViewController<DebugLabelView> {
     
-    private let fonts: [UIFont] = [
-        .systemFont(ofSize: 17.0),
-        .systemFont(ofSize: 17.0, weight: .light),
-        .systemFont(ofSize: 17.0, weight: .medium),
-        .systemFont(ofSize: 17.0, weight: .semibold),
-        .systemFont(ofSize: 17.0, weight: .black),
-        UIFont(name: "Georgia", size: 17.0) ?? .systemFont(ofSize: 17.0),
-        UIFont(name: "Helvetica", size: 17.0) ?? .systemFont(ofSize: 17.0),
-        UIFont(name: "Helvetica Neue", size: 17.0) ?? .systemFont(ofSize: 17.0),
-        UIFont(name: "Times New Roman", size: 17.0) ?? .systemFont(ofSize: 17.0)
-    ]
-    
     private var info: Debug.Label = .init() {
         didSet {
             container.set(info: info)
@@ -64,6 +52,10 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         guard let json = try? JSONEncoder().encode(info) else { return }
         UserDefaults.standard.setValue(json, forKey: key)
     }
+    @IBAction func cleanAction(_ sender: UIBarButtonItem) {
+        UserDefaults.standard.removeObject(forKey: key)
+        info = .init()
+    }
     
     @IBAction func pageControlAction(_ sender: UIPageControl) {
         container.set(page: sender.currentPage, scroll: true)
@@ -83,7 +75,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     @IBAction func fontNameSliderAction(_ sender: UISlider) {
-        info.font = fonts[.init(sender.value)].withSize(info.font?.pointSize ?? 17.0)
+        info.font = Debug.Label.fonts[.init(sender.value)].withSize(info.font?.pointSize ?? 17.0)
     }
     @IBAction func fontSizeSliderAction(_ sender: UISlider) {
         info.font = info.font?.withSize(.init(sender.value))
