@@ -232,6 +232,7 @@ extension DebugLabelView {
     func set(text: AttributedString) {
         // 富文本中如果包含段落样式 则无法进行多行字号缩放
         label.attributed.text = text
+        // 刷新布局
         layoutIfNeeded()
     }
     

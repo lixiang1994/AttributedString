@@ -450,7 +450,7 @@ extension UILabel {
         ) { (value, range, stop) in
             guard let old = value as? NSParagraphStyle else { return }
             guard let new = old.mutableCopy() as? NSMutableParagraphStyle else { return }
-            new.lineBreakMode = numberOfLines == 1 ? .byCharWrapping : .byWordWrapping
+            new.lineBreakMode = .byWordWrapping
             if #available(iOS 11.0, *) {
                 new.setValue(1, forKey: "lineBreakStrategy")
             }

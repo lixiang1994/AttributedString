@@ -36,7 +36,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     private var attributes: [AttributedString.Attribute] = []
     private var paragraphs: [AttributedString.Attribute.ParagraphStyle] = []
     private var attributedString: AttributedString = """
-        我的名字叫李响，我的手机号码是18611401994，我的电子邮件地址是18611401994@163.com，现在是2020/06/28 20:30。我的GitHub主页是https://github.com/lixiang1994。欢迎来Star! \("点击联系我", .action({ }))
+    我的名字叫李响，我的手机号码是18611401994，我的电子邮件地址是18611401994@163.com，现在是2020/06/28 20:30。我的GitHub主页是https://github.com/lixiang1994。欢迎来Star! \("点击联系我", .action({ }))
     """
     
     override func viewDidLoad() {
