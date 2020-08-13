@@ -14,23 +14,7 @@ private let key = "com.debug.label"
 class DebugLabelViewController: ViewController<DebugLabelView> {
     
     private var info: Debug.Label = .init() {
-        didSet {
-            if let value = info.lineSpacing {
-                paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
-                paragraphs.append(.lineSpacing(value))
-                
-            } else {
-                paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
-            }
-            if let value = info.lineHeightMultiple {
-                paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
-                paragraphs.append(.lineHeightMultiple(value))
-                
-            } else {
-                paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
-            }
-            container.set(info: info)
-        }
+        didSet { set(info: info) }
     }
     
     private var attributes: [AttributedString.Attribute] = []
@@ -38,6 +22,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     private var attributedString: AttributedString = """
     我的名字叫李响，我的手机号码是18611401994，我的电子邮件地址是18611401994@163.com，现在是2020/06/28 20:30。我的GitHub主页是https://github.com/lixiang1994。欢迎来Star! \("点击联系我", .action({ }))
     """
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +38,24 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
             return
         }
         self.info = info
+    }
+    
+    private func set(info: Debug.Label) {
+        if let value = info.lineSpacing {
+            paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
+            paragraphs.append(.lineSpacing(value))
+            
+        } else {
+            paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
+        }
+        if let value = info.lineHeightMultiple {
+            paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
+            paragraphs.append(.lineHeightMultiple(value))
+            
+        } else {
+            paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
+        }
+        container.set(info: info)
     }
     
     private func update() {
@@ -112,10 +115,6 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     @IBAction func minimumScaleFactorSlider(_ sender: UISlider) {
         info.minimumScaleFactor = .init(sender.value)
-        // 需要关闭再开启才会更新
-//        container.aLabel.adjustsFontSizeToFitWidth.toggle()
-//        container.aLabel.adjustsFontSizeToFitWidth.toggle()
-        update()
     }
     @IBAction func allowsDefaultTighteningForTruncationSwitchAction(_ sender: UISwitch) {
         info.allowsDefaultTighteningForTruncation = sender.isOn
@@ -133,6 +132,26 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         info.lineHeightMultiple = .init(sender.value)
         update()
     }
+    
+    @IBAction func minimumLineHeightSliderAction(_ sender: UISlider) {
+    }
+    @IBAction func maximumLineHeightSliderAction(_ sender: UISlider) {
+    }
+    
+    @IBAction func paragraphSpacingSliderAction(_ sender: UISlider) {
+    }
+    @IBAction func paragraphSpacingBeforeSliderAction(_ sender: UISlider) {
+    }
+    
+    @IBAction func firstLineHeadIndentSliderAction(_ sender: UISlider) {
+    }
+    
+    @IBAction func headIndentSliderAction(_ sender: UISlider) {
+    }
+    
+    @IBAction func tailIndentSliderAction(_ sender: UISlider) {
+    }
+    
 }
 
 extension DebugLabelViewController: UIScrollViewDelegate {

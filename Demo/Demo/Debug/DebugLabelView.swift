@@ -82,6 +82,8 @@ class DebugLabelView: UIView {
             label.minimumScaleFactor = value
             minimumScaleFactorLabel.text = String(format: "%.2f", value)
             minimumScaleFactorSlider.value = .init(value)
+            label.adjustsFontSizeToFitWidth.toggle()
+            label.adjustsFontSizeToFitWidth.toggle()
         }
     }
     var allowsDefaultTighteningForTruncation: Bool = false {
@@ -105,6 +107,22 @@ class DebugLabelView: UIView {
             let value = lineHeightMultiple
             lineHeightMultipleLabel.text = String(format: "%.2f", value)
             lineHeightMultipleSlider.value = .init(value)
+        }
+    }
+    
+    var minimumLineHeight: CGFloat = 0 {
+        didSet {
+            let value = minimumLineHeight
+            minimumLineHeightLabel.text = String(format: "%.2f", value)
+            minimumLineHeightSlider.value = .init(value)
+        }
+    }
+    
+    var maximumLineHeight: CGFloat = 0 {
+        didSet {
+            let value = maximumLineHeight
+            maximumLineHeightLabel.text = String(format: "%.2f", value)
+            maximumLineHeightSlider.value = .init(value)
         }
     }
     
@@ -141,14 +159,26 @@ class DebugLabelView: UIView {
     @IBOutlet private weak var minimumScaleFactorLabel: UILabel!
     @IBOutlet private weak var minimumScaleFactorSlider: UISlider!
     @IBOutlet private weak var allowsDefaultTighteningForTruncationSwitch: UISwitch!
-    
     /// Page 5
     @IBOutlet private weak var lineSpacingLabel: UILabel!
     @IBOutlet private weak var lineSpacingSlider: UISlider!
     @IBOutlet private weak var lineHeightMultipleLabel: UILabel!
     @IBOutlet private weak var lineHeightMultipleSlider: UISlider!
+    @IBOutlet private weak var minimumLineHeightLabel: UILabel!
+    @IBOutlet private weak var minimumLineHeightSlider: UISlider!
+    @IBOutlet private weak var maximumLineHeightLabel: UILabel!
+    @IBOutlet private weak var maximumLineHeightSlider: UISlider!
+    @IBOutlet private weak var paragraphSpacingLabel: UILabel!
+    @IBOutlet private weak var paragraphSpacingSlider: UISlider!
+    @IBOutlet private weak var paragraphSpacingBeforeLabel: UILabel!
+    @IBOutlet private weak var paragraphSpacingBeforeSlider: UISlider!
+    @IBOutlet private weak var firstLineHeadIndentLabel: UILabel!
+    @IBOutlet private weak var firstLineHeadIndentSlider: UISlider!
+    @IBOutlet private weak var headIndentLabel: UILabel!
+    @IBOutlet private weak var headIndentSlider: UISlider!
+    @IBOutlet private weak var tailIndentLabel: UILabel!
+    @IBOutlet private weak var tailIndentSlider: UISlider!
     
-    private var old: Debug.Label?
     private var labelBoundsObservation: NSKeyValueObservation?
     
     override func awakeFromNib() {
