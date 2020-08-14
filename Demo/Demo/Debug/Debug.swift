@@ -32,6 +32,13 @@ extension Debug {
         // paragraphs
         var lineSpacing: CGFloat?
         var lineHeightMultiple: CGFloat?
+        var minimumLineHeight: CGFloat?
+        var maximumLineHeight: CGFloat?
+        var paragraphSpacing: CGFloat?
+        var paragraphSpacingBefore: CGFloat?
+        var firstLineHeadIndent: CGFloat?
+        var headIndent: CGFloat?
+        var tailIndent: CGFloat?
         
         init() {
             font = .systemFont(ofSize: 17.0)
@@ -50,6 +57,13 @@ extension Debug {
             case allowsDefaultTighteningForTruncation
             case lineSpacing
             case lineHeightMultiple
+            case minimumLineHeight
+            case maximumLineHeight
+            case paragraphSpacing
+            case paragraphSpacingBefore
+            case firstLineHeadIndent
+            case headIndent
+            case tailIndent
         }
         
         init(from decoder: Decoder) throws {
@@ -86,6 +100,20 @@ extension Debug {
             self.lineSpacing = try container.decodeIfPresent(CGFloat.self, forKey: .lineSpacing)
             
             self.lineHeightMultiple = try container.decodeIfPresent(CGFloat.self, forKey: .lineHeightMultiple)
+            
+            self.minimumLineHeight = try container.decodeIfPresent(CGFloat.self, forKey: .minimumLineHeight)
+            
+            self.maximumLineHeight = try container.decodeIfPresent(CGFloat.self, forKey: .maximumLineHeight)
+            
+            self.paragraphSpacing = try container.decodeIfPresent(CGFloat.self, forKey: .paragraphSpacing)
+        
+            self.paragraphSpacingBefore = try container.decodeIfPresent(CGFloat.self, forKey: .paragraphSpacingBefore)
+            
+            self.firstLineHeadIndent = try container.decodeIfPresent(CGFloat.self, forKey: .firstLineHeadIndent)
+            
+            self.headIndent = try container.decodeIfPresent(CGFloat.self, forKey: .headIndent)
+            
+            self.tailIndent = try container.decodeIfPresent(CGFloat.self, forKey: .tailIndent)
         }
         
         func encode(to encoder: Encoder) throws {
@@ -102,6 +130,13 @@ extension Debug {
             try container.encodeIfPresent(allowsDefaultTighteningForTruncation, forKey: .allowsDefaultTighteningForTruncation)
             try container.encodeIfPresent(lineSpacing, forKey: .lineSpacing)
             try container.encodeIfPresent(lineHeightMultiple, forKey: .lineHeightMultiple)
+            try container.encodeIfPresent(minimumLineHeight, forKey: .minimumLineHeight)
+            try container.encodeIfPresent(maximumLineHeight, forKey: .maximumLineHeight)
+            try container.encodeIfPresent(paragraphSpacing, forKey: .paragraphSpacing)
+            try container.encodeIfPresent(paragraphSpacingBefore, forKey: .paragraphSpacingBefore)
+            try container.encodeIfPresent(firstLineHeadIndent, forKey: .firstLineHeadIndent)
+            try container.encodeIfPresent(headIndent, forKey: .headIndent)
+            try container.encodeIfPresent(tailIndent, forKey: .tailIndent)
         }
     }
 }

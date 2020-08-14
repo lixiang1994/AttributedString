@@ -126,6 +126,45 @@ class DebugLabelView: UIView {
         }
     }
     
+    var paragraphSpacing: CGFloat = 0 {
+        didSet {
+            let value = paragraphSpacing
+            paragraphSpacingLabel.text = String(format: "%.2f", value)
+            paragraphSpacingSlider.value = .init(value)
+        }
+    }
+    
+    var paragraphSpacingBefore: CGFloat = 0 {
+        didSet {
+            let value = paragraphSpacingBefore
+            paragraphSpacingBeforeLabel.text = String(format: "%.2f", value)
+            paragraphSpacingBeforeSlider.value = .init(value)
+        }
+    }
+    
+    var firstLineHeadIndent: CGFloat = 0 {
+        didSet {
+            let value = firstLineHeadIndent
+            firstLineHeadIndentLabel.text = String(format: "%.2f", value)
+            firstLineHeadIndentSlider.value = .init(value)
+        }
+    }
+    var headIndent: CGFloat = 0 {
+        didSet {
+            let value = headIndent
+            headIndentLabel.text = String(format: "%.2f", value)
+            headIndentSlider.value = .init(value)
+        }
+    }
+    
+    var tailIndent: CGFloat = 0 {
+        didSet {
+            let value = tailIndent
+            tailIndentLabel.text = String(format: "%.2f", value)
+            tailIndentSlider.value = .init(value)
+        }
+    }
+    
     @IBOutlet private weak var label: UILabel!
     
     @IBOutlet private weak var widthLayoutConstraint: NSLayoutConstraint!
@@ -252,6 +291,13 @@ extension DebugLabelView {
         // paragraphs
         lineSpacing = info.lineSpacing ?? 0
         lineHeightMultiple = info.lineHeightMultiple ?? 0
+        minimumLineHeight = info.minimumLineHeight ?? 0
+        maximumLineHeight = info.maximumLineHeight ?? 0
+        paragraphSpacing = info.paragraphSpacing ?? 0
+        paragraphSpacingBefore = info.paragraphSpacingBefore ?? 0
+        firstLineHeadIndent = info.firstLineHeadIndent ?? 0
+        headIndent = info.headIndent ?? 0
+        tailIndent = info.tailIndent ?? 0
         
         // 刷新布局
         layoutIfNeeded()

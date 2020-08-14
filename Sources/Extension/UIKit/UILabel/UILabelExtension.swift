@@ -270,7 +270,6 @@ fileprivate extension UILabel {
         guard let attributedString = AttributedString(text) else { return nil }
         
         // 构建同步Label的TextKit
-        // 注: 目前还剩一个截断处理没解决 比如 "a\n\n\nb" numberOfLines=2
         let delegate = UILabelLayoutManagerDelegate(scaledMetrics, with: baselineAdjustment)
         let textStorage = NSTextStorage()
         let textContainer = NSTextContainer(size: bounds.size)
@@ -450,7 +449,7 @@ extension UILabel {
         ) { (value, range, stop) in
             guard let old = value as? NSParagraphStyle else { return }
             guard let new = old.mutableCopy() as? NSMutableParagraphStyle else { return }
-            new.lineBreakMode = .byWordWrapping
+            new.lineBreakMode = numberOfLines == 1 ? .byCharWrapping : .byWordWrapping
             if #available(iOS 11.0, *) {
                 new.setValue(1, forKey: "lineBreakStrategy")
             }

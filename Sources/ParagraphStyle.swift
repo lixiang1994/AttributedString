@@ -157,9 +157,9 @@ extension AttributedString.Attribute.ParagraphStyle {
     }
 }
 
-extension AttributedString.Attribute.ParagraphStyle: Equatable {
+extension AttributedString.Attribute.ParagraphStyle {
     
-    public static func == (lhs: AttributedString.Attribute.ParagraphStyle, rhs: AttributedString.Attribute.ParagraphStyle) -> Bool {
+    public static func ~= (lhs: AttributedString.Attribute.ParagraphStyle, rhs: AttributedString.Attribute.ParagraphStyle) -> Bool {
         return lhs.style.keys == rhs.style.keys
     }
 }

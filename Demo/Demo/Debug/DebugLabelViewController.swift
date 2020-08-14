@@ -28,7 +28,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
         super.viewDidLoad()
         
         setup()
-        update()
+        updateText()
     }
     
     private func setup() {
@@ -41,24 +41,75 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     private func set(info: Debug.Label) {
+        
+        func update(_ style: AttributedString.Attribute.ParagraphStyle) {
+            paragraphs.removeAll(where: { $0 ~= style })
+            paragraphs.append(style)
+        }
+        
+        func remove(_ style: AttributedString.Attribute.ParagraphStyle) {
+            paragraphs.removeAll(where: { $0 ~= style })
+        }
+        
         if let value = info.lineSpacing {
-            paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
-            paragraphs.append(.lineSpacing(value))
+            update(.lineSpacing(value))
             
         } else {
-            paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
+            remove(.lineSpacing(0))
         }
         if let value = info.lineHeightMultiple {
-            paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
-            paragraphs.append(.lineHeightMultiple(value))
+            update(.lineHeightMultiple(value))
             
         } else {
-            paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
+            remove(.lineHeightMultiple(0))
+        }
+        if let value = info.minimumLineHeight {
+            update(.minimumLineHeight(value))
+            
+        } else {
+            remove(.minimumLineHeight(0))
+        }
+        if let value = info.maximumLineHeight {
+            update(.maximumLineHeight(value))
+            
+        } else {
+            remove(.maximumLineHeight(0))
+        }
+        if let value = info.paragraphSpacing {
+            update(.paragraphSpacing(value))
+            
+        } else {
+            remove(.paragraphSpacing(0))
+        }
+        if let value = info.paragraphSpacingBefore {
+            update(.paragraphSpacingBefore(value))
+            
+        } else {
+            remove(.paragraphSpacingBefore(0))
+        }
+        if let value = info.firstLineHeadIndent {
+            update(.firstLineHeadIndent(value))
+            
+        } else {
+            remove(.firstLineHeadIndent(0))
+        }
+        if let value = info.headIndent {
+            update(.headIndent(value))
+            
+        } else {
+            remove(.headIndent(0))
+        }
+        if let value = info.tailIndent {
+            update(.tailIndent(value))
+            
+        } else {
+            remove(.tailIndent(0))
         }
         container.set(info: info)
+        updateText()
     }
     
-    private func update() {
+    private func updateText() {
         container.set(text: .init(
             attributedString,
             with: attributes + [.paragraph(paragraphs)]
@@ -121,37 +172,32 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     }
     
     @IBAction func lineSpacingSliderAction(_ sender: UISlider) {
-        paragraphs.removeAll(where: { $0 == .lineSpacing(0) })
-        paragraphs.append(.lineSpacing(.init(sender.value)))
         info.lineSpacing = .init(sender.value)
-        update()
     }
     @IBAction func lineHeightMultipleSliderAction(_ sender: UISlider) {
-        paragraphs.removeAll(where: { $0 == .lineHeightMultiple(0) })
-        paragraphs.append(.lineHeightMultiple(.init(sender.value)))
         info.lineHeightMultiple = .init(sender.value)
-        update()
     }
-    
     @IBAction func minimumLineHeightSliderAction(_ sender: UISlider) {
+        info.minimumLineHeight = .init(sender.value)
     }
     @IBAction func maximumLineHeightSliderAction(_ sender: UISlider) {
+        info.maximumLineHeight = .init(sender.value)
     }
-    
     @IBAction func paragraphSpacingSliderAction(_ sender: UISlider) {
+        info.paragraphSpacing = .init(sender.value)
     }
     @IBAction func paragraphSpacingBeforeSliderAction(_ sender: UISlider) {
+        info.paragraphSpacingBefore = .init(sender.value)
     }
-    
     @IBAction func firstLineHeadIndentSliderAction(_ sender: UISlider) {
+        info.firstLineHeadIndent = .init(sender.value)
     }
-    
     @IBAction func headIndentSliderAction(_ sender: UISlider) {
+        info.headIndent = .init(sender.value)
     }
-    
     @IBAction func tailIndentSliderAction(_ sender: UISlider) {
+        info.tailIndent = .init(sender.value)
     }
-    
 }
 
 extension DebugLabelViewController: UIScrollViewDelegate {
