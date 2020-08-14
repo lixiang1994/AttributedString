@@ -224,6 +224,8 @@ textView.attributed.text = string
 
 #### 动作: (仅支持 iOS: UILabel / UITextView 和 macOS: NSTextField)
 
+对于复杂的样式, 推荐优先使用 UITextView.
+
 ##### 点击:    
 
 ```swift
