@@ -226,6 +226,8 @@ textView.attributed.text = string
 
 #### Action: (Only supports iOS: UILabel / UITextView & macOS: NSTextField)
 
+For complex styles, it is recommended to use UITextView.
+
 ##### Click:	
 
 ```swift
