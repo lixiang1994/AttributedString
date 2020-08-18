@@ -29,7 +29,7 @@ extension AttributedString.Attribute {
     /// 段落
     /// - Parameter value: 段落样式
     /// - Returns: 属性
-    public static func paragraph(_ value: [ParagraphStyle]) -> Self {
+    public static func paragraph(with value: [ParagraphStyle]) -> Self {
         return .init(attributes: value.isEmpty ? [:] : [.paragraphStyle: ParagraphStyle.get(value)])
     }
 }
