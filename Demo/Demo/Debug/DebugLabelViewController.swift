@@ -112,7 +112,7 @@ class DebugLabelViewController: ViewController<DebugLabelView> {
     private func updateText() {
         container.set(text: .init(
             attributedString,
-            with: attributes + [.paragraph(paragraphs)]
+            with: attributes + [.paragraph(with: paragraphs)]
         ))
     }
     
