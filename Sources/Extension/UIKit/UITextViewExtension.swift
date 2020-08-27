@@ -451,7 +451,7 @@ private class AttachmentView: UIView {
             let ratio = view.bounds.width / view.bounds.height
             view.transform = .init(
                 scaleX: bounds.width / view.bounds.width,
-                y: bounds.width / view.bounds.width / ratio
+                y: bounds.width / ratio / view.bounds.height
             )
             
         case .custom(let size):
