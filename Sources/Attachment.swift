@@ -86,15 +86,15 @@ extension AttributedString {
             
             switch style.mode {
             case .proposed:
-                let radio = image.size.width / image.size.height
-                let width = min(lineFrag.height * radio, lineFrag.width)
-                let height = width / radio
+                let ratio = image.size.width / image.size.height
+                let width = min(lineFrag.height * ratio, lineFrag.width)
+                let height = width / ratio
                 return .init(point(.init(width, height)), .init(width, height))
                 
             case .original:
-                let radio = image.size.width / image.size.height
+                let ratio = image.size.width / image.size.height
                 let width = min(image.size.width, lineFrag.width)
-                let height = width / radio
+                let height = width / ratio
                 return .init(point(.init(width, height)), .init(width, height))
                 
             case .custom(let size):
@@ -110,7 +110,7 @@ extension AttributedString {
         public typealias Style = Attachment.Style
         
         let view: UIView
-        private let style: Style
+        let style: Style
         
         /// Custom View  (Only  support UITextView)
         /// - Parameter view: 视图
@@ -148,15 +148,15 @@ extension AttributedString {
             
             switch style.mode {
             case .proposed:
-                let radio = view.bounds.width / view.bounds.height
-                let width = min(lineFrag.height * radio, lineFrag.width)
-                let height = width / radio
+                let ratio = view.bounds.width / view.bounds.height
+                let width = min(lineFrag.height * ratio, lineFrag.width)
+                let height = width / ratio
                 return .init(point(.init(width, height)), .init(width, height))
                 
             case .original:
-                let radio = view.bounds.width / view.bounds.height
+                let ratio = view.bounds.width / view.bounds.height
                 let width = min(view.bounds.width, lineFrag.width)
-                let height = width / radio
+                let height = width / ratio
                 return .init(point(.init(width, height)), .init(width, height))
                 
             case .custom(let size):
@@ -176,8 +176,6 @@ extension AttributedString.Attachment {
         
         case origin // Baseline
         
-        case bottom // Bottom
-        
         case offset(CGPoint)
     }
     
@@ -189,8 +187,8 @@ extension AttributedString.Attachment {
             case custom(CGSize)
         }
         
-        fileprivate let mode: Mode
-        fileprivate let alignment: Alignment
+        let mode: Mode
+        let alignment: Alignment
         
         /// 建议的大小 (一般为当前行的高度)
         /// - Parameter alignment: 对齐方式
@@ -269,9 +267,6 @@ fileprivate extension AttributedString.Attachment.Alignment {
         font = .systemFont(ofSize: fontSize)
         
         switch self {
-        case .bottom:
-            return .zero
-            
         case .origin:
             return .init(0, font.descender)
             

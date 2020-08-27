@@ -206,7 +206,7 @@ extension AttributedStringWrapper where Base: UITextView {
         
         // 添加子视图
         attachments.forEach {
-            let view = AttachmentView($0.value.view)
+            let view = AttachmentView($0.value.view, with: $0.value.style)
             base.addSubview(view)
             base.attachmentViews[$0.key] = view
         }
@@ -399,12 +399,16 @@ fileprivate extension UITextView {
 /// 附件视图
 private class AttachmentView: UIView {
     
+    typealias Style = AttributedString.Attachment.Style
+    
     let view: UIView
+    let style: Style
     
     private var observation: [String: NSKeyValueObservation] = [:]
     
-    init(_ view: UIView) {
+    init(_ view: UIView, with style: Style) {
         self.view = view
+        self.style = style
         super.init(frame: view.bounds)
         
         clipsToBounds = true
@@ -436,10 +440,26 @@ private class AttachmentView: UIView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         view.center = .init(bounds.width * 0.5, bounds.height * 0.5)
-        view.transform = .init(
-            scaleX: bounds.width / view.bounds.width,
-            y: bounds.height / view.bounds.height
-        )
+        switch style.mode {
+        case .proposed:
+            view.transform = .init(
+                scaleX: bounds.width / view.bounds.width,
+                y: bounds.height / view.bounds.height
+            )
+            
+        case .original:
+            let ratio = view.bounds.width / view.bounds.height
+            view.transform = .init(
+                scaleX: bounds.width / view.bounds.width,
+                y: bounds.width / view.bounds.width / ratio
+            )
+            
+        case .custom(let size):
+            view.transform = .init(
+                scaleX: size.width / view.bounds.width,
+                y: size.height / view.bounds.height
+            )
+        }
         CATransaction.commit()
     }
 }
