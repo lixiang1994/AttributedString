@@ -228,7 +228,7 @@ textView.attributed.text = string
 
 For complex styles, it is recommended to use UITextView.
 
-UITextview needs to set isEditable and isSelectable to false.
+UITextview needs to set `isEditable` and `isSelectable` to `false`.
 
 ##### Click:	
 
