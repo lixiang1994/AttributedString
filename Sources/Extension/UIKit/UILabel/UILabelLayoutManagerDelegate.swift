@@ -137,6 +137,15 @@ extension UILabelLayoutManagerDelegate {
     }
     
     private func getMaximum(_ layoutManager: NSLayoutManager, with textStorage: NSTextStorage, for glyphRange: NSRange) -> Maximum? {
+        // 排除换行符, 系统不用它计算行.
+        var glyphRange = glyphRange
+        if glyphRange.length > 1 {
+            let property = layoutManager.propertyForGlyph(at: glyphRange.location + glyphRange.length - 1)
+            if property == .controlCharacter {
+                glyphRange = .init(location: glyphRange.location, length: glyphRange.length - 1)
+            }
+        }
+        
         let characterRange = layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
         
         var maximumLineHeightFont: UIFont?

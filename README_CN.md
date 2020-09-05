@@ -226,6 +226,8 @@ textView.attributed.text = string
 
 对于复杂的样式, 推荐优先使用 UITextView.
 
+UITextView 需要将 `isEditable` 和 `isSelectable` 属性设置为 `false`.
+
 ##### 点击:    
 
 ```swift
