@@ -222,11 +222,14 @@ extension UILabel {
     }
     
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard isActionEnabled else { return }
-        guard let string = attributed.text else { return }
-        guard let touch = touches.first else { return }
-        guard let (range, action) = matching(touch.location(in: self)) else { return }
+        guard
+            isActionEnabled,
+            let string = attributed.text,
+            let touch = touches.first,
+            let (range, action) = matching(touch.location(in: self)) else {
+            super.touchesBegan(touches, with: event)
+            return
+        }
         // 设置触摸范围内容
         touched = (string, range, action)
         // 设置高亮样式
@@ -238,17 +241,23 @@ extension UILabel {
     }
     
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        guard isActionEnabled else { return }
-        guard let touched = self.touched else { return }
+        guard
+            isActionEnabled,
+            let touched = self.touched else {
+            super.touchesEnded(touches, with: event)
+            return
+        }
         self.touched = nil
         attributedText = touched.0.value
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        guard isActionEnabled else { return }
-        guard let touched = self.touched else { return }
+        guard
+            isActionEnabled,
+            let touched = self.touched else {
+            super.touchesCancelled(touches, with: event)
+            return
+        }
         self.touched = nil
         attributedText = touched.0.value
     }
