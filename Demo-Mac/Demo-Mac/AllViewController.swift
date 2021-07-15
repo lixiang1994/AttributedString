@@ -54,7 +54,7 @@ extension AllViewController {
     
     struct Item {
         let title: (String, String)
-        let content: AttributedString
+        let content: ASAttributedString
         let code: String
     }
     
@@ -899,7 +899,7 @@ extension AllViewController {
         tableView.selectRowIndexes(.init(integer: 0), byExtendingSelection: true)
     }
     
-    func clicked(_ result: AttributedString.Action.Result) {
+    func clicked(_ result: ASAttributedString.Action.Result) {
         switch result.content {
         case .string(let value):
             print("点击了文本: \n\(value) \nrange: \(result.range)")
@@ -909,7 +909,7 @@ extension AllViewController {
         }
     }
     
-    func pressed(_ result: AttributedString.Action.Result) {
+    func pressed(_ result: ASAttributedString.Action.Result) {
         switch result.content {
         case .string(let value):
             print("按住了文本: \n\(value) \nrange: \(result.range)")

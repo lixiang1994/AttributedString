@@ -26,7 +26,7 @@ import TVUIKit
 
 #if os(iOS) || os(macOS)
 
-extension AttributedString {
+extension ASAttributedString {
     
     public struct Action {
         /// 触发类型
@@ -53,20 +53,20 @@ extension AttributedString {
     }
 }
 
-extension AttributedStringWrapper {
+extension ASAttributedStringWrapper {
     
-    public typealias Action = AttributedString.Action
+    public typealias Action = ASAttributedString.Action
     public typealias Highlight = Action.Highlight
 }
 
-public extension Array where Element == AttributedString.Action.Highlight {
+public extension Array where Element == ASAttributedString.Action.Highlight {
     
-    static var defalut: [AttributedString.Action.Highlight] = [.foreground(#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)), .underline(.single)]
+    static var defalut: [ASAttributedString.Action.Highlight] = [.foreground(#colorLiteral(red: 0.01680417731, green: 0.1983509958, blue: 1, alpha: 1)), .underline(.single)]
     
-    static let empty: [AttributedString.Action.Highlight] = []
+    static let empty: [ASAttributedString.Action.Highlight] = []
 }
 
-extension AttributedString.Action {
+extension ASAttributedString.Action {
     
     public enum Trigger: Hashable {
         /// 单击  default
@@ -85,7 +85,7 @@ extension AttributedString.Action {
     }
 }
 
-extension AttributedString.Action.Result {
+extension ASAttributedString.Action.Result {
     
     public enum Content {
         case string(NSAttributedString)
@@ -93,9 +93,9 @@ extension AttributedString.Action.Result {
     }
 }
 
-extension AttributedString.Attribute {
+extension ASAttributedString.Attribute {
     
-    public typealias Action = AttributedString.Action
+    public typealias Action = ASAttributedString.Action
     public typealias Trigger = Action.Trigger
     public typealias Result = Action.Result
     
@@ -128,64 +128,64 @@ extension AttributedString.Attribute {
     }
 }
 
-extension AttributedString {
+extension ASAttributedString {
     
     public init(_ attachment: ImageAttachment, trigger: Action.Trigger = .click, action: @escaping () -> Void) {
-        self.value = AttributedString(.init(attachment: attachment), .action(trigger, action)).value
+        self.value = ASAttributedString(.init(attachment: attachment), .action(trigger, action)).value
     }
     
     public init(_ attachment: Attachment, trigger: Action.Trigger = .click, action: @escaping () -> Void) {
-        self.value = AttributedString(.init(attachment: attachment.value), .action(trigger, action)).value
+        self.value = ASAttributedString(.init(attachment: attachment.value), .action(trigger, action)).value
     }
     
     public init(_ attachment: ImageAttachment, trigger: Action.Trigger = .click, action: @escaping (Action.Result) -> Void) {
-        self.value = AttributedString(.init(attachment: attachment), .action(trigger, action)).value
+        self.value = ASAttributedString(.init(attachment: attachment), .action(trigger, action)).value
     }
     
     public init(_ attachment: Attachment, trigger: Action.Trigger = .click, action: @escaping (Action.Result) -> Void) {
-        self.value = AttributedString(.init(attachment: attachment.value), .action(trigger, action)).value
+        self.value = ASAttributedString(.init(attachment: attachment.value), .action(trigger, action)).value
     }
     
     public init(_ attachment: ImageAttachment, action: Action) {
-        self.value = AttributedString(.init(attachment: attachment), .action(action)).value
+        self.value = ASAttributedString(.init(attachment: attachment), .action(action)).value
     }
     
     public init(_ attachment: Attachment, action: Action) {
-        self.value = AttributedString(.init(attachment: attachment.value), .action(action)).value
+        self.value = ASAttributedString(.init(attachment: attachment.value), .action(action)).value
     }
 }
 
 extension AttributedStringInterpolation {
     
-    public typealias Action = AttributedString.Action
+    public typealias Action = ASAttributedString.Action
     public typealias Result = Action.Result
     
     public mutating func appendInterpolation(_ value: ImageAttachment, trigger: Action.Trigger = .click, action: @escaping () -> Void) {
-        self.value.append(AttributedString(.init(attachment: value), .action(trigger, action)).value)
+        self.value.append(ASAttributedString(.init(attachment: value), .action(trigger, action)).value)
     }
     
     public mutating func appendInterpolation(_ value: Attachment, trigger: Action.Trigger = .click, action: @escaping () -> Void) {
-        self.value.append(AttributedString(.init(attachment: value.value), .action(trigger, action)).value)
+        self.value.append(ASAttributedString(.init(attachment: value.value), .action(trigger, action)).value)
     }
     
     public mutating func appendInterpolation(_ value: ImageAttachment, trigger: Action.Trigger = .click, action: @escaping (Result) -> Void) {
-        self.value.append(AttributedString(.init(attachment: value), .action(trigger, action)).value)
+        self.value.append(ASAttributedString(.init(attachment: value), .action(trigger, action)).value)
     }
     
     public mutating func appendInterpolation(_ value: Attachment, trigger: Action.Trigger = .click, action: @escaping (Result) -> Void) {
-        self.value.append(AttributedString(.init(attachment: value.value), .action(trigger, action)).value)
+        self.value.append(ASAttributedString(.init(attachment: value.value), .action(trigger, action)).value)
     }
     
     public mutating func appendInterpolation(_ value: ImageAttachment, action: Action) {
-        self.value.append(AttributedString(.init(attachment: value), .action(action)).value)
+        self.value.append(ASAttributedString(.init(attachment: value), .action(action)).value)
     }
     
     public mutating func appendInterpolation(_ value: Attachment, action: Action) {
-        self.value.append(AttributedString(.init(attachment: value.value), .action(action)).value)
+        self.value.append(ASAttributedString(.init(attachment: value.value), .action(action)).value)
     }
 }
 
-extension AttributedString.Action.Highlight {
+extension ASAttributedString.Action.Highlight {
     
     @available(*, deprecated, message: "use foreground(_:)", renamed: "foreground(_:)")
     public static func color(_ value: Color) -> Self {
@@ -226,7 +226,7 @@ extension AttributedString.Action.Highlight {
     }
 }
 
-extension AttributedString.Action.Trigger {
+extension ASAttributedString.Action.Trigger {
 
     func matching(_ gesture: GestureRecognizer) -> Bool {
         switch self {
@@ -251,7 +251,7 @@ extension AttributedString.Action.Trigger {
 
 extension NSAttributedString {
     
-    func get(_ range: NSRange) -> AttributedString.Action.Result {
+    func get(_ range: NSRange) -> ASAttributedString.Action.Result {
         let substring = attributedSubstring(from: range)
         if let attachment = substring.attribute(.attachment, at: 0, effectiveRange: nil) as? NSTextAttachment {
             return .init(range: range, content: .attachment(attachment))

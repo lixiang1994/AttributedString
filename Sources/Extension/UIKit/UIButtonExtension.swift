@@ -15,18 +15,18 @@
 
 import UIKit
 
-extension UIButton: AttributedStringCompatible {
+extension UIButton: ASAttributedStringCompatible {
     
 }
 
-extension AttributedStringWrapper where Base: UIButton {
+extension ASAttributedStringWrapper where Base: UIButton {
 
-    public func setTitle(_ title: AttributedString?, for state: UIControl.State) {
+    public func setTitle(_ title: ASAttributedString?, for state: UIControl.State) {
         base.setAttributedTitle(title?.value, for: state)
     }
     
-    public func title(for state: UIControl.State) -> AttributedString? {
-        AttributedString(base.attributedTitle(for: state))
+    public func title(for state: UIControl.State) -> ASAttributedString? {
+        ASAttributedString(base.attributedTitle(for: state))
     }
 }
 

@@ -17,7 +17,7 @@ import AppKit
 import UIKit
 #endif
 
-extension AttributedString {
+extension ASAttributedString {
         
     public enum Checking: Hashable {
         /// 自定义范围
@@ -40,7 +40,7 @@ extension AttributedString {
     }
 }
 
-extension AttributedString.Checking {
+extension ASAttributedString.Checking {
     
     public enum Result {
         /// 自定义范围
@@ -48,7 +48,7 @@ extension AttributedString.Checking {
         /// 正则表达式
         case regex(NSAttributedString)
         #if os(iOS) || os(macOS)
-        case action(AttributedString.Action.Result.Content)
+        case action(ASAttributedString.Action.Result.Content)
         #endif
         #if !os(watchOS)
         case attachment(NSTextAttachment)
@@ -61,7 +61,7 @@ extension AttributedString.Checking {
     }
 }
 
-extension AttributedString.Checking.Result {
+extension ASAttributedString.Checking.Result {
     
     public struct Date {
         let date: Foundation.Date?
@@ -87,19 +87,19 @@ extension AttributedString.Checking.Result {
     }
 }
 
-extension AttributedStringWrapper {
+extension ASAttributedStringWrapper {
     
-    public typealias Checking = AttributedString.Checking
+    public typealias Checking = ASAttributedString.Checking
 }
 
-public extension Array where Element == AttributedString.Checking {
+public extension Array where Element == ASAttributedString.Checking {
     
-    static var defalut: [AttributedString.Checking] = [.date, .link, .address, .phoneNumber, .transitInformation]
+    static var defalut: [ASAttributedString.Checking] = [.date, .link, .address, .phoneNumber, .transitInformation]
     
-    static let empty: [AttributedString.Checking] = []
+    static let empty: [ASAttributedString.Checking] = []
 }
 
-extension AttributedString {
+extension ASAttributedString {
     
     public mutating func add(attributes: [Attribute], checkings: [Checking] = .defalut) {
         guard !attributes.isEmpty, !checkings.isEmpty else { return }
@@ -126,7 +126,7 @@ extension AttributedString {
     }
 }
 
-extension AttributedString {
+extension ASAttributedString {
     
     /// 匹配检查 (Key 不会出现覆盖情况, 优先级 range > action > regex > other)
     /// - Parameter checkings: 检查类型
@@ -171,7 +171,7 @@ extension AttributedString {
             
             #if os(iOS) || os(macOS)
             case .action:
-                let actions: [NSRange: AttributedString.Action] = value.get(.action)
+                let actions: [NSRange: ASAttributedString.Action] = value.get(.action)
                 for action in actions where !contains(action.key) {
                     result[action.key] = (.action, .action(value.get(action.key).content))
                 }
@@ -225,7 +225,7 @@ extension AttributedString {
     }
 }
 
-fileprivate extension AttributedString.Checking {
+fileprivate extension ASAttributedString.Checking {
     
     var order: Int {
         switch self {
@@ -239,7 +239,7 @@ fileprivate extension AttributedString.Checking {
     }
 }
 
-fileprivate extension AttributedString.Checking {
+fileprivate extension ASAttributedString.Checking {
     
     func map() -> NSTextCheckingResult.CheckingType? {
         switch self {
@@ -266,7 +266,7 @@ fileprivate extension AttributedString.Checking {
 
 fileprivate extension NSTextCheckingResult.CheckingType {
     
-    func map() -> AttributedString.Checking? {
+    func map() -> ASAttributedString.Checking? {
         switch self {
         case .date:
             return .date
@@ -291,7 +291,7 @@ fileprivate extension NSTextCheckingResult.CheckingType {
 
 fileprivate extension NSTextCheckingResult {
     
-    func map() -> AttributedString.Checking.Result? {
+    func map() -> ASAttributedString.Checking.Result? {
         switch resultType {
         case .date:
             return .date(

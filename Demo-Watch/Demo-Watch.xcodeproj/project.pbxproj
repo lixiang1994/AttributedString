@@ -14,6 +14,8 @@
 		9B267B6324405CFD002F571E /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B6224405CFD002F571E /* InterfaceController.swift */; };
 		9B267B6524405CFD002F571E /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B6424405CFD002F571E /* ExtensionDelegate.swift */; };
 		9B267B6724405CFD002F571E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B267B6624405CFD002F571E /* Assets.xcassets */; };
+		9B2E319D26A0312000BA33A8 /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B2E319C26A0312000BA33A8 /* AttributedString.framework */; };
+		9B2E319E26A0312000BA33A8 /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B2E319C26A0312000BA33A8 /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,17 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B2E319F26A0312000BA33A8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9B2E319E26A0312000BA33A8 /* AttributedString.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +82,7 @@
 		9B267B6424405CFD002F571E /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		9B267B6624405CFD002F571E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B267B6824405CFD002F571E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9B2E319C26A0312000BA33A8 /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +90,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B2E318B26A02FC900BA33A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B2E319D26A0312000BA33A8 /* AttributedString.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +110,7 @@
 				9B267B5224405CFA002F571E /* Demo-Watch WatchKit App */,
 				9B267B6124405CFD002F571E /* Demo-Watch WatchKit Extension */,
 				9B267B4B24405CFA002F571E /* Products */,
+				9B2E318726A02FC900BA33A8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -122,6 +145,14 @@
 			path = "Demo-Watch WatchKit Extension";
 			sourceTree = "<group>";
 		};
+		9B2E318726A02FC900BA33A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9B2E319C26A0312000BA33A8 /* AttributedString.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -148,6 +179,8 @@
 			buildPhases = (
 				9B267B4C24405CFA002F571E /* Resources */,
 				9B267B6E24405CFD002F571E /* Embed App Extensions */,
+				9B2E318B26A02FC900BA33A8 /* Frameworks */,
+				9B2E319F26A0312000BA33A8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -446,6 +479,10 @@
 				DEVELOPMENT_TEAM = "";
 				IBSC_MODULE = Demo_Watch_WatchKit_Extension;
 				INFOPLIST_FILE = "Demo-Watch WatchKit App/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -465,6 +502,10 @@
 				DEVELOPMENT_TEAM = "";
 				IBSC_MODULE = Demo_Watch_WatchKit_Extension;
 				INFOPLIST_FILE = "Demo-Watch WatchKit App/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;

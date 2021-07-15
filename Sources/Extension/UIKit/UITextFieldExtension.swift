@@ -15,19 +15,19 @@
 
 import UIKit
 
-extension UITextField: AttributedStringCompatible {
+extension UITextField: ASAttributedStringCompatible {
     
 }
 
-extension AttributedStringWrapper where Base: UITextField {
+extension ASAttributedStringWrapper where Base: UITextField {
 
-    public var text: AttributedString? {
-        get { AttributedString(base.attributedText) }
+    public var text: ASAttributedString? {
+        get { ASAttributedString(base.attributedText) }
         set { base.attributedText = newValue?.value }
     }
     
-    public var placeholder: AttributedString? {
-        get { AttributedString(base.attributedPlaceholder) }
+    public var placeholder: ASAttributedString? {
+        get { ASAttributedString(base.attributedPlaceholder) }
         set { base.attributedPlaceholder = newValue?.value }
     }
 }

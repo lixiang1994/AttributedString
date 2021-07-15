@@ -20,16 +20,16 @@ private var UILabelTouchedKey: Void?
 private var UILabelActionsKey: Void?
 private var UILabelCheckingsKey: Void?
 
-extension UILabel: AttributedStringCompatible {
-    
+extension UILabel: ASAttributedStringCompatible {
+
 }
 
-extension AttributedStringWrapper where Base: UILabel {
-    
+extension ASAttributedStringWrapper where Base: UILabel {
+
     #if os(iOS)
-    
-    public var text: AttributedString? {
-        get { base.touched?.0 ?? AttributedString(base.attributedText) }
+
+    public var text: ASAttributedString? {
+        get { base.touched?.0 ?? ASAttributedString(base.attributedText) }
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
             if var touched = base.touched, touched.0.isContentEqual(to: newValue) {
@@ -37,44 +37,44 @@ extension AttributedStringWrapper where Base: UILabel {
                     base.touched = nil
                     return
                 }
-                
+
                 // 将当前的高亮属性覆盖到新文本中 替换显示的文本
                 let temp = NSMutableAttributedString(attributedString: string.value)
                 base.attributedText?.get(touched.1).forEach { (range, attributes) in
                     temp.setAttributes(attributes, range: range)
                 }
                 base.attributedText = temp
-                
+
                 touched.0 = string
                 base.touched = touched
-                
+
                 setupActions(string)
                 setupGestureRecognizers()
-                
+
             } else {
                 base.touched = nil
                 base.attributedText = newValue?.value
-                
+
                 setupActions(newValue)
                 setupGestureRecognizers()
             }
         }
     }
-    
+
     #else
-    
-    public var text: AttributedString? {
-        get { AttributedString(base.attributedText) }
+
+    public var text: ASAttributedString? {
+        get { ASAttributedString(base.attributedText) }
         set { base.attributedText = newValue?.value }
     }
-    
+
     #endif
 }
 
 #if os(iOS)
 
-extension AttributedStringWrapper where Base: UILabel {
-    
+extension ASAttributedStringWrapper where Base: UILabel {
+
     /// 添加监听
     /// - Parameters:
     ///   - checking: 检查类型
@@ -109,7 +109,7 @@ extension AttributedStringWrapper where Base: UILabel {
         checkings.forEach { temp[$0] = (highlights, { callback($0.0, $0.1) }) }
         base.checkings = temp
     }
-    
+
     /// 移除监听
     /// - Parameter checking: 检查类型
     public func remove(checking: Checking) {
@@ -122,23 +122,23 @@ extension AttributedStringWrapper where Base: UILabel {
     }
 }
 
-extension AttributedStringWrapper where Base: UILabel {
-    
+extension ASAttributedStringWrapper where Base: UILabel {
+
     private(set) var gestures: [UIGestureRecognizer] {
         get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
         set { base.associated.set(retain: &UIGestureRecognizerKey, newValue) }
     }
-    
+
     /// 设置动作
-    private func setupActions(_ string: AttributedString?) {
+    private func setupActions(_ string: ASAttributedString?) {
         // 清理原有动作记录
         base.actions = [:]
-        
+
         guard let string = string else {
             return
         }
         // 获取全部动作
-        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
+        let actions: [NSRange: ASAttributedString.Action] = string.value.get(.action)
         // 匹配检查
         let checkings = base.checkings
         let temp = checkings.keys + (actions.isEmpty ? [] : [.action])
@@ -152,7 +152,7 @@ extension AttributedStringWrapper where Base: UILabel {
                     checkings[type]?.1((range, .action(result)))
                 }
                 base.actions[range] = action
-                
+
             default:
                 guard let value = checkings[type] else { return }
                 var action = Action(.click, highlights: value.0)
@@ -163,14 +163,14 @@ extension AttributedStringWrapper where Base: UILabel {
             }
         }
     }
-    
+
     /// 设置手势识别
     private func setupGestureRecognizers() {
         base.isUserInteractionEnabled = true
-        
+
         gestures.forEach { base.removeGestureRecognizer($0) }
         gestures = []
-        
+
         Set(base.actions.values.map({ $0.trigger })).forEach {
             switch $0 {
             case .click:
@@ -178,7 +178,7 @@ extension AttributedStringWrapper where Base: UILabel {
                 gesture.cancelsTouchesInView = false
                 base.addGestureRecognizer(gesture)
                 gestures.append(gesture)
-                
+
             case .press:
                 let gesture = UILongPressGestureRecognizer(target: base, action: #selector(Base.attributedAction))
                 gesture.cancelsTouchesInView = false
@@ -194,19 +194,19 @@ extension AttributedStringWrapper where Base: UILabel {
 #if os(iOS)
 
 extension UILabel {
-    
-    fileprivate typealias Action = AttributedString.Action
-    fileprivate typealias Checking = AttributedString.Checking
-    fileprivate typealias Highlight = AttributedString.Action.Highlight
+
+    fileprivate typealias Action = ASAttributedString.Action
+    fileprivate typealias Checking = ASAttributedString.Checking
+    fileprivate typealias Highlight = ASAttributedString.Action.Highlight
     fileprivate typealias Checkings = [Checking: ([Highlight], ((NSRange, Checking.Result)) -> Void)]
-    
+
     /// 是否启用Action
     fileprivate var isActionEnabled: Bool {
         return !actions.isEmpty
     }
-    
+
     /// 当前触摸
-    fileprivate var touched: (AttributedString, NSRange, Action)? {
+    fileprivate var touched: (ASAttributedString, NSRange, Action)? {
         get { associated.get(&UILabelTouchedKey) }
         set { associated.set(retain: &UILabelTouchedKey, newValue) }
     }
@@ -220,7 +220,7 @@ extension UILabel {
         get { associated.get(&UILabelCheckingsKey) ?? [:] }
         set { associated.set(retain: &UILabelCheckingsKey, newValue) }
     }
-    
+
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard
             isActionEnabled,
@@ -239,7 +239,7 @@ extension UILabel {
             attributes.merge(temp, uniquingKeysWith: { $1 })
         }
     }
-    
+
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard
             isActionEnabled,
@@ -250,7 +250,7 @@ extension UILabel {
         self.touched = nil
         attributedText = touched.0.value
     }
-    
+
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard
             isActionEnabled,
@@ -264,7 +264,7 @@ extension UILabel {
 }
 
 fileprivate extension UILabel {
-    
+
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard isActionEnabled else { return }
@@ -273,11 +273,11 @@ fileprivate extension UILabel {
         // 点击 回调
         action.handle?()
     }
-    
+
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
         let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText, with: numberOfLines)
-        guard let attributedString = AttributedString(text) else { return nil }
-        
+        guard let attributedString = ASAttributedString(text) else { return nil }
+
         // 构建同步Label的TextKit
         let delegate = UILabelLayoutManagerDelegate(scaledMetrics, with: baselineAdjustment)
         let textStorage = NSTextStorage()
@@ -291,23 +291,23 @@ fileprivate extension UILabel {
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
         textStorage.setAttributedString(attributedString.value) // 放在最后添加富文本 TextKit的坑
-        
+
         // 确保布局
         layoutManager.ensureLayout(for: textContainer)
-        
+
         // 获取文本所占高度
         let height = layoutManager.usedRect(for: textContainer).height
-        
+
         // 获取点击坐标 并排除各种偏移
         var point = point
         point.y -= (bounds.height - height) / 2
-        
+
         // Debug
 //        subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
 //        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
 //        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
 //        addSubview(view)
-        
+
         // 获取字形下标
         var fraction: CGFloat = 0
         let glyphIndex = layoutManager.glyphIndex(for: point, in: textContainer, fractionOfDistanceThroughGlyph: &fraction)
@@ -328,19 +328,19 @@ fileprivate extension UILabel {
 }
 
 class DebugView: UIView {
-    
+
     var draw: (() -> Void)?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         isUserInteractionEnabled = false
         backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.2983732877)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         self.draw?()
@@ -348,7 +348,7 @@ class DebugView: UIView {
 }
 
 private extension String {
-    
+
     func reversedBase64Decoder() -> String? {
         guard let data = Data(base64Encoded: .init(self.reversed())) else { return nil }
         return String(data: data, encoding: .utf8)
@@ -359,7 +359,7 @@ extension UILabel {
     // Runtime Headers
     // https://github.com/nst/iOS-Runtime-Headers/blob/master/PrivateFrameworks/UIKitCore.framework/UILabel.h
     // https://github.com/nst/iOS-Runtime-Headers/blob/fbb634c78269b0169efdead80955ba64eaaa2f21/PrivateFrameworks/UIKitCore.framework/_UILabelScaledMetrics.h
-    
+
     struct ScaledMetrics {
         let actualScaleFactor: Double
         let baselineOffset: Double
@@ -369,9 +369,9 @@ extension UILabel {
         let scaledLineHeight: Double
         let scaledSize: CGSize
         let targetSize: CGSize
-        
+
         /// Keys
-        
+
         static let actualScaleFactorName = "y9GdjFmRlxWYjNFbhVHdjF2X".reversedBase64Decoder()
         static let baselineOffsetName = "0V2cmZ2Tl5WasV2chJ2X".reversedBase64Decoder()
         static let measuredNumberOfLinesName = "==wcl5WaMZ2TyVmYtVnTkVmc1NXYl12X".reversedBase64Decoder()
@@ -381,7 +381,7 @@ extension UILabel {
         static let scaledSizeName = "=UmepNFZlxWYjN3X".reversedBase64Decoder()
         static let targetSizeName = "=UmepNFdldmchR3X".reversedBase64Decoder()
     }
-    
+
     private static let synthesizedAttributedTextName = "=QHelRFZlRXdilmc0RXQkVmepNXZoRnb5N3X".reversedBase64Decoder()
     private var synthesizedAttributedText: NSAttributedString? {
         guard
@@ -392,7 +392,7 @@ extension UILabel {
         }
         return synthesizedAttributedText as? NSAttributedString
     }
-    
+
     private static let scaledMetricsName = "=M3YpJHdl1EZlxWYjN3X".reversedBase64Decoder()
     private var scaledMetrics: ScaledMetrics? {
         guard
@@ -423,7 +423,7 @@ extension UILabel {
             let targetSize = object.value(forKey: targetSizeName) as? CGSize else {
             return nil
         }
-        
+
         return .init(
             actualScaleFactor: actualScaleFactor,
             baselineOffset: baselineOffset,
@@ -435,11 +435,11 @@ extension UILabel {
             targetSize: targetSize
         )
     }
-    
+
     private var scaledAttributedText: NSAttributedString? {
         return scaledMetrics?.scaledAttributedText
     }
-    
+
     private func adaptation(_ string: NSAttributedString?, with numberOfLines: Int) -> NSAttributedString? {
         /**
         由于富文本中的lineBreakMode对于UILabel和TextKit的行为是不一致的, UILabel默认的.byTruncatingTail在TextKit中则无法正确显示.
@@ -449,7 +449,7 @@ extension UILabel {
         guard let string = string else {
             return nil
         }
-        
+
         let mutable = NSMutableAttributedString(attributedString: string)
         mutable.enumerateAttribute(
             .paragraphStyle,

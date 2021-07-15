@@ -24,7 +24,7 @@ class AllDetailViewController: UIViewController {
 
     func set(item: Item) {
         list = [
-            AttributedString(item.content, .font(.systemFont(ofSize: 38))).value,
+            ASAttributedString(item.content, .font(.systemFont(ofSize: 38))).value,
             .init(string: item.code)
         ]
 

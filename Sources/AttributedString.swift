@@ -23,7 +23,11 @@ public typealias Color = UIColor
 public typealias Font = UIFont
 #endif
 
-public struct AttributedString {
+public struct ASAttributedString {
+    internal init(value: NSAttributedString) {
+        self.value = value
+    }
+    
     
     public internal(set) var value: NSAttributedString
     
@@ -34,11 +38,11 @@ public struct AttributedString {
     /// String
     
     public init(string value: String, _ attributes: Attribute...) {
-        self.value = AttributedString(string: value, with: attributes).value
+        self.value = ASAttributedString(string: value, with: attributes).value
     }
     
     public init(string value: String, with attributes: [Attribute] = []) {
-        self.value = AttributedString(.init(string: value), with: attributes).value
+        self.value = ASAttributedString(.init(string: value), with: attributes).value
     }
     
     /// NSAttributedString
@@ -48,35 +52,35 @@ public struct AttributedString {
     }
     
     public init(_ value: NSAttributedString, _ attributes: Attribute...) {
-        self.value = AttributedString(value, with: attributes).value
+        self.value = ASAttributedString(value, with: attributes).value
     }
     
     public init?(_ value: NSAttributedString?, _ attributes: Attribute...) {
         guard let value = value else { return nil }
-        self.value = AttributedString(value, with: attributes).value
+        self.value = ASAttributedString(value, with: attributes).value
     }
     
     public init(_ value: NSAttributedString, with attributes: [Attribute]) {
-        self.value = AttributedString(.init(value), with: attributes).value
+        self.value = ASAttributedString(.init(value), with: attributes).value
     }
     
     public init?(_ value: NSAttributedString?, with attributes: [Attribute] = []) {
         guard let value = value else { return nil }
-        self.value = AttributedString(.init(value), with: attributes).value
+        self.value = ASAttributedString(.init(value), with: attributes).value
     }
     
     /// AttributedString
     
-    public init(_ string: AttributedString, _ attributes: Attribute...) {
-        self.value = AttributedString(wrap: .embedding(string), with: attributes).value
+    public init(_ string: ASAttributedString, _ attributes: Attribute...) {
+        self.value = ASAttributedString(wrap: .embedding(string), with: attributes).value
     }
     
-    public init(_ string: AttributedString, with attributes: [Attribute] = []) {
-        self.value = AttributedString(wrap: .embedding(string), with: attributes).value
+    public init(_ string: ASAttributedString, with attributes: [Attribute] = []) {
+        self.value = ASAttributedString(wrap: .embedding(string), with: attributes).value
     }
     
     public init(wrap mode: WrapMode, _ attributes: Attribute...) {
-        self.value = AttributedString(wrap: mode, with: attributes).value
+        self.value = ASAttributedString(wrap: mode, with: attributes).value
     }
     
     public init(wrap mode: WrapMode, with attributes: [Attribute]) {
@@ -116,23 +120,23 @@ public struct AttributedString {
     }
 }
 
-extension AttributedString: ExpressibleByStringLiteral {
+extension ASAttributedString: ExpressibleByStringLiteral {
     
     public init(stringLiteral value: String) {
         self.value = .init(string: value)
     }
 }
 
-extension AttributedString: CustomStringConvertible {
+extension ASAttributedString: CustomStringConvertible {
     
     public var description: String {
         .init(describing: value)
     }
 }
 
-extension AttributedString: Equatable {
+extension ASAttributedString: Equatable {
     
-    public static func == (lhs: AttributedString, rhs: AttributedString) -> Bool {
+    public static func == (lhs: ASAttributedString, rhs: ASAttributedString) -> Bool {
         guard lhs.length == rhs.length else {
             return false
         }
@@ -148,7 +152,7 @@ extension AttributedString: Equatable {
     /// 内容是否相等
     /// - Parameter other: 其他AttributedString
     /// - Returns: 结果
-    public func isContentEqual(to other: AttributedString?) -> Bool {
+    public func isContentEqual(to other: ASAttributedString?) -> Bool {
         guard let other = other else {
             return false
         }
@@ -159,7 +163,7 @@ extension AttributedString: Equatable {
     }
 }
 
-extension AttributedString {
+extension ASAttributedString {
     
     public mutating func add(attributes: [Attribute], range: NSRange) {
         guard !attributes.isEmpty, range.length > 0 else { return }

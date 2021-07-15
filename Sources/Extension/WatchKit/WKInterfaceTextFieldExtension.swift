@@ -11,18 +11,18 @@
 import WatchKit
 
 @available(watchOS 6.0, *)
-extension WKInterfaceTextField: AttributedStringCompatible {
+extension WKInterfaceTextField: ASAttributedStringCompatible {
     
 }
 
 @available(watchOS 6.0, *)
-extension AttributedStringWrapper where Base: WKInterfaceTextField {
+extension ASAttributedStringWrapper where Base: WKInterfaceTextField {
     
-    public func set(text: AttributedString?) {
+    public func set(text: ASAttributedString?) {
         base.setAttributedText(text?.value)
     }
     
-    public func setPlaceholder(text: AttributedString?) {
+    public func setPlaceholder(text: ASAttributedString?) {
         base.setAttributedPlaceholder(text?.value)
     }
 }

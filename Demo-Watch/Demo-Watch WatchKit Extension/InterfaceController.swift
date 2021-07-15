@@ -16,7 +16,7 @@ class InterfaceController: WKInterfaceController {
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        let array: [AttributedString] = [
+        let array: [ASAttributedString] = [
             .init(
                 """
                 \("Swift", .font(.systemFont(ofSize: 48, weight: .semibold)))
@@ -96,7 +96,7 @@ class InterfaceController: WKInterfaceController {
             """
         ]
         
-        let string = array.reduce(into: AttributedString(stringLiteral: "")) {
+        let string = array.reduce(into: ASAttributedString(stringLiteral: "")) {
             $0 += $1 + "\n"
         }
         

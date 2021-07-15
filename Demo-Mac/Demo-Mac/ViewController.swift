@@ -47,7 +47,7 @@ class ViewController: NSViewController {
         ///     , .paragraph(.alignment(.center)))
         ///     """
         
-        let array: [AttributedString] = [
+        let array: [ASAttributedString] = [
             .init(
                 """
                 \(.image(#imageLiteral(resourceName: "swift-icon"), .custom(size: .init(width: 64, height: 64))))
@@ -129,7 +129,7 @@ class ViewController: NSViewController {
             """
         ]
         
-        let string = array.reduce(into: AttributedString(stringLiteral: "")) {
+        let string = array.reduce(into: ASAttributedString(stringLiteral: "")) {
             $0 += $1 + "\n"
         }
         label.attributed.string = string

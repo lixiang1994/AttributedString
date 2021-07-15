@@ -25,7 +25,7 @@ class CheckingViewController: ViewController<CheckingView> {
         // 移除监听
         //container.textView.attributed.remove(checking: .link)
         
-        func clicked(_ result: AttributedString.Action.Result) {
+        func clicked(_ result: ASAttributedString.Action.Result) {
             switch result.content {
             case .string(let value):
                 print("点击了文本: \n\(value) \nrange: \(result.range)")
@@ -36,7 +36,7 @@ class CheckingViewController: ViewController<CheckingView> {
         }
         
         do {
-            var string: AttributedString = """
+            var string: ASAttributedString = """
             我的名字叫李响，我的手机号码是18611401994，我的电子邮件地址是18611401994@163.com，现在是2020/06/28 20:30。我的GitHub主页是https://github.com/lixiang1994。欢迎来Star! \("点击联系我", .action(clicked))
             """
             string.add(attributes: [.foreground(#colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)), .font(.systemFont(ofSize: 20, weight: .medium))], checkings: [.phoneNumber])
@@ -47,7 +47,7 @@ class CheckingViewController: ViewController<CheckingView> {
         }
         
         do {
-            var string: AttributedString = """
+            var string: ASAttributedString = """
             My name is Li Xiang, my mobile phone number is 18611401994, my email address is 18611401994@163.com, I live in No.10 Xitucheng Road, Haidian District, Beijing, China, and it is now 20:30 on June 28, 2020. My GitHub homepage is https://github.com/lixiang1994. Welcome to star me! \("Contact me", .action(clicked))
             """
             string.add(attributes: [.foreground(#colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1))], checkings: [.address])

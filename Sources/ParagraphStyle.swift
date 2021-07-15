@@ -17,7 +17,7 @@ import AppKit
 import UIKit
 #endif
 
-extension AttributedString.Attribute {
+extension ASAttributedString.Attribute {
     
     /// 段落
     /// - Parameter value: 段落样式
@@ -34,7 +34,7 @@ extension AttributedString.Attribute {
     }
 }
 
-extension AttributedString.Attribute {
+extension ASAttributedString.Attribute {
     
     public struct ParagraphStyle {
         
@@ -90,7 +90,7 @@ extension AttributedString.Attribute {
     }
 }
 
-extension AttributedString.Attribute.ParagraphStyle {
+extension ASAttributedString.Attribute.ParagraphStyle {
     
     public static func lineSpacing(_ value: CGFloat) -> Self {
         return .init(style: [.lineSpacing: value])
@@ -157,9 +157,9 @@ extension AttributedString.Attribute.ParagraphStyle {
     }
 }
 
-extension AttributedString.Attribute.ParagraphStyle {
+extension ASAttributedString.Attribute.ParagraphStyle {
     
-    public static func ~= (lhs: AttributedString.Attribute.ParagraphStyle, rhs: AttributedString.Attribute.ParagraphStyle) -> Bool {
+    public static func ~= (lhs: ASAttributedString.Attribute.ParagraphStyle, rhs: ASAttributedString.Attribute.ParagraphStyle) -> Bool {
         return lhs.style.keys == rhs.style.keys
     }
 }

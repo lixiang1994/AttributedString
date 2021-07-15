@@ -10,13 +10,13 @@
 
 import WatchKit
 
-extension WKInterfaceButton: AttributedStringCompatible {
+extension WKInterfaceButton: ASAttributedStringCompatible {
     
 }
 
-extension AttributedStringWrapper where Base: WKInterfaceButton {
+extension ASAttributedStringWrapper where Base: WKInterfaceButton {
     
-    public func set(title: AttributedString?) {
+    public func set(title: ASAttributedString?) {
         base.setAttributedTitle(title?.value)
     }
 }

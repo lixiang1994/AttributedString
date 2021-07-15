@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         ///     """
         
         
-        let array: [AttributedString] = [
+        let array: [ASAttributedString] = [
             .init(
                 """
                 \(.image(#imageLiteral(resourceName: "swift-icon"), .custom(size: .init(width: 64, height: 64))))
@@ -183,10 +183,10 @@ extension ViewController: UITableViewDataSource {
 extension ViewController {
     
     struct Model {
-        let content: AttributedString
+        let content: ASAttributedString
         let height: CGFloat
         
-        init(_ content: AttributedString) {
+        init(_ content: ASAttributedString) {
             self.content = content
             self.height = content.value.boundingRect(
                 with: .init(

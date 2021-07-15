@@ -17,7 +17,7 @@ import AppKit
 import UIKit
 #endif
 
-extension AttributedString: ExpressibleByStringInterpolation {
+extension ASAttributedString: ExpressibleByStringInterpolation {
     
     public init(stringInterpolation: AttributedStringInterpolation) {
         self.value = .init(attributedString: stringInterpolation.value)

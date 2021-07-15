@@ -22,15 +22,15 @@ private var UITextViewCheckingsKey: Void?
 private var UITextViewObservationsKey: Void?
 private var UITextViewAttachmentViewsKey: Void?
 
-extension UITextView: AttributedStringCompatible {
+extension UITextView: ASAttributedStringCompatible {
     
 }
 
-extension AttributedStringWrapper where Base: UITextView {
+extension ASAttributedStringWrapper where Base: UITextView {
 
     #if os(iOS)
     
-    public var text: AttributedString {
+    public var text: ASAttributedString {
         get { base.touched?.0 ?? .init(base.attributedText) }
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
@@ -58,7 +58,7 @@ extension AttributedStringWrapper where Base: UITextView {
     
     #else
     
-    public var text: AttributedString {
+    public var text: ASAttributedString {
         get { .init(base.attributedText) }
         set { base.attributedText = newValue.value }
     }
@@ -68,7 +68,7 @@ extension AttributedStringWrapper where Base: UITextView {
 
 #if os(iOS)
 
-extension AttributedStringWrapper where Base: UITextView {
+extension ASAttributedStringWrapper where Base: UITextView {
     
     /// 添加监听
     /// - Parameters:
@@ -117,7 +117,7 @@ extension AttributedStringWrapper where Base: UITextView {
     }
 }
 
-extension AttributedStringWrapper where Base: UITextView {
+extension ASAttributedStringWrapper where Base: UITextView {
     
     private(set) var gestures: [UIGestureRecognizer] {
         get { base.associated.get(&UIGestureRecognizerKey) ?? [] }
@@ -130,12 +130,12 @@ extension AttributedStringWrapper where Base: UITextView {
     }
     
     /// 设置动作
-    private func setupActions(_ string: AttributedString) {
+    private func setupActions(_ string: ASAttributedString) {
         // 清理原有动作记录
         base.actions = [:]
         
         // 获取全部动作
-        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
+        let actions: [NSRange: ASAttributedString.Action] = string.value.get(.action)
         // 匹配检查
         let checkings = base.checkings
         let temp = checkings.keys + (actions.isEmpty ? [] : [.action])
@@ -187,7 +187,7 @@ extension AttributedStringWrapper where Base: UITextView {
     }
     
     /// 设置视图附件
-    private func setupViewAttachments(_ string: AttributedString) {
+    private func setupViewAttachments(_ string: ASAttributedString) {
         // 清理原有监听
         observations = [:]
         
@@ -198,7 +198,7 @@ extension AttributedStringWrapper where Base: UITextView {
         base.attachmentViews = [:]
         
         // 获取视图附件
-        let attachments: [NSRange: AttributedString.ViewAttachment] = string.value.get(.attachment)
+        let attachments: [NSRange: ASAttributedString.ViewAttachment] = string.value.get(.attachment)
         
         guard !attachments.isEmpty else {
             return
@@ -230,9 +230,9 @@ extension AttributedStringWrapper where Base: UITextView {
 
 extension UITextView {
     
-    fileprivate typealias Action = AttributedString.Action
-    fileprivate typealias Checking = AttributedString.Checking
-    fileprivate typealias Highlight = AttributedString.Action.Highlight
+    fileprivate typealias Action = ASAttributedString.Action
+    fileprivate typealias Checking = ASAttributedString.Checking
+    fileprivate typealias Highlight = ASAttributedString.Action.Highlight
     fileprivate typealias Checkings = [Checking: ([Highlight], ((NSRange, Checking.Result)) -> Void)]
     
     /// 是否启用Action
@@ -241,7 +241,7 @@ extension UITextView {
     }
     
     /// 触摸信息
-    fileprivate var touched: (AttributedString, NSRange, Action)? {
+    fileprivate var touched: (ASAttributedString, NSRange, Action)? {
         get { associated.get(&UITextViewTouchedKey) }
         set { associated.set(retain: &UITextViewTouchedKey, newValue) }
     }
@@ -408,7 +408,7 @@ fileprivate extension UITextView {
 /// 附件视图
 private class AttachmentView: UIView {
     
-    typealias Style = AttributedString.Attachment.Style
+    typealias Style = ASAttributedString.Attachment.Style
     
     let view: UIView
     let style: Style

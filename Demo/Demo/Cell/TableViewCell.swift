@@ -21,7 +21,7 @@ class TableViewCell: UITableViewCell {
         textView.textContainerInset = .zero
     }
     
-    func set(_ string: AttributedString) {
+    func set(_ string: ASAttributedString) {
         textView.attributed.text = string
     }
     

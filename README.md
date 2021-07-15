@@ -83,9 +83,9 @@ How to initialize:
 
 ```swift
 // Normal
-let a: AttributedString = .init("lee", .font(.systemFont(ofSize: 13)))
+let a: ASAttributedString = .init("lee", .font(.systemFont(ofSize: 13)))
 // Interpolation
-let b: AttributedString = "\("lee", .font(.systemFont(ofSize: 13)))"
+let b: ASAttributedString = "\("lee", .font(.systemFont(ofSize: 13)))"
 ```
 
 
@@ -134,7 +134,7 @@ textView.attributed.text = """
 #### Attachment: (Does not include watchOS)
 
 ```swift
-// AttributedString.Attachment
+// ASAttributedString.Attachment
 
 textView.attributed.text = """
 
@@ -150,7 +150,7 @@ textView.attributed.text = """
 #### Attachment Image: (Does not include watchOS)
 
 ```swift
-// AttributedString.ImageAttachment
+// ASAttributedString.ImageAttachment
 
 textView.attributed.text = """
 
@@ -166,7 +166,7 @@ textView.attributed.text = """
 #### Attachment View: (Only supports iOS: UITextView)
 
 ```swift
-// AttributedString.ViewAttachment
+// ASAttributedString.ViewAttachment
 
 textView.attributed.text = """
 
@@ -182,8 +182,8 @@ textView.attributed.text = """
 #### Wrap:
 
 ```swift
-let a: AttributedString = .init("123", .background(.blue))
-let b: AttributedString = .init("456", .background(.red))
+let a: ASAttributedString = .init("123", .background(.blue))
+let b: ASAttributedString = .init("456", .background(.red))
 textView.attributed.text = "\(wrap: a) \(wrap: b, .paragraph(.alignment(.center)))"
 
 // Defalut embedding mode, Nested internal styles take precedence over external styles
@@ -196,9 +196,9 @@ textView.attributed.text = "\(wrap: .override(a), .paragraph(.alignment(.center)
 #### Append:
 
 ```swift
-let a: AttributedString = .init("123", .background(.blue))
-let b: AttributedString = .init("456", .background(.red))
-let c: AttributedString = .init("789", .background(.gray))
+let a: ASAttributedString = .init("123", .background(.blue))
+let b: ASAttributedString = .init("456", .background(.red))
+let c: ASAttributedString = .init("789", .background(.gray))
 textView.attributed.text = a + b
 textView.attributed.text += c
 ```
@@ -206,19 +206,19 @@ textView.attributed.text += c
 #### Checking:
 
 ```swift
-var string: AttributedString = .init("my phone number is +86 18611401994.", .background(.blue))
+var string: ASAttributedString = .init("my phone number is +86 18611401994.", .background(.blue))
 string.add(attributes: [.foreground(color)], checkings: [.phoneNumber])
 textView.attributed.text = string
 ```
 
 ```swift
-var string: AttributedString = .init("open https://www.apple.com and https://github.com/lixiang1994/AttributedString", .background(.blue))
+var string: ASAttributedString = .init("open https://www.apple.com and https://github.com/lixiang1994/AttributedString", .background(.blue))
 string.add(attributes: [.foreground(color)], checkings: [.link])
 textView.attributed.text = string
 ```
 
 ```swift
-var string: AttributedString = .init("123456789", .background(.blue))
+var string: ASAttributedString = .init("123456789", .background(.blue))
 string.add(attributes: [.foreground(color)], checkings: [.regex("[0-6]")])
 textView.attributed.text = string
 ```
@@ -234,9 +234,9 @@ UITextview needs to set `isEditable` and `isSelectable` to `false`.
 
 ```swift
 // Text
-let a: AttributedString = .init("lee", .action({  }))
+let a: ASAttributedString = .init("lee", .action({  }))
 // Attachment (image)
-let b: AttributedString = .init(.image(image), action: {
+let b: ASAttributedString = .init(.image(image), action: {
     // code
 })
 
@@ -245,14 +245,14 @@ func clicked() {
     // code
 }
 // Normal
-let c: AttributedString = .init("lee", .action(clicked))
-let d: AttributedString = .init(.image(image), action: clicked)
+let c: ASAttributedString = .init("lee", .action(clicked))
+let d: ASAttributedString = .init(.image(image), action: clicked)
 // Interpolation
-let e: AttributedString = "\("lee", .action(clicked))"
-let f: AttributedString = "\(.image(image), action: clicked)"
+let e: ASAttributedString = "\("lee", .action(clicked))"
+let f: ASAttributedString = "\(.image(image), action: clicked)"
 
 // More information. 
-func clicked(_ result: AttributedString.Action.Result) {
+func clicked(_ result: ASAttributedString.Action.Result) {
     switch result.content {
     case .string(let value):
        	print("Currently clicked text: \(value) range: \(result.range)")
@@ -269,7 +269,7 @@ textView.attributed.text = "This is a picture \(.image(image, .custom(size: .ini
 ##### Press:  
 
 ```swift
-func pressed(_ result: AttributedString.Action.Result) {
+func pressed(_ result: ASAttributedString.Action.Result) {
     switch result.content {
     case .string(let value):
         print("Currently pressed text: \(value) range: \(result.range)")
@@ -286,7 +286,7 @@ textView.attributed.text = "This is a picture \(.image(image, .custom(size: .ini
 ##### Highlight style:    
 
 ```swift
-func clicked(_ result: AttributedString.Action.Result) {
+func clicked(_ result: ASAttributedString.Action.Result) {
     switch result.content {
     case .string(let value):
         print("Currently clicked text: \(value) range: \(result.range)")
@@ -302,7 +302,7 @@ label.attributed.text = "This is \("Label", .font(.systemFont(ofSize: 20)), .act
 ##### Custom: 
 
 ```swift
-let custom = AttributedString.Action(.press, highlights: [.background(.blue), .foreground(.white)]) { (result) in
+let custom = ASAttributedString.Action(.press, highlights: [.background(.blue), .foreground(.white)]) { (result) in
     switch result.content {
     case .string(let value):
         print("Currently pressed text: \(value) range: \(result.range)")

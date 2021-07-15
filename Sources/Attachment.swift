@@ -19,7 +19,7 @@ import UIKit
 
 #if !os(watchOS)
 
-extension AttributedString {
+extension ASAttributedString {
     
     public enum Attachment {
         case image(Image, bounds: CGRect)
@@ -168,7 +168,7 @@ extension AttributedString {
     #endif
 }
 
-extension AttributedString.Attachment {
+extension ASAttributedString.Attachment {
     
     /// 对齐
     public enum Alignment {
@@ -213,8 +213,8 @@ extension AttributedString.Attachment {
 
 extension AttributedStringInterpolation {
     
-    public typealias Attachment = AttributedString.Attachment
-    public typealias ImageAttachment = AttributedString.ImageAttachment
+    public typealias Attachment = ASAttributedString.Attachment
+    public typealias ImageAttachment = ASAttributedString.ImageAttachment
     
     public mutating func appendInterpolation(_ value: Attachment) {
         self.value.append(.init(attachment: value.value))
@@ -226,7 +226,7 @@ extension AttributedStringInterpolation {
     
     #if os(iOS)
     
-    public typealias ViewAttachment = AttributedString.ViewAttachment
+    public typealias ViewAttachment = ASAttributedString.ViewAttachment
     
     public mutating func appendInterpolation(_ value: ViewAttachment) {
         self.value.append(.init(attachment: value))
@@ -235,7 +235,7 @@ extension AttributedStringInterpolation {
     #endif
 }
 
-extension AttributedString {
+extension ASAttributedString {
     
     public init(_ attachment: Attachment) {
         self.value = .init(attachment: attachment.value)
@@ -254,7 +254,7 @@ extension AttributedString {
     #endif
 }
 
-fileprivate extension AttributedString.Attachment.Alignment {
+fileprivate extension ASAttributedString.Attachment.Alignment {
     
     /// 计算坐标
     /// - Parameters:

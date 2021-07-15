@@ -16,13 +16,13 @@ private var NSTextFieldTouchedKey: Void?
 private var NSTextFieldActionsKey: Void?
 private var NSTextFieldCheckingsKey: Void?
 
-extension NSTextField: AttributedStringCompatible {
+extension NSTextField: ASAttributedStringCompatible {
     
 }
 
-extension AttributedStringWrapper where Base: NSTextField {
+extension ASAttributedStringWrapper where Base: NSTextField {
 
-    public var string: AttributedString {
+    public var string: ASAttributedString {
         get { base.touched?.0 ?? .init(base.attributedStringValue) }
         set {
             // 判断当前是否在触摸状态, 内容是否发生了变化
@@ -38,7 +38,7 @@ extension AttributedStringWrapper where Base: NSTextField {
                 base.attributedStringValue = temp
                 
             } else {
-                base.attributedStringValue = AttributedString(
+                base.attributedStringValue = ASAttributedString(
                     newValue.value,
                     .font(base.font ?? .systemFont(ofSize: 13)),
                     .paragraph(
@@ -54,13 +54,13 @@ extension AttributedStringWrapper where Base: NSTextField {
         }
     }
     
-    public var placeholder: AttributedString? {
-        get { AttributedString(base.placeholderAttributedString) }
+    public var placeholder: ASAttributedString? {
+        get { ASAttributedString(base.placeholderAttributedString) }
         set { base.placeholderAttributedString = newValue?.value }
     }
 }
 
-extension AttributedStringWrapper where Base: NSTextField {
+extension ASAttributedStringWrapper where Base: NSTextField {
     
     /// 添加监听
     /// - Parameters:
@@ -104,7 +104,7 @@ extension AttributedStringWrapper where Base: NSTextField {
     }
 }
 
-extension AttributedStringWrapper where Base: NSTextField {
+extension ASAttributedStringWrapper where Base: NSTextField {
     
     private(set) var gestures: [NSGestureRecognizer] {
         get { base.associated.get(&NSGestureRecognizerKey) ?? [] }
@@ -117,7 +117,7 @@ extension AttributedStringWrapper where Base: NSTextField {
     }
     
     /// 设置动作
-    private func setupActions(_ string: AttributedString?) {
+    private func setupActions(_ string: ASAttributedString?) {
         // 清理原有动作记录
         base.actions = [:]
         
@@ -125,7 +125,7 @@ extension AttributedStringWrapper where Base: NSTextField {
             return
         }
         // 获取全部动作
-        let actions: [NSRange: AttributedString.Action] = string.value.get(.action)
+        let actions: [NSRange: ASAttributedString.Action] = string.value.get(.action)
         // 匹配检查
         let checkings = base.checkings
         let temp = checkings.keys + (actions.isEmpty ? [] : [.action])
@@ -190,9 +190,9 @@ extension AttributedStringWrapper where Base: NSTextField {
 
 extension NSTextField {
     
-    fileprivate typealias Action = AttributedString.Action
-    fileprivate typealias Checking = AttributedString.Checking
-    fileprivate typealias Highlight = AttributedString.Action.Highlight
+    fileprivate typealias Action = ASAttributedString.Action
+    fileprivate typealias Checking = ASAttributedString.Checking
+    fileprivate typealias Highlight = ASAttributedString.Action.Highlight
     fileprivate typealias Checkings = [Checking: ([Highlight], ((NSRange, Checking.Result)) -> Void)]
     
     /// 是否启用Action
@@ -201,7 +201,7 @@ extension NSTextField {
     }
     
     /// 触摸信息
-    fileprivate var touched: (AttributedString, NSRange, Action)? {
+    fileprivate var touched: (ASAttributedString, NSRange, Action)? {
         get { associated.get(&NSTextFieldTouchedKey) }
         set { associated.set(retain: &NSTextFieldTouchedKey, newValue) }
     }
@@ -256,7 +256,7 @@ fileprivate extension NSTextField {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        let attributedString = AttributedString(attributedStringValue)
+        let attributedString = ASAttributedString(attributedStringValue)
         
         // 构建同步Label设置的TextKit
         let textStorage = NSTextStorage(attributedString: attributedString.value)

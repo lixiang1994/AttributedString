@@ -305,7 +305,7 @@ extension DebugLabelView {
     
     /// 设置富文本
     /// - Parameter text: 富文本
-    func set(text: AttributedString) {
+    func set(text: ASAttributedString) {
         // 富文本中如果包含段落样式 则无法进行多行字号缩放
         label.attributed.text = text
         // 刷新布局

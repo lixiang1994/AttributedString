@@ -57,7 +57,7 @@ extension AllTableViewController {
     
     struct Item {
         let title: (String, String)
-        let content: AttributedString
+        let content: ASAttributedString
         let code: String
     }
     

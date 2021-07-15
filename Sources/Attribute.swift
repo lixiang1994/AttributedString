@@ -17,7 +17,7 @@ import AppKit
 import UIKit
 #endif
 
-extension AttributedString {
+extension ASAttributedString {
     
     /// 属性
     public struct Attribute {
@@ -26,10 +26,10 @@ extension AttributedString {
     
     /// 包装模式
     public enum WrapMode {
-        case embedding(AttributedString)        // 嵌入模式
-        case override(AttributedString)         // 覆盖模式
+        case embedding(ASAttributedString)        // 嵌入模式
+        case override(ASAttributedString)         // 覆盖模式
         
-        internal var value: AttributedString {
+        internal var value: ASAttributedString {
             switch self {
             case .embedding(let value):     return value
             case .override(let value):      return value
@@ -38,7 +38,7 @@ extension AttributedString {
     }
 }
 
-extension AttributedString.Attribute {
+extension ASAttributedString.Attribute {
     
     public static func font(_ value: Font) -> Self {
         return .init(attributes: [.font: value])
@@ -125,7 +125,7 @@ extension AttributedString.Attribute {
     }
 }
 
-extension AttributedString.Attribute {
+extension ASAttributedString.Attribute {
     
     public enum WritingDirection {
         case LRE
@@ -149,33 +149,33 @@ extension AttributedString.Attribute {
 
 extension AttributedStringInterpolation {
     
-    public typealias Attribute = AttributedString.Attribute
-    public typealias WrapMode = AttributedString.WrapMode
+    public typealias Attribute = ASAttributedString.Attribute
+    public typealias WrapMode = ASAttributedString.WrapMode
     
     public mutating func appendInterpolation<T>(_ value: T, _ attributes: Attribute...) {
         appendInterpolation(value, with: attributes)
     }
     
     public mutating func appendInterpolation<T>(_ value: T, with attributes: [Attribute]) {
-        self.value.append(AttributedString("\(value)", with: attributes).value)
+        self.value.append(ASAttributedString("\(value)", with: attributes).value)
     }
     
     // 嵌套包装
-    public mutating func appendInterpolation(wrap string: AttributedString, _ attributes: Attribute...) {
+    public mutating func appendInterpolation(wrap string: ASAttributedString, _ attributes: Attribute...) {
         appendInterpolation(wrap: string, with: attributes)
     }
-    public mutating func appendInterpolation(wrap string: AttributedString, with attributes: [Attribute]) {
-        self.value.append(AttributedString(wrap: .embedding(string), with: attributes).value)
+    public mutating func appendInterpolation(wrap string: ASAttributedString, with attributes: [Attribute]) {
+        self.value.append(ASAttributedString(wrap: .embedding(string), with: attributes).value)
     }
     public mutating func appendInterpolation(wrap mode: WrapMode, _ attributes: Attribute...) {
         appendInterpolation(wrap: mode, with: attributes)
     }
     public mutating func appendInterpolation(wrap mode: WrapMode, with attributes: [Attribute]) {
-        self.value.append(AttributedString(wrap: mode, with: attributes).value)
+        self.value.append(ASAttributedString(wrap: mode, with: attributes).value)
     }
 }
 
-extension AttributedString.Attribute {
+extension ASAttributedString.Attribute {
     
     @available(*, deprecated, message: "use foreground(_:)", renamed: "foreground(_:)")
     public static func color(_ value: Color) -> Self {
