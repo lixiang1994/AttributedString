@@ -147,7 +147,7 @@ extension ASAttributedString.Attribute {
     }
 }
 
-extension AttributedStringInterpolation {
+extension ASAttributedStringInterpolation {
     
     public typealias Attribute = ASAttributedString.Attribute
     public typealias WrapMode = ASAttributedString.WrapMode
@@ -155,9 +155,22 @@ extension AttributedStringInterpolation {
     public mutating func appendInterpolation<T>(_ value: T, _ attributes: Attribute...) {
         appendInterpolation(value, with: attributes)
     }
-    
     public mutating func appendInterpolation<T>(_ value: T, with attributes: [Attribute]) {
         self.value.append(ASAttributedString("\(value)", with: attributes).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: NSAttributedString, _ attributes: Attribute...) {
+        appendInterpolation(value, with: attributes)
+    }
+    public mutating func appendInterpolation(_ value: NSAttributedString, with attributes: [Attribute]) {
+        self.value.append(ASAttributedString(value, with: attributes).value)
+    }
+    
+    public mutating func appendInterpolation(_ value: ASAttributedString, _ attributes: Attribute...) {
+        appendInterpolation(value, with: attributes)
+    }
+    public mutating func appendInterpolation(_ value: ASAttributedString, with attributes: [Attribute]) {
+        self.value.append(ASAttributedString(value, with: attributes).value)
     }
     
     // 嵌套包装
@@ -165,8 +178,9 @@ extension AttributedStringInterpolation {
         appendInterpolation(wrap: string, with: attributes)
     }
     public mutating func appendInterpolation(wrap string: ASAttributedString, with attributes: [Attribute]) {
-        self.value.append(ASAttributedString(wrap: .embedding(string), with: attributes).value)
+        self.value.append(ASAttributedString(string, with: attributes).value)
     }
+    
     public mutating func appendInterpolation(wrap mode: WrapMode, _ attributes: Attribute...) {
         appendInterpolation(wrap: mode, with: attributes)
     }

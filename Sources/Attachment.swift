@@ -211,7 +211,7 @@ extension ASAttributedString.Attachment {
     }
 }
 
-extension AttributedStringInterpolation {
+extension ASAttributedStringInterpolation {
     
     public typealias Attachment = ASAttributedString.Attachment
     public typealias ImageAttachment = ASAttributedString.ImageAttachment

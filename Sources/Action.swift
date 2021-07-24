@@ -155,7 +155,7 @@ extension ASAttributedString {
     }
 }
 
-extension AttributedStringInterpolation {
+extension ASAttributedStringInterpolation {
     
     public typealias Action = ASAttributedString.Action
     public typealias Result = Action.Result

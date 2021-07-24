@@ -19,12 +19,12 @@ import UIKit
 
 extension ASAttributedString: ExpressibleByStringInterpolation {
     
-    public init(stringInterpolation: AttributedStringInterpolation) {
+    public init(stringInterpolation: ASAttributedStringInterpolation) {
         self.value = .init(attributedString: stringInterpolation.value)
     }
 }
 
-public struct AttributedStringInterpolation : StringInterpolationProtocol {
+public struct ASAttributedStringInterpolation : StringInterpolationProtocol {
     
     let value: NSMutableAttributedString
     
@@ -38,6 +38,10 @@ public struct AttributedStringInterpolation : StringInterpolationProtocol {
     
     public mutating func appendInterpolation(_ value: NSAttributedString) {
         self.value.append(value)
+    }
+    
+    public mutating func appendInterpolation(_ value: ASAttributedString) {
+        self.value.append(value.value)
     }
     
     /// Interpolates the given value's textual representation into the
