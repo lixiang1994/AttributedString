@@ -282,9 +282,13 @@ extension UITextView {
             super.touchesEnded(touches, with: event)
             return
         }
-        self.touched = nil
-        attributedText = touched.0.value
-        layout()
+        // 保证delaysContentTouches时 touchesBegan -> Action -> touchesEnded的调用顺序
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.touched = nil
+            self.attributedText = touched.0.value
+            self.layout()
+        }
     }
     
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -304,11 +308,16 @@ fileprivate extension UITextView {
     
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
-        guard isActionEnabled else { return }
-        guard let action = touched?.2 else { return }
-        guard action.trigger.matching(sender) else { return }
-        // 点击 回调
-        action.handle?()
+        guard sender.state == .ended else { return }
+        // 保证delaysContentTouches时 touchesBegan -> Action -> touchesEnded的调用顺序
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard self.isActionEnabled else { return }
+            guard let action = self.touched?.2 else { return }
+            guard action.trigger.matching(sender) else { return }
+            // 点击 回调
+            action.handle?()
+        }
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {

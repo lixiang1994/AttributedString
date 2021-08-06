@@ -248,6 +248,7 @@ fileprivate extension NSTextField {
     
     @objc
     func attributedAction(_ sender: NSGestureRecognizer) {
+        guard sender.state == .ended else { return }
         guard isActionEnabled else { return }
         guard let action = touched?.2 else { return }
         guard action.trigger.matching(sender) else { return }

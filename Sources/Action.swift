@@ -232,16 +232,16 @@ extension ASAttributedString.Action.Trigger {
         switch self {
         #if os(iOS)
         case .click where gesture is UITapGestureRecognizer:
-            return gesture.state == .ended
+            return true
         case .press where gesture is UILongPressGestureRecognizer:
-            return gesture.state == .began
+            return true
         #endif
         
         #if os(macOS)
         case .click where gesture is NSClickGestureRecognizer:
-            return gesture.state == .ended
+            return true
         case .press where gesture is NSPressGestureRecognizer:
-            return gesture.state == .began
+            return true
         #endif
         default:
             return false
