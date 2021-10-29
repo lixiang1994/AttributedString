@@ -264,14 +264,16 @@ extension UITextView {
             super.touchesBegan(touches, with: event)
             return
         }
-        let string = attributed.text
-        // 设置触摸范围内容
-        touched = (string, range, action)
-        // 设置高亮样式
-        var temp: [NSAttributedString.Key: Any] = [:]
-        action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
-        attributedText = string.value.reset(range: range) { (attributes) in
-            attributes.merge(temp, uniquingKeysWith: { $1 })
+        ActionQueue.main.began {
+            let string = attributed.text
+            // 设置触摸范围内容
+            touched = (string, range, action)
+            // 设置高亮样式
+            var temp: [NSAttributedString.Key: Any] = [:]
+            action.highlights.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
+            attributedText = string.value.reset(range: range) { (attributes) in
+                attributes.merge(temp, uniquingKeysWith: { $1 })
+            }
         }
     }
     
@@ -282,9 +284,8 @@ extension UITextView {
             super.touchesEnded(touches, with: event)
             return
         }
-        // 保证delaysContentTouches时 touchesBegan -> Action -> touchesEnded的调用顺序
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+        // 保证 touchesBegan -> Action -> touchesEnded 的调用顺序
+        ActionQueue.main.ended {
             self.touched = nil
             self.attributedText = touched.0.value
             self.layout()
@@ -298,9 +299,12 @@ extension UITextView {
             super.touchesCancelled(touches, with: event)
             return
         }
-        self.touched = nil
-        attributedText = touched.0.value
-        layout()
+        // 保证 touchesBegan -> Action -> touchesEnded 的调用顺序
+        ActionQueue.main.ended {
+            self.touched = nil
+            self.attributedText = touched.0.value
+            self.layout()
+        }
     }
 }
 
@@ -309,8 +313,8 @@ fileprivate extension UITextView {
     @objc
     func attributedAction(_ sender: UIGestureRecognizer) {
         guard sender.state == .ended else { return }
-        // 保证delaysContentTouches时 touchesBegan -> Action -> touchesEnded的调用顺序
-        DispatchQueue.main.async { [weak self] in
+        // 保证 touchesBegan -> Action -> touchesEnded 的调用顺序
+        ActionQueue.main.action { [weak self] in
             guard let self = self else { return }
             guard self.isActionEnabled else { return }
             guard let action = self.touched?.2 else { return }

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9B0A2A3823851EB6003D8A55 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A3723851EB6003D8A55 /* Extension.swift */; };
 		9B0A2A3A238524E1003D8A55 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */; };
+		9B152CAE272BE94200D8D4B2 /* ActionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B152CAD272BE94200D8D4B2 /* ActionQueue.swift */; };
+		9B152CAF272BE94200D8D4B2 /* ActionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B152CAD272BE94200D8D4B2 /* ActionQueue.swift */; };
 		9B267B1D24404124002F571E /* AttributedString_iOS_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B1C24404124002F571E /* AttributedString_iOS_Tests.swift */; };
 		9B267B1F24404124002F571E /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B6E894C23823C40009EBEBE /* AttributedString.framework */; };
 		9B267B2E2440433F002F571E /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B34BD37243DBC8100932E6C /* AttributedString.framework */; };
@@ -116,6 +118,7 @@
 /* Begin PBXFileReference section */
 		9B0A2A3723851EB6003D8A55 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		9B0A2A39238524E1003D8A55 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
+		9B152CAD272BE94200D8D4B2 /* ActionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionQueue.swift; sourceTree = "<group>"; };
 		9B267B1A24404124002F571E /* AttributedString-iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AttributedString-iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B267B1C24404124002F571E /* AttributedString_iOS_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString_iOS_Tests.swift; sourceTree = "<group>"; };
 		9B267B1E24404124002F571E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -287,6 +290,7 @@
 		9B6E89A42382739C009EBEBE /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				9B152CAD272BE94200D8D4B2 /* ActionQueue.swift */,
 				9BEBB11124D5113D00355C22 /* UILabel */,
 				9B6E89A7238273E4009EBEBE /* UITextViewExtension.swift */,
 				9B6E89A92382742F009EBEBE /* UITextFieldExtension.swift */,
@@ -653,6 +657,7 @@
 				9B267BB42440811F002F571E /* CGRectExtension.swift in Sources */,
 				9BE7D4C92488E0FC00DE1176 /* Action.swift in Sources */,
 				9BA451EB24B0412E00BE3F02 /* ArrayExtension.swift in Sources */,
+				9B152CAF272BE94200D8D4B2 /* ActionQueue.swift in Sources */,
 				9B267BB52440811F002F571E /* CGPointExtension.swift in Sources */,
 				9B267BB62440811F002F571E /* Extension.swift in Sources */,
 				9B267BB72440811F002F571E /* AttributedString.swift in Sources */,
@@ -709,6 +714,7 @@
 				9B6E89AF238275D2009EBEBE /* CGSizeExtension.swift in Sources */,
 				9BE7D4C62488E0FC00DE1176 /* Action.swift in Sources */,
 				9BA451E824B0412E00BE3F02 /* ArrayExtension.swift in Sources */,
+				9B152CAE272BE94200D8D4B2 /* ActionQueue.swift in Sources */,
 				9B6E89B12382766F009EBEBE /* CGRectExtension.swift in Sources */,
 				9B6E89A8238273E4009EBEBE /* UITextViewExtension.swift in Sources */,
 				9B0A2A3823851EB6003D8A55 /* Extension.swift in Sources */,
