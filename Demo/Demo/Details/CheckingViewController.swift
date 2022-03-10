@@ -15,9 +15,9 @@ class CheckingViewController: ViewController<CheckingView> {
         super.viewDidLoad()
         
         // 添加电话号码类型监听
-        container.label.attributed.observe([.phoneNumber], highlights: [.foreground(#colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1))]) { (result) in
+        container.label.attributed.observe(.phoneNumber, with: .init(.click, highlights: [.foreground(#colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1))], with: { (result) in
             print(result)
-        }
+        }))
         // 添加默认类型监听
         container.textView.attributed.observe(highlights: [.foreground(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1))]) { (result) in
             print(result)
@@ -42,7 +42,6 @@ class CheckingViewController: ViewController<CheckingView> {
             string.add(attributes: [.foreground(#colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)), .font(.systemFont(ofSize: 20, weight: .medium))], checkings: [.phoneNumber])
             string.add(attributes: [.foreground(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)), .font(.systemFont(ofSize: 20, weight: .medium))], checkings: [.link])
             string.add(attributes: [.foreground(#colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)), .font(.systemFont(ofSize: 20, weight: .medium))], checkings: [.date])
-            string.add(attributes: [.font(.systemFont(ofSize: 20, weight: .medium))], checkings: [.action])
             container.label.attributed.text = string
         }
         

@@ -48,7 +48,7 @@ extension ASAttributedString.Checking {
         /// 正则表达式
         case regex(NSAttributedString)
         #if os(iOS) || os(macOS)
-        case action(ASAttributedString.Action.Result.Content)
+        case action([ASAttributedString.Action])
         #endif
         #if !os(watchOS)
         case attachment(NSTextAttachment)
@@ -60,6 +60,31 @@ extension ASAttributedString.Checking {
         case transitInformation(TransitInformation)
     }
 }
+
+#if os(iOS) || os(macOS)
+
+extension ASAttributedString.Checking {
+    
+    public struct Action {
+        public typealias Trigger = ASAttributedString.Action.Trigger
+        public typealias Highlight = ASAttributedString.Action.Highlight
+        
+        /// 触发类型
+        let trigger: Trigger
+        /// 高亮属性
+        let highlights: [Highlight]
+        /// 触发回调
+        let callback: (Result) -> Void
+        
+        public init(_ trigger: Trigger = .click, highlights: [Highlight] = .defalut, with callback: @escaping (Result) -> Void) {
+            self.trigger = trigger
+            self.highlights = highlights
+            self.callback = callback
+        }
+    }
+}
+
+#endif
 
 extension ASAttributedString.Checking.Result {
     
@@ -168,15 +193,16 @@ extension ASAttributedString {
                     let substring = value.attributedSubstring(from: match.range)
                     result[match.range] = (checking, .regex(substring))
                 }
-            
+                
             #if os(iOS) || os(macOS)
             case .action:
-                let actions: [NSRange: ASAttributedString.Action] = value.get(.action)
-                for action in actions where !contains(action.key) {
-                    result[action.key] = (.action, .action(value.get(action.key).content))
+                let ranges: [NSRange: [Action]] = value.get(.action)
+                for range in ranges where !contains(range.key) {
+                    let actions = range.value.filter({ $0.isExternal })
+                    result[range.key] = (.action, .action(actions))
                 }
             #endif
-                
+
             #if !os(watchOS)
             case .attachment:
                 let attachments: [NSRange: NSTextAttachment] = value.get(.attachment)

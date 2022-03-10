@@ -89,6 +89,22 @@ public struct ASAttributedString {
             return
         }
         
+        #if os(iOS) || os(macOS)
+        // 合并多个Action
+        var attributes = attributes
+        
+        let actions = attributes.compactMap {
+            $0.attributes[.action] as? Attribute.Action
+        }
+        if !actions.isEmpty {
+            attributes.removeAll(where: {
+                $0.attributes.keys.contains(.action)
+            })
+            attributes.append(.init(attributes: [.action: actions]))
+        }
+        
+        #endif
+        
         // 获取通用属性
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }

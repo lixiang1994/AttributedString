@@ -36,7 +36,8 @@ extension ASAttributedString {
         /// 触发回调
         let callback: (Result) -> Void
         
-        /// 内部处理
+        /// 内部使用
+        internal var isExternal: Bool = true
         internal var handle: (() -> Void)?
         
         public init(_ trigger: Trigger = .click, highlights: [Highlight] = .defalut, with callback: @escaping (Result) -> Void) {
@@ -45,10 +46,11 @@ extension ASAttributedString {
             self.callback = callback
         }
         
-        init(_ trigger: Trigger = .click, highlights: [Highlight] = .defalut) {
+        internal init(_ trigger: Trigger, _ highlights: [Highlight], _ callback: @escaping (Result) -> Void) {
             self.trigger = trigger
             self.highlights = highlights
-            self.callback = { _ in }
+            self.callback = callback
+            self.isExternal = false
         }
     }
 }
