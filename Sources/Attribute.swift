@@ -188,11 +188,3 @@ extension ASAttributedStringInterpolation {
         self.value.append(ASAttributedString(wrap: mode, with: attributes).value)
     }
 }
-
-extension ASAttributedString.Attribute {
-    
-    @available(*, deprecated, message: "use foreground(_:)", renamed: "foreground(_:)")
-    public static func color(_ value: Color) -> Self {
-        return .init(attributes: [.foregroundColor: value])
-    }
-}

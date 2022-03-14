@@ -188,12 +188,7 @@ extension ASAttributedStringInterpolation {
 }
 
 extension ASAttributedString.Action.Highlight {
-    
-    @available(*, deprecated, message: "use foreground(_:)", renamed: "foreground(_:)")
-    public static func color(_ value: Color) -> Self {
-        return .init(attributes: [.foregroundColor: value])
-    }
-    
+        
     public static func foreground(_ value: Color) -> Self {
         return .init(attributes: [.foregroundColor: value])
     }
@@ -267,6 +262,30 @@ extension NSAttributedString {
 extension NSAttributedString.Key {
     
     static let action = NSAttributedString.Key("com.attributed.string.action")
+}
+
+extension Array where Element == ASAttributedString.Attribute {
+    
+    /// 合并Action  当存在多个action时 将所有action合并到一个数组中
+    /// - Returns: 合并后的数组
+    func mergedAction() -> Array<Element> {
+        var temp = self
+        
+        var actions = temp.compactMap {
+            $0.attributes[.action] as? ASAttributedString.Attribute.Action
+        }
+        actions.append(contentsOf: temp.compactMap {
+            $0.attributes[.action] as? [ASAttributedString.Attribute.Action]
+        }.flatMap({ $0 }))
+        
+        if !actions.isEmpty {
+            temp.removeAll(where: {
+                $0.attributes.keys.contains(.action)
+            })
+            temp.append(.init(attributes: [.action: actions]))
+        }
+        return temp
+    }
 }
 
 #endif

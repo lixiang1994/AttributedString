@@ -91,17 +91,7 @@ public struct ASAttributedString {
         
         #if os(iOS) || os(macOS)
         // 合并多个Action
-        var attributes = attributes
-        
-        let actions = attributes.compactMap {
-            $0.attributes[.action] as? Attribute.Action
-        }
-        if !actions.isEmpty {
-            attributes.removeAll(where: {
-                $0.attributes.keys.contains(.action)
-            })
-            attributes.append(.init(attributes: [.action: actions]))
-        }
+        let attributes = attributes.mergedAction()
         
         #endif
         
@@ -184,6 +174,12 @@ extension ASAttributedString {
     public mutating func add(attributes: [Attribute], range: NSRange) {
         guard !attributes.isEmpty, range.length > 0 else { return }
         
+        #if os(iOS) || os(macOS)
+        // 合并多个Action
+        let attributes = attributes.mergedAction()
+
+        #endif
+        
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         let string = NSMutableAttributedString(attributedString: value)
@@ -193,6 +189,12 @@ extension ASAttributedString {
     
     public mutating func set(attributes: [Attribute], range: NSRange) {
         guard !attributes.isEmpty, range.length > 0 else { return }
+        
+        #if os(iOS) || os(macOS)
+        // 合并多个Action
+        let attributes = attributes.mergedAction()
+
+        #endif
         
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }

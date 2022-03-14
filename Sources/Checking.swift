@@ -129,6 +129,12 @@ extension ASAttributedString {
     public mutating func add(attributes: [Attribute], checkings: [Checking] = .defalut) {
         guard !attributes.isEmpty, !checkings.isEmpty else { return }
         
+        #if os(iOS) || os(macOS)
+        // 合并多个Action
+        let attributes = attributes.mergedAction()
+
+        #endif
+        
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
         
@@ -140,6 +146,12 @@ extension ASAttributedString {
     
     public mutating func set(attributes: [Attribute], checkings: [Checking] = .defalut) {
         guard !attributes.isEmpty, !checkings.isEmpty else { return }
+        
+        #if os(iOS) || os(macOS)
+        // 合并多个Action
+        let attributes = attributes.mergedAction()
+
+        #endif
         
         var temp: [NSAttributedString.Key: Any] = [:]
         attributes.forEach { temp.merge($0.attributes, uniquingKeysWith: { $1 }) }
