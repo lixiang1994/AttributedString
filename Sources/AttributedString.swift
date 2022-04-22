@@ -24,6 +24,7 @@ public typealias Font = UIFont
 #endif
 
 public struct ASAttributedString {
+    
     internal init(value: NSAttributedString) {
         self.value = value
     }
@@ -201,6 +202,29 @@ extension ASAttributedString {
         let string = NSMutableAttributedString(attributedString: value)
         string.setAttributes(temp, range: range)
         value = string
+    }
+}
+
+extension ASAttributedString {
+    
+    public func add(attributes: Attribute..., range: NSRange? = .none) -> Self {
+        return add(attributes, range: range ?? .init(location: 0, length: length))
+    }
+    
+    public func add(_ attributes: [Attribute], range: NSRange) -> Self {
+        var temp = self
+        temp.add(attributes: attributes, range: range)
+        return temp
+    }
+    
+    public func set(attributes: Attribute..., range: NSRange? = .none) -> Self {
+        return set(attributes, range: range ?? .init(location: 0, length: length))
+    }
+    
+    public func set(_ attributes: [Attribute], range: NSRange) -> Self {
+        var temp = self
+        temp.set(attributes: attributes, range: range)
+        return temp
     }
 }
 
