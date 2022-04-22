@@ -844,7 +844,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = watchos;
@@ -872,7 +872,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = watchos;
@@ -899,7 +899,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = appletvos;
@@ -926,7 +926,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = appletvos;
@@ -1002,7 +1002,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = macosx;
@@ -1029,7 +1029,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = macosx;
@@ -1176,7 +1176,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios;
 				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;
@@ -1205,7 +1205,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios;
 				PRODUCT_NAME = AttributedString;
 				SKIP_INSTALL = YES;
