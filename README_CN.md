@@ -17,6 +17,7 @@
 - [x] 支持全部`NSAttributedString.Key`特性.
 - [x] 支持 iOS & macOS & watchOS & tvOS.
 - [x] 支持文本和附件点击或长按事件回调, 支持高亮样式.
+- [x] 支持异步图片附件, 可以将远程图片资源加载到`UITextView`中.
 - [x] 支持视图附件, 可以将自定义视图通过富文本添加到`UITextView`中.
 - [x] 更多新特性的不断加入.
 
@@ -161,6 +162,27 @@ textView.attributed.text = """
 
 """
 ```
+
+#### 附件 异步图片: (仅支持 iOS: UITextView)
+
+```swift
+// ASAttributedString.AsyncImageAttachment
+
+textView.attributed.text = """
+
+\(.image(url, placeholder: xxxxx))
+
+"""
+```
+
+自定义加载器 例如使用Kingfisher加载图片, 默认加载器使用的是URLSession:
+
+```swift
+ASAttributedString.AsyncImageAttachment.Loader = AsyncImageAttachmentKingfisherLoader.self
+```
+
+具体细节请查看Demo中`AttachmentViewController.swift`文件.
+
 
 #### 附件 视图: (仅支持 iOS: UITextView)
 

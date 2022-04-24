@@ -19,6 +19,7 @@
 - [x] Support for all `NSAttributedString.Key` functions.
 - [x] Support iOS & macOS & watchOS & tvOS.
 - [x] Support text and attachment click or press event callback, support highlight style.
+- [x] Support async image attachment, you can load remote image to `UITextView`.
 - [x] Support view attachment, you can add custom view to `UITextView`.
 - [x] Continue to add more new features.
 
@@ -162,6 +163,27 @@ textView.attributed.text = """
 
 """
 ```
+
+#### Attachment Async Image: (Only supports iOS: UITextView)
+
+```swift
+// ASAttributedString.AsyncImageAttachment
+
+textView.attributed.text = """
+
+\(.image(url, placeholder: xxxxx))
+
+"""
+```
+
+Custom loader:
+
+```swift
+ASAttributedString.AsyncImageAttachment.Loader = AsyncImageAttachmentKingfisherLoader.self
+```
+
+Please read the demo `AttachmentViewController.swift` file for details.
+
 
 #### Attachment View: (Only supports iOS: UITextView)
 

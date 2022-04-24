@@ -9,22 +9,22 @@
 /* Begin PBXBuildFile section */
 		9B34BD6B243F16EE00932E6C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B34BD6A243F16EE00932E6C /* TableViewCell.swift */; };
 		9B34BD6D243F172E00932E6C /* AllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B34BD6C243F172E00932E6C /* AllViewController.swift */; };
+		9B53DFEC28153DB300ACE7B5 /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B34BD58243DC2F900932E6C /* AttributedString.framework */; };
+		9B53DFED28153DB300ACE7B5 /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B34BD58243DC2F900932E6C /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B6E89C123827C48009EBEBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89C023827C48009EBEBE /* AppDelegate.swift */; };
 		9B6E89C323827C48009EBEBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6E89C223827C48009EBEBE /* ViewController.swift */; };
 		9B6E89C523827C49009EBEBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B6E89C423827C49009EBEBE /* Assets.xcassets */; };
 		9B6E89C823827C49009EBEBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B6E89C623827C49009EBEBE /* Main.storyboard */; };
-		9BF2B27C27DA1B6900CE59D9 /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B34BD58243DC2F900932E6C /* AttributedString.framework */; };
-		9BF2B27D27DA1B6900CE59D9 /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B34BD58243DC2F900932E6C /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		9BF2B27E27DA1B6A00CE59D9 /* Embed Frameworks */ = {
+		9B53DFEE28153DB300ACE7B5 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9BF2B27D27DA1B6900CE59D9 /* AttributedString.framework in Embed Frameworks */,
+				9B53DFED28153DB300ACE7B5 /* AttributedString.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BF2B27C27DA1B6900CE59D9 /* AttributedString.framework in Frameworks */,
+				9B53DFEC28153DB300ACE7B5 /* AttributedString.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +114,7 @@
 				9B6E89B923827C48009EBEBE /* Sources */,
 				9B6E89BA23827C48009EBEBE /* Frameworks */,
 				9B6E89BB23827C48009EBEBE /* Resources */,
-				9BF2B27E27DA1B6A00CE59D9 /* Embed Frameworks */,
+				9B53DFEE28153DB300ACE7B5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -314,10 +314,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Demo-Mac/Demo_Mac.entitlements";
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "Demo-Mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -336,10 +336,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Demo-Mac/Demo_Mac.entitlements";
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "Demo-Mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (

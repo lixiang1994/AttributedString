@@ -15,6 +15,13 @@ class AttachmentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        textView.textContainer.lineFragmentPadding = 0
+        textView.textContainerInset = .zero
+        
+        // 网络图片链接与占位图
+        let url = URL(string: "https://avatars.githubusercontent.com/u/13112992?s=400&u=bb452b153d9d5342877ebd8179b04fbbae41f3d0&v=4")
+        let placeholder = UIImage(named: "placeholder")
+        
         
         // 创建一些自定义视图控件
         let customView = UIView(frame: .init(x: 0, y: 0, width: 100, height: 100))
@@ -56,6 +63,12 @@ class AttachmentViewController: UIViewController {
             
             -----------------------
             
+            AsyncImageAttachment only support UITextView (以下异步图片附件仅UITextView支持):
+            
+            This is a remote image URL -> \(.image(url, placeholder: placeholder))
+            
+            -----------------------
+            
             \("ViewAttachment only support UITextView (以下视图附件仅UITextView支持):", .font(.systemFont(ofSize: 24, weight: .medium)))
             
             \("Change something", .foreground(.blue), .action(clicked))
@@ -71,3 +84,40 @@ class AttachmentViewController: UIViewController {
         )
     }
 }
+
+/*
+ 
+ASAttributedString.AsyncImageAttachment.Loader = AsyncImageAttachmentKingfisherLoader.self
+
+
+import Kingfisher
+
+public class AsyncImageAttachmentKingfisherLoader: NSObject, AsyncImageAttachmentLoader {
+   
+    private var downloadTask: Kingfisher.DownloadTask?
+    
+    public var isLoading: Bool {
+        return downloadTask != nil
+    }
+    
+    public func loadImage(with url: URL, completion: @escaping (Result<Image, Error>) -> Void) {
+        downloadTask = KingfisherManager.shared.retrieveImage(with: url) { [weak self] (result) in
+            guard let self = self else { return }
+            self.downloadTask = nil
+            
+            switch result {
+            case .success(let value):
+                completion(.success(value.image))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    public func cancel() {
+        downloadTask?.cancel()
+        downloadTask = nil
+    }
+}
+
+*/
