@@ -52,9 +52,12 @@ extension ASAttributedString.Attribute {
             case lineHeightMultiple         // CGFloat
             case paragraphSpacingBefore     // CGFloat
             case hyphenationFactor          // Float
+            @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOSApplicationExtension 8.0, *)
+            case usesDefaultHyphenation     // Bool
             case tabStops                   // [NSTextTab]
             case defaultTabInterval         // CGFloat
             case allowsDefaultTighteningForTruncation   // Bool
+            case lineBreakStrategy          // NSParagraphStyle.LineBreakStrategy
         }
         
         fileprivate let style: [Key: Any]
@@ -82,9 +85,13 @@ extension ASAttributedString.Attribute {
             fetch(.lineHeightMultiple) { paragraph.lineHeightMultiple = $0 }
             fetch(.paragraphSpacingBefore) { paragraph.paragraphSpacingBefore = $0 }
             fetch(.hyphenationFactor) { paragraph.hyphenationFactor = $0 }
+            if #available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOSApplicationExtension 8.0, *) {
+                fetch(.usesDefaultHyphenation) { paragraph.usesDefaultHyphenation = $0 }
+            }
             fetch(.tabStops) { paragraph.tabStops = $0 }
             fetch(.defaultTabInterval) { paragraph.defaultTabInterval = $0 }
             fetch(.allowsDefaultTighteningForTruncation) { paragraph.allowsDefaultTighteningForTruncation = $0 }
+            fetch(.lineBreakStrategy) { paragraph.lineBreakStrategy = $0 }
             return paragraph
         }
     }
@@ -144,6 +151,11 @@ extension ASAttributedString.Attribute.ParagraphStyle {
         return .init(style: [.hyphenationFactor: value])
     }
     
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOSApplicationExtension 8.0, *)
+    public static func usesDefaultHyphenation(_ value: Bool) -> Self {
+        return .init(style: [.usesDefaultHyphenation: value])
+    }
+    
     public static func tabStops(_ value: [NSTextTab]) -> Self {
         return .init(style: [.tabStops: value])
     }
@@ -154,6 +166,10 @@ extension ASAttributedString.Attribute.ParagraphStyle {
     
     public static func allowsDefaultTighteningForTruncation(_ value: Bool) -> Self {
         return .init(style: [.allowsDefaultTighteningForTruncation: value])
+    }
+    
+    public static func lineBreakStrategy(_ value: NSParagraphStyle.LineBreakStrategy) -> Self {
+        return .init(style: [.lineBreakStrategy: value])
     }
 }
 
