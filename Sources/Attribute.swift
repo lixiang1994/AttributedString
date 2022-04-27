@@ -40,6 +40,10 @@ extension ASAttributedString {
 
 extension ASAttributedString.Attribute {
     
+    public static func custom(_ value: [NSAttributedString.Key: Any]) -> Self {
+        return .init(attributes: value)
+    }
+    
     public static func font(_ value: Font) -> Self {
         return .init(attributes: [.font: value])
     }
@@ -124,6 +128,54 @@ extension ASAttributedString.Attribute {
         return .init(attributes: [.verticalGlyphForm: value ? 1 : 0])
     }
 }
+
+#if os(macOS)
+
+extension ASAttributedString.Attribute {
+    
+    public static func cursor(_ value: NSCursor) -> Self {
+        return .init(attributes: [.cursor: value])
+    }
+    
+    public static func markedClauseSegment(_ value: Int) -> Self {
+        return .init(attributes: [.markedClauseSegment: value])
+    }
+    
+    public static func spellingState(_ value: SpellingState) -> Self {
+        return .init(attributes: [.spellingState: value.rawValue])
+    }
+    
+    public static func superscript(_ value: Int) -> Self {
+        return .init(attributes: [.superscript: value])
+    }
+    
+    public static func textAlternatives(_ value: NSTextAlternatives) -> Self {
+        return .init(attributes: [.textAlternatives: value])
+    }
+    
+    public static func toolTip(_ value: String) -> Self {
+        return .init(attributes: [.toolTip: value])
+    }
+}
+
+extension ASAttributedString.Attribute {
+    
+    /**
+         This enum controls the display of the spelling and grammar indicators on text,
+         highlighting portions of the text that are flagged for spelling or grammar issues.
+         This should be used with `Attribute.spellingState`.
+     */
+    public enum SpellingState: Int {
+
+        /// The spelling error indicator.
+        case spelling = 1
+
+        /// The grammar error indicator.
+        case grammar = 2
+    }
+}
+
+#endif
 
 extension ASAttributedString.Attribute {
     
