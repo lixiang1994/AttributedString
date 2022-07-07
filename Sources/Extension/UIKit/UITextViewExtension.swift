@@ -342,7 +342,7 @@ extension UITextView {
             return
         }
         // 保证 touchesBegan -> Action -> touchesEnded 的调用顺序
-        ActionQueue.main.ended {
+        ActionQueue.main.cancelled {
             self.touched = nil
             self.attributedText = touched.0.value
             self.layout()

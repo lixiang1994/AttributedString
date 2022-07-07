@@ -17,37 +17,21 @@ class ActionQueue {
     
     private var action: Handle?
     
-    private var lock: Int = 0
-    
-    func next(_ lock: Int) {
-        self.lock = lock
-        switch lock {
-        case 1:
-            guard let handle = action else { return }
-            handle()
-            next(0)
-            
-        default:
-            action = nil
-        }
-    }
-    
     func began(_ handle: Handle) {
         handle()
-        next(1)
     }
     
     func action(_ handle: @escaping Handle) {
-        if lock == 1 {
-            handle()
-            
-        } else {
-            action = handle
-        }
+        action = handle
     }
     
-    func ended(_ handle: Handle) {
+    func ended(_ handle: @escaping Handle) {
+        action?()
         handle()
-        next(0)
+    }
+    
+    func cancelled(_ handle: @escaping Handle) {
+        action = nil
+        handle()
     }
 }

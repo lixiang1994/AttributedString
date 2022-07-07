@@ -54,8 +54,10 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/Demo-Watch WatchKit App">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9B267B4D24405CFA002F571E"
@@ -63,7 +65,7 @@
             BlueprintName = "Demo-Watch WatchKit App"
             ReferencedContainer = "container:Demo-Watch.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -71,8 +73,10 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.Carousel"
+         RemotePath = "/Demo-Watch WatchKit App">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9B267B4D24405CFA002F571E"
@@ -80,7 +84,16 @@
             BlueprintName = "Demo-Watch WatchKit App"
             ReferencedContainer = "container:Demo-Watch.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "9B267B4D24405CFA002F571E"
+            BuildableName = "Demo-Watch WatchKit App.app"
+            BlueprintName = "Demo-Watch WatchKit App"
+            ReferencedContainer = "container:Demo-Watch.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

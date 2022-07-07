@@ -58,7 +58,7 @@ class ActionViewController: UIViewController {
         
         This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, pressed))
         
-        Please \("custom", .font(.systemFont(ofSize: 30)), .action(custom)).
+        Please \("custom highlight style", .font(.systemFont(ofSize: 30)), .action(custom)).
         
         Please custom -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: custom).
         
@@ -71,9 +71,9 @@ class ActionViewController: UIViewController {
         
         This is \("Long Press", .font(.systemFont(ofSize: 30)), .action(.press, pressed))
         
-        Please \("custom", .font(.systemFont(ofSize: 30)), .action(custom)).
+        Please \("custom highlight style", .font(.systemFont(ofSize: 30)), .action(custom)).
         
-        Please custom -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: custom).
+        Please custom highlight style -> \(.image(#imageLiteral(resourceName: "swift-icon"), .original(.center)), action: custom).
         
         """
     }
