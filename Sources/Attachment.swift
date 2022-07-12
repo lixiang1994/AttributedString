@@ -53,7 +53,7 @@ extension ASAttributedString {
        
         public typealias Style = Attachment.Style
         
-        let style: Style
+        public let style: Style
         
         public static func image(_ image: Image, _ style: Style = .original()) -> ImageAttachment {
             return .init(image, style)
@@ -109,8 +109,8 @@ extension ASAttributedString {
         
         public static var Loader: AsyncImageAttachmentLoader.Type = AsyncImageAttachmentURLSessionLoader.self
         
-        let url: URL?
-        let placeholder: Image?
+        public let url: URL?
+        public let placeholder: Image?
         
         private weak var textContainer: NSTextContainer?
         
@@ -172,8 +172,8 @@ extension ASAttributedString {
         
         public typealias Style = Attachment.Style
         
-        let view: UIView
-        let style: Style
+        public let view: UIView
+        public let style: Style
         
         /// Custom View  (Only  support UITextView)
         /// - Parameter view: 视图
