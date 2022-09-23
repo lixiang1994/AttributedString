@@ -14,8 +14,8 @@
 		9B267B6324405CFD002F571E /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B6224405CFD002F571E /* InterfaceController.swift */; };
 		9B267B6524405CFD002F571E /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B6424405CFD002F571E /* ExtensionDelegate.swift */; };
 		9B267B6724405CFD002F571E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B267B6624405CFD002F571E /* Assets.xcassets */; };
-		9B80471C28DD97F400FFBDFB /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B80471B28DD97F400FFBDFB /* AttributedString.framework */; };
-		9B80471D28DD97F400FFBDFB /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B80471B28DD97F400FFBDFB /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B5EBAA528DDB32600CCA416 /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B5EBAA428DDB32600CCA416 /* AttributedString.framework */; };
+		9B5EBAA628DDB32600CCA416 /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B5EBAA428DDB32600CCA416 /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +64,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9B80471D28DD97F400FFBDFB /* AttributedString.framework in Embed Frameworks */,
+				9B5EBAA628DDB32600CCA416 /* AttributedString.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,8 +82,7 @@
 		9B267B6424405CFD002F571E /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		9B267B6624405CFD002F571E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B267B6824405CFD002F571E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9B2E319C26A0312000BA33A8 /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B80471B28DD97F400FFBDFB /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B5EBAA428DDB32600CCA416 /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B80471C28DD97F400FFBDFB /* AttributedString.framework in Frameworks */,
+				9B5EBAA528DDB32600CCA416 /* AttributedString.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,8 +148,7 @@
 		9B2E318726A02FC900BA33A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9B80471B28DD97F400FFBDFB /* AttributedString.framework */,
-				9B2E319C26A0312000BA33A8 /* AttributedString.framework */,
+				9B5EBAA428DDB32600CCA416 /* AttributedString.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
