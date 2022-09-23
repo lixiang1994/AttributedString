@@ -14,8 +14,6 @@
 		9B267B6324405CFD002F571E /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B6224405CFD002F571E /* InterfaceController.swift */; };
 		9B267B6524405CFD002F571E /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B267B6424405CFD002F571E /* ExtensionDelegate.swift */; };
 		9B267B6724405CFD002F571E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B267B6624405CFD002F571E /* Assets.xcassets */; };
-		9B2E319D26A0312000BA33A8 /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B2E319C26A0312000BA33A8 /* AttributedString.framework */; };
-		9B2E319E26A0312000BA33A8 /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B2E319C26A0312000BA33A8 /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B80471C28DD97F400FFBDFB /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B80471B28DD97F400FFBDFB /* AttributedString.framework */; };
 		9B80471D28DD97F400FFBDFB /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B80471B28DD97F400FFBDFB /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -60,17 +58,6 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9B2E319F26A0312000BA33A8 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				9B2E319E26A0312000BA33A8 /* AttributedString.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		9B80471E28DD97F400FFBDFB /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -112,7 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B2E319D26A0312000BA33A8 /* AttributedString.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,7 +182,6 @@
 				9B267B4C24405CFA002F571E /* Resources */,
 				9B267B6E24405CFD002F571E /* Embed App Extensions */,
 				9B2E318B26A02FC900BA33A8 /* Frameworks */,
-				9B2E319F26A0312000BA33A8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
