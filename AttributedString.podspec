@@ -25,7 +25,7 @@ s.watchos.frameworks = "WatchKit"
 s.ios.deployment_target = '9.0'
 s.osx.deployment_target = "10.13"
 s.tvos.deployment_target = "11.0"
-s.watchos.deployment_target = "5.0"
+s.watchos.deployment_target = "6.0"
 
 s.source_files  = ["Sources/*.swift", "Sources/Extension/*.swift", "Sources/Extension/CoreGraphics/*.swift"]
 s.ios.source_files = ["Sources/Extension/UIKit/*.swift", "Sources/Extension/UIKit/UILabel/*.swift"]

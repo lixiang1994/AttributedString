@@ -25,6 +25,8 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>WKCompanionAppBundleIdentifier</key>
+	<string>com.lee.attributedstring.demo.watch</string>
 	<key>WKWatchKitApp</key>
 	<true/>
 </dict>
