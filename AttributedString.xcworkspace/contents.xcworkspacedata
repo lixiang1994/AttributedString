@@ -5,9 +5,6 @@
       location = "group:Demo-TV/Demo-TV.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Demo-Watch/Demo-Watch.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:Demo-Mac/Demo-Mac.xcodeproj">
    </FileRef>
    <FileRef
