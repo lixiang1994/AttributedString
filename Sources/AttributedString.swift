@@ -13,14 +13,14 @@
 
 #if os(macOS)
 import AppKit
-public typealias Image = NSImage
-public typealias Color = NSColor
-public typealias Font = NSFont
+public typealias ASImage = NSImage
+public typealias ASColor = NSColor
+public typealias ASFont = NSFont
 #else
 import UIKit
-public typealias Image = UIImage
-public typealias Color = UIColor
-public typealias Font = UIFont
+public typealias ASImage = UIImage
+public typealias ASColor = UIColor
+public typealias ASFont = UIFont
 #endif
 
 public struct ASAttributedString {

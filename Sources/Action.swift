@@ -189,22 +189,22 @@ extension ASAttributedStringInterpolation {
 
 extension ASAttributedString.Action.Highlight {
         
-    public static func foreground(_ value: Color) -> Self {
+    public static func foreground(_ value: ASColor) -> Self {
         return .init(attributes: [.foregroundColor: value])
     }
     
-    public static func background(_ value: Color) -> Self {
+    public static func background(_ value: ASColor) -> Self {
         return .init(attributes: [.backgroundColor: value])
     }
     
-    public static func strikethrough(_ style: NSUnderlineStyle, color: Color? = nil) -> Self {
+    public static func strikethrough(_ style: NSUnderlineStyle, color: ASColor? = nil) -> Self {
         var temp: [NSAttributedString.Key: Any] = [:]
         temp[.strikethroughColor] = color
         temp[.strikethroughStyle] = style.rawValue
         return .init(attributes: temp)
     }
     
-    public static func underline(_ style: NSUnderlineStyle, color: Color? = nil) -> Self {
+    public static func underline(_ style: NSUnderlineStyle, color: ASColor? = nil) -> Self {
         var temp: [NSAttributedString.Key: Any] = [:]
         temp[.underlineColor] = color
         temp[.underlineStyle] = style.rawValue
@@ -215,7 +215,7 @@ extension ASAttributedString.Action.Highlight {
         return .init(attributes: [.shadow: value])
     }
     
-    public static func stroke(_ width: CGFloat = 0, color: Color? = nil) -> Self {
+    public static func stroke(_ width: CGFloat = 0, color: ASColor? = nil) -> Self {
         var temp: [NSAttributedString.Key: Any] = [:]
         temp[.strokeColor] = color
         temp[.strokeWidth] = width

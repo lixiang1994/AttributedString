@@ -21,7 +21,7 @@ import WatchKit
 
 public extension NSShadow {
     
-    convenience init(offset: CGSize, radius: CGFloat, color: Color? = .none) {
+    convenience init(offset: CGSize, radius: CGFloat, color: ASColor? = .none) {
         self.init()
         self.shadowOffset = offset
         self.shadowBlurRadius = radius

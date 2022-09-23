@@ -22,7 +22,7 @@ import UIKit
 extension ASAttributedString {
     
     public enum Attachment {
-        case image(Image, bounds: CGRect)
+        case image(ASImage, bounds: CGRect)
         case data(Data, type: String)
         case file(FileWrapper)
         case attachment(NSTextAttachment)
@@ -55,11 +55,11 @@ extension ASAttributedString {
         
         public let style: Style
         
-        public static func image(_ image: Image, _ style: Style = .original()) -> ImageAttachment {
+        public static func image(_ image: ASImage, _ style: Style = .original()) -> ImageAttachment {
             return .init(image, style)
         }
         
-        init(_ image: Image?, _ style: Style = .original()) {
+        init(_ image: ASImage?, _ style: Style = .original()) {
             self.style = style
             super.init(data: nil, ofType: nil)
             self.image = image
@@ -110,7 +110,7 @@ extension ASAttributedString {
         public static var Loader: AsyncImageAttachmentLoader.Type = AsyncImageAttachmentURLSessionLoader.self
         
         public let url: URL?
-        public let placeholder: Image?
+        public let placeholder: ASImage?
         
         private weak var textContainer: NSTextContainer?
         
@@ -121,11 +121,11 @@ extension ASAttributedString {
         ///   - url: 图片链接
         ///   - placeholder: 占位图
         /// - Returns: 异步图片附件
-        public static func image(_ url: URL?, placeholder: Image? = nil, _ style: Style = .original()) -> AsyncImageAttachment {
+        public static func image(_ url: URL?, placeholder: ASImage? = nil, _ style: Style = .original()) -> AsyncImageAttachment {
             return .init(url, placeholder, style)
         }
         
-        init(_ url: URL?, _ placeholder: Image?, _ style: Style = .original()) {
+        init(_ url: URL?, _ placeholder: ASImage?, _ style: Style = .original()) {
             self.url = url
             self.placeholder = placeholder
             self.loader = AsyncImageAttachment.Loader.init()
@@ -155,7 +155,7 @@ extension ASAttributedString {
             }
         }
         
-        public override func image(forBounds imageBounds: CGRect, textContainer: NSTextContainer?, characterIndex charIndex: Int) -> Image? {
+        public override func image(forBounds imageBounds: CGRect, textContainer: NSTextContainer?, characterIndex charIndex: Int) -> ASImage? {
             self.textContainer = textContainer
             if image == placeholder {
                 loadImage()
@@ -186,7 +186,7 @@ extension ASAttributedString {
             self.view = view
             self.style = style
             super.init(data: nil, ofType: nil)
-            self.image = Image()
+            self.image = ASImage()
         }
         
         required init?(coder: NSCoder) {
@@ -335,7 +335,7 @@ fileprivate extension ASAttributedString.Attachment.Alignment {
     ///   - lineHeight: 行高
     /// - Returns: 位置坐标
     func point(_ size: CGSize, with lineHeight: CGFloat) -> CGPoint {
-        var font = Font.systemFont(ofSize: 18)
+        var font = ASFont.systemFont(ofSize: 18)
         let fontSize = font.pointSize / (abs(font.descender) + abs(font.ascender)) * lineHeight
         font = .systemFont(ofSize: fontSize)
         
@@ -421,7 +421,7 @@ public protocol AsyncImageAttachmentLoader: NSObject {
     /// - Parameters:
     ///   - url: 链接
     ///   - completion: 完成回调
-    func loadImage(with url: URL, completion: @escaping (Swift.Result<Image, Swift.Error>) -> Void)
+    func loadImage(with url: URL, completion: @escaping (Swift.Result<ASImage, Swift.Error>) -> Void)
     /// 取消加载
     func cancel()
 }
@@ -434,7 +434,7 @@ public class AsyncImageAttachmentURLSessionLoader: NSObject, AsyncImageAttachmen
         return downloadTask != nil
     }
     
-    public func loadImage(with url: URL, completion: @escaping (Result<Image, Error>) -> Void) {
+    public func loadImage(with url: URL, completion: @escaping (Result<ASImage, Error>) -> Void) {
         downloadTask = URLSession.shared.dataTask(with: url) {
             [weak self] (data, response, error) in
             guard let self = self else { return }
@@ -446,7 +446,7 @@ public class AsyncImageAttachmentURLSessionLoader: NSObject, AsyncImageAttachmen
                 }
                 return
             }
-            guard let image = Image(data: data) else {
+            guard let image = ASImage(data: data) else {
                 DispatchQueue.main.async {
                     completion(.failure(NSError(domain: "Unable to create image", code: -2)))
                 }
