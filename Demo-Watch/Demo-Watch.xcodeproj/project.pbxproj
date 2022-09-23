@@ -16,6 +16,8 @@
 		9B267B6724405CFD002F571E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B267B6624405CFD002F571E /* Assets.xcassets */; };
 		9B2E319D26A0312000BA33A8 /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B2E319C26A0312000BA33A8 /* AttributedString.framework */; };
 		9B2E319E26A0312000BA33A8 /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B2E319C26A0312000BA33A8 /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B80471C28DD97F400FFBDFB /* AttributedString.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B80471B28DD97F400FFBDFB /* AttributedString.framework */; };
+		9B80471D28DD97F400FFBDFB /* AttributedString.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B80471B28DD97F400FFBDFB /* AttributedString.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +71,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B80471E28DD97F400FFBDFB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9B80471D28DD97F400FFBDFB /* AttributedString.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +96,7 @@
 		9B267B6624405CFD002F571E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B267B6824405CFD002F571E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B2E319C26A0312000BA33A8 /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B80471B28DD97F400FFBDFB /* AttributedString.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AttributedString.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B80471C28DD97F400FFBDFB /* AttributedString.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +163,7 @@
 		9B2E318726A02FC900BA33A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B80471B28DD97F400FFBDFB /* AttributedString.framework */,
 				9B2E319C26A0312000BA33A8 /* AttributedString.framework */,
 			);
 			name = Frameworks;
@@ -199,6 +215,7 @@
 				9B267B5924405CFD002F571E /* Sources */,
 				9B267B5A24405CFD002F571E /* Frameworks */,
 				9B267B5B24405CFD002F571E /* Resources */,
+				9B80471E28DD97F400FFBDFB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -431,20 +448,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				INFOPLIST_FILE = "Demo-Watch WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.watch.app.extension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Debug;
 		};
@@ -453,20 +470,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				INFOPLIST_FILE = "Demo-Watch WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.watch.app.extension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Release;
 		};
@@ -476,20 +493,20 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				IBSC_MODULE = Demo_Watch_WatchKit_Extension;
 				INFOPLIST_FILE = "Demo-Watch WatchKit App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.watch.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Debug;
 		};
@@ -499,20 +516,20 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				IBSC_MODULE = Demo_Watch_WatchKit_Extension;
 				INFOPLIST_FILE = "Demo-Watch WatchKit App/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.watch.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Release;
 		};
@@ -521,9 +538,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -534,9 +552,10 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};

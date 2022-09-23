@@ -329,13 +329,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				INFOPLIST_FILE = "Demo-TV/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.demo.tv;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.tv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -348,13 +348,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B9D8DJR5J5;
+				DEVELOPMENT_TEAM = 8G74YECJ4Z;
 				INFOPLIST_FILE = "Demo-TV/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.demo.tv;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.demo.tv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;

@@ -760,7 +760,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.ios.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -780,7 +780,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.ios.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.ios.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -800,7 +800,7 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.macos.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
@@ -820,7 +820,7 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.macos.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.macos.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
@@ -845,7 +845,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 3.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.watchos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -873,7 +873,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 3.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.watchos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.watchos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -900,7 +900,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 3.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.tvos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -927,7 +927,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 3.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.tvos;
 				PRODUCT_NAME = AttributedString;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -950,7 +950,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.tvos.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -974,7 +974,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.attributedstring.tvos.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lee.attributedstring.tvos.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
