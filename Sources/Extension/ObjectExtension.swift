@@ -43,7 +43,12 @@ extension AssociatedWrapper where Base: NSObject {
     
     /// 获取关联值
     func get<T>(_ key: UnsafeRawPointer) -> T? {
-        objc_getAssociatedObject(base, key) as? T
+        guard let value = objc_getAssociatedObject(base, key) else {
+            return nil
+        }
+        return (value as! T)
+        // 💣 Xcode 14.0 iOS12 Release Mode Crash 疑似苹果编译器漏洞
+        //objc_getAssociatedObject(base, key) as? T
     }
     
     /// 设置关联值 OBJC_ASSOCIATION_ASSIGN
