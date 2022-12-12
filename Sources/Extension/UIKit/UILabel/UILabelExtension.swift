@@ -416,7 +416,6 @@ extension UILabel {
         let scaledBaselineOffset: Double
         let scaledLineHeight: Double
         let scaledSize: CGSize
-        let targetSize: CGSize
 
         /// Keys
 
@@ -427,7 +426,6 @@ extension UILabel {
         static let scaledBaselineOffsetName = "0V2cmZ2Tl5WasV2chJEZlxWYjN3X".reversedBase64Decoder()
         static let scaledLineHeightName = "=QHanlWZIVmbpxEZlxWYjN3X".reversedBase64Decoder()
         static let scaledSizeName = "=UmepNFZlxWYjN3X".reversedBase64Decoder()
-        static let targetSizeName = "=UmepNFdldmchR3X".reversedBase64Decoder()
     }
 
     private static let synthesizedAttributedTextName = "=QHelRFZlRXdilmc0RXQkVmepNXZoRnb5N3X".reversedBase64Decoder()
@@ -456,8 +454,7 @@ extension UILabel {
             let scaledAttributedTextName = ScaledMetrics.scaledAttributedTextName,
             let scaledBaselineOffsetName = ScaledMetrics.scaledBaselineOffsetName,
             let scaledLineHeightName = ScaledMetrics.scaledLineHeightName,
-            let scaledSizeName = ScaledMetrics.scaledSizeName,
-            let targetSizeName = ScaledMetrics.targetSizeName else {
+            let scaledSizeName = ScaledMetrics.scaledSizeName else {
             return nil
         }
         guard
@@ -467,8 +464,7 @@ extension UILabel {
             let scaledAttributedText = object.value(forKey: scaledAttributedTextName) as? NSAttributedString,
             let scaledBaselineOffset = object.value(forKey: scaledBaselineOffsetName) as? Double,
             let scaledLineHeight = object.value(forKey: scaledLineHeightName) as? Double,
-            let scaledSize = object.value(forKey: scaledSizeName) as? CGSize,
-            let targetSize = object.value(forKey: targetSizeName) as? CGSize else {
+            let scaledSize = object.value(forKey: scaledSizeName) as? CGSize else {
             return nil
         }
 
@@ -479,8 +475,7 @@ extension UILabel {
             scaledAttributedText: scaledAttributedText,
             scaledBaselineOffset: scaledBaselineOffset,
             scaledLineHeight: scaledLineHeight,
-            scaledSize: scaledSize,
-            targetSize: targetSize
+            scaledSize: scaledSize
         )
     }
 

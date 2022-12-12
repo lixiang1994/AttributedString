@@ -138,7 +138,7 @@ extension ASAttributedString {
     ///   - lhs: AttributedString to add to.
     ///   - rhs: AttributedString.Attribute to add.
     public static func += (lhs: inout ASAttributedString, rhs: ASAttributedString.Attribute) {
-        lhs += (rhs, .init(location: 0, length: lhs.value.string.count))
+        lhs += (rhs, .init(location: 0, length: lhs.value.length))
     }
     
     /// Add a AttributedString.Attribute to another AttributedString.
@@ -147,7 +147,7 @@ extension ASAttributedString {
     ///   - lhs: AttributedString to add to.
     ///   - rhs: AttributedString.Attribute to add.
     public static func += (lhs: inout ASAttributedString, rhs: [ASAttributedString.Attribute]) {
-        lhs += (rhs, .init(location: 0, length: lhs.value.string.count))
+        lhs += (rhs, .init(location: 0, length: lhs.value.length))
     }
     
     /// Add a AttributedString.Attribute to another AttributedString.
@@ -175,7 +175,7 @@ extension ASAttributedString {
     ///   - rhs: AttributedString.Attribute to add.
     /// - Returns: New instance with added AttributedString.Attribute.
     public static func + (lhs: ASAttributedString, rhs: ASAttributedString.Attribute) -> ASAttributedString {
-        return lhs + (rhs, .init(location: 0, length: lhs.value.string.count))
+        return lhs + (rhs, .init(location: 0, length: lhs.value.length))
     }
     
     /// Add a AttributedString.Attribute to another AttributedString and return a new AttributedString instance.
