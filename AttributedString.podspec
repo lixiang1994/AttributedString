@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
 s.name         = "AttributedString"
-s.version      = "3.4.0"
+s.version      = "3.4.1"
 s.summary      = "基于Swift字符串插值快速构建你想要的富文本, 支持点击按住等事件获取, 支持多种类型过滤"
 
 s.homepage     = "https://github.com/lixiang1994/AttributedString"
@@ -33,9 +33,9 @@ s.osx.source_files = ["Sources/Extension/AppKit/*.swift"]
 s.tvos.source_files = ["Sources/Extension/UIKit/*.swift"]
 s.watchos.source_files = ["Sources/Extension/WatchKit/*.swift"]
 
-  s.subspec 'Privacy' do |ss|
-      ss.resource_bundles = {
-        "Privacy" => 'Sources/PrivacyInfo.xcprivacy'
-      }
-  end
+s.subspec 'Privacy' do |ss|
+    ss.resource_bundles = {
+        "AttributedString" => 'Sources/PrivacyInfo.xcprivacy'
+    }
+end
 end
