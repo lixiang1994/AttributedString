@@ -38,7 +38,7 @@ extension ASAttributedString {
         
         /// 内部使用
         internal var isExternal: Bool = true
-        internal var handle: (() -> Void)?
+        internal var result: Action.Result?
         
         public init(_ trigger: Trigger = .click, highlights: [Highlight] = .defalut, with callback: @escaping (Result) -> Void) {
             self.trigger = trigger

@@ -174,9 +174,7 @@ extension ASAttributedStringWrapper where Base: NSTextField {
             let result: Action.Result = string.value.get($1.key)
             let actions: [Action] = $1.value.reduce(into: []) {
                 var temp = $1
-                temp.handle = {
-                    temp.callback(result)
-                }
+                temp.result = result
                 $0.append(temp)
             }
             $0[$1.key] = actions
@@ -292,7 +290,8 @@ fileprivate extension NSTextField {
         guard let touched = self.touched else { return }
         let actions = touched.1.flatMap({ $0.value })
         for action in actions where action.trigger.matching(sender) {
-            action.handle?()
+            guard let result = action.result else { return }
+            action.callback(result)
         }
     }
     

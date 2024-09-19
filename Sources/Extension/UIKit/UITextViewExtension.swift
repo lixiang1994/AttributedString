@@ -184,9 +184,7 @@ extension ASAttributedStringWrapper where Base: UITextView {
             let result: Action.Result = string.value.get($1.key)
             let actions: [Action] = $1.value.reduce(into: []) {
                 var temp = $1
-                temp.handle = {
-                    temp.callback(result)
-                }
+                temp.result = result
                 $0.append(temp)
             }
             $0[$1.key] = actions
@@ -327,7 +325,8 @@ extension UITextView {
             return
         }
         // 保证 touchesBegan -> Action -> touchesEnded 的调用顺序
-        ActionQueue.main.ended {
+        ActionQueue.main.ended { [weak self] in
+            guard let self = self else { return }
             self.touched = nil
             self.attributedText = touched.0.value
             self.layout()
@@ -342,7 +341,8 @@ extension UITextView {
             return
         }
         // 保证 touchesBegan -> Action -> touchesEnded 的调用顺序
-        ActionQueue.main.cancelled {
+        ActionQueue.main.cancelled { [weak self] in
+            guard let self = self else { return }
             self.touched = nil
             self.attributedText = touched.0.value
             self.layout()
@@ -362,7 +362,8 @@ fileprivate extension UITextView {
             guard let touched = self.touched else { return }
             let actions = touched.1.flatMap({ $0.value })
             for action in actions where action.trigger.matching(sender) {
-                action.handle?()
+                guard let result = action.result else { return }
+                action.callback(result)
             }
         }
     }
