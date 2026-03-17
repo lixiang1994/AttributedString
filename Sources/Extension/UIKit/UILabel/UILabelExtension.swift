@@ -14,6 +14,7 @@
 #if os(iOS) || os(tvOS)
 
 import UIKit
+import CoreText
 
 private var UIGestureRecognizerKey: Void?
 private var UILabelTouchedKey: Void?
@@ -266,49 +267,73 @@ fileprivate extension UILabel {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText, with: numberOfLines)
-        guard let attributedString = AttributedString(text) else { return nil }
-        
-        // 构建同步Label的TextKit
-        let delegate = UILabelLayoutManagerDelegate(scaledMetrics, with: baselineAdjustment)
-        let textStorage = NSTextStorage()
-        let textContainer = NSTextContainer(size: bounds.size)
-        let layoutManager = NSLayoutManager()
-        layoutManager.delegate = delegate // 重新计算行高确保TextKit与UILabel显示同步
-        textContainer.lineBreakMode = lineBreakMode
-        textContainer.lineFragmentPadding = 0.0
-        textContainer.maximumNumberOfLines = numberOfLines
-        layoutManager.usesFontLeading = false   // UILabel没有使用FontLeading排版
-        layoutManager.addTextContainer(textContainer)
-        textStorage.addLayoutManager(layoutManager)
-        textStorage.setAttributedString(attributedString.value) // 放在最后添加富文本 TextKit的坑
-        
-        // 确保布局
-        layoutManager.ensureLayout(for: textContainer)
-        
-        // 获取文本所占高度
-        let height = layoutManager.usedRect(for: textContainer).height
-        
-        // 获取点击坐标 并排除各种偏移
-        var point = point
-        point.y -= (bounds.height - height) / 2
-        
-        // Debug
+        // Use the actual attributed string UILabel renders (prefer scaled version for adjustsFontSizeToFitWidth)
+        guard let attributedText = scaledAttributedText ?? synthesizedAttributedText ?? self.attributedText else { return nil }
+        guard attributedText.length > 0 else { return nil }
+
+        // Use UILabel's own text rect — this accounts for vertical centering, alignment, and numberOfLines
+        let textRect = self.textRect(forBounds: bounds, limitedToNumberOfLines: numberOfLines)
+        guard textRect.width > 0, textRect.height > 0 else { return nil }
+
+        // Build CoreText layout — CoreText is the engine UILabel uses internally,
+        // so its line height and glyph positioning match UILabel closely,
+        // avoiding the known discrepancies with TextKit's NSLayoutManager.
+        let framesetter = CTFramesetterCreateWithAttributedString(attributedText as CFAttributedString)
+        let framePath = CGMutablePath()
+        framePath.addRect(CGRect(origin: .zero, size: textRect.size))
+        let ctFrame = CTFramesetterCreateFrame(framesetter, CFRange(location: 0, length: 0), framePath, nil)
+
+        guard let lines = CTFrameGetLines(ctFrame) as? [CTLine], !lines.isEmpty else { return nil }
+
+        // Limit visible lines (CoreText fills what fits; apply numberOfLines cap)
+        let visibleCount = numberOfLines > 0 ? min(numberOfLines, lines.count) : lines.count
+        var origins = [CGPoint](repeating: .zero, count: visibleCount)
+        CTFrameGetLineOrigins(ctFrame, CFRange(location: 0, length: visibleCount), &origins)
+
+        // Debug overlay — draw CoreText lines on top of UILabel for visual comparison
         subviews.filter({ $0 is DebugView }).forEach({ $0.removeFromSuperview() })
-        let view = DebugView(frame: .init(x: 0, y: (bounds.height - height) / 2, width: bounds.width, height: height))
-        view.draw = { layoutManager.drawGlyphs(forGlyphRange: .init(location: 0, length: textStorage.length), at: .zero) }
-        addSubview(view)
-        
-        // 获取字形下标
-        var fraction: CGFloat = 0
-        let glyphIndex = layoutManager.glyphIndex(for: point, in: textContainer, fractionOfDistanceThroughGlyph: &fraction)
-        // 获取字符下标
-        let index = layoutManager.characterIndexForGlyph(at: glyphIndex)
-        // 通过字形距离判断是否在字形范围内
-        guard fraction > 0, fraction < 1 else {
-            return nil
+        let debugView = DebugView(frame: textRect)
+        debugView.draw = { [lines = Array(lines.prefix(visibleCount)), origins, height = textRect.height] in
+            guard let ctx = UIGraphicsGetCurrentContext() else { return }
+            ctx.saveGState()
+            ctx.translateBy(x: 0, y: height)
+            ctx.scaleBy(x: 1, y: -1)
+            for i in 0..<lines.count {
+                ctx.textPosition = origins[i]
+                CTLineDraw(lines[i], ctx)
+            }
+            ctx.restoreGState()
         }
-        // 获取点击的字符串范围和回调事件
+        addSubview(debugView)
+
+        // Convert tap point from UIKit coordinates (top-left origin) to CoreText coordinates (bottom-left origin)
+        let ctX = point.x - textRect.origin.x
+        let ctY = textRect.height - (point.y - textRect.origin.y)
+
+        // Find the tapped line using vertical midpoints to split inter-line space evenly between neighbors
+        var tappedLineIndex: Int?
+        for i in 0..<visibleCount {
+            let topBound: CGFloat = (i == 0) ? textRect.height : (origins[i - 1].y + origins[i].y) / 2
+            let bottomBound: CGFloat = (i == visibleCount - 1) ? 0 : (origins[i].y + origins[i + 1].y) / 2
+            if ctY <= topBound && ctY >= bottomBound {
+                tappedLineIndex = i
+                break
+            }
+        }
+        guard let lineIndex = tappedLineIndex else { return nil }
+        let line = lines[lineIndex]
+
+        // Check horizontal bounds — account for text alignment offset
+        var ascent: CGFloat = 0, descent: CGFloat = 0, leading: CGFloat = 0
+        let lineWidth = CGFloat(CTLineGetTypographicBounds(line, &ascent, &descent, &leading))
+        let lineOriginX = origins[lineIndex].x
+        guard ctX >= lineOriginX, ctX <= lineOriginX + lineWidth else { return nil }
+
+        // Get string index at tap position (x relative to line origin)
+        let index = CTLineGetStringIndexForPosition(line, CGPoint(x: ctX - lineOriginX, y: 0))
+        guard index >= 0, index < attributedText.length else { return nil }
+
+        // Find matching action range
         guard
             let range = actions.keys.first(where: { $0.contains(index) }),
             let action = actions[range] else {

@@ -78,7 +78,6 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
                 used.size.height = scaledMetrics.scaledSize.height
                 
             case .alignCenters:
-                print(scaledMetrics)
                 // 居中的基线偏移 使用Scaled的尺寸高度
                 var baseline = baselineOffset.pointee
                 // 整行的占用高度 - 缩放的行高 = 上下边距; 上边距 = 上下边距 * 0.5; 居中的基线偏移 = 上边距 + 缩放的基线偏移
