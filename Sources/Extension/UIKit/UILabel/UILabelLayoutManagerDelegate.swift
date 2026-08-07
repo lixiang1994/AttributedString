@@ -78,7 +78,6 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
                 used.size.height = scaledMetrics.scaledSize.height
                 
             case .alignCenters:
-                print(scaledMetrics)
                 // 居中的基线偏移 使用Scaled的尺寸高度
                 var baseline = baselineOffset.pointee
                 // 整行的占用高度 - 缩放的行高 = 上下边距; 上边距 = 上下边距 * 0.5; 居中的基线偏移 = 上边距 + 缩放的基线偏移
@@ -111,13 +110,10 @@ class UILabelLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
         lineFragmentRect.pointee = rect
         lineFragmentUsedRect.pointee = used
         
-        /**
-        From apple's doc:
-        true if you modified the layout information and want your modifications to be used or false if the original layout information should be used.
-        But actually returning false is also used. : )
-        We should do this to solve the problem of exclusionPaths not working.
-        */
-        return false
+        // The rectangles above are the synchronization layer between UILabel
+        // and TextKit. Returning false tells NSLayoutManager to discard those
+        // changes and use its proposed geometry instead.
+        return true
     }
     
     // Implementing this method with a return value 0 will solve the problem of last line disappearing

@@ -266,8 +266,14 @@ fileprivate extension UILabel {
     }
     
     func matching(_ point: CGPoint) -> (NSRange, Action)? {
-        let text = adaptation(scaledAttributedText ?? synthesizedAttributedText ?? attributedText, with: numberOfLines)
+        let text = adaptation(
+            scaledAttributedText ?? synthesizedAttributedText ?? attributedText,
+            with: numberOfLines,
+            lineBreakMode: lineBreakMode,
+            textAlignment: textAlignment
+        )
         guard let attributedString = AttributedString(text) else { return nil }
+        guard attributedString.value.length > 0 else { return nil }
         
         // 构建同步Label的TextKit
         let delegate = UILabelLayoutManagerDelegate(scaledMetrics, with: baselineAdjustment)
@@ -302,6 +308,16 @@ fileprivate extension UILabel {
         // 获取字形下标
         var fraction: CGFloat = 0
         let glyphIndex = layoutManager.glyphIndex(for: point, in: textContainer, fractionOfDistanceThroughGlyph: &fraction)
+        let glyphRange = layoutManager.glyphRange(for: textContainer)
+        guard glyphRange.contains(glyphIndex) else {
+            return nil
+        }
+        // A truncated line can still map a touch to a character that is not
+        // visible. Do not trigger an action for the hidden part of the text.
+        let truncatedGlyphRange = layoutManager.truncatedGlyphRange(inLineFragmentForGlyphAt: glyphIndex)
+        guard truncatedGlyphRange.location == NSNotFound || !truncatedGlyphRange.contains(glyphIndex) else {
+            return nil
+        }
         // 获取字符下标
         let index = layoutManager.characterIndexForGlyph(at: glyphIndex)
         // 通过字形距离判断是否在字形范围内
@@ -431,7 +447,12 @@ extension UILabel {
         return scaledMetrics?.scaledAttributedText
     }
     
-    private func adaptation(_ string: NSAttributedString?, with numberOfLines: Int) -> NSAttributedString? {
+    private func adaptation(
+        _ string: NSAttributedString?,
+        with numberOfLines: Int,
+        lineBreakMode: NSLineBreakMode,
+        textAlignment: NSTextAlignment
+    ) -> NSAttributedString? {
         /**
         由于富文本中的lineBreakMode对于UILabel和TextKit的行为是不一致的, UILabel默认的.byTruncatingTail在TextKit中则无法正确显示.
         所以将富文本中的lineBreakMode全部替换为TextKit默认的.byWordWrapping, 以解决多行显示和不一致的问题.
@@ -442,14 +463,36 @@ extension UILabel {
         }
         
         let mutable = NSMutableAttributedString(attributedString: string)
+        let wrappingMode: NSLineBreakMode
+        if numberOfLines == 1 {
+            wrappingMode = .byCharWrapping
+        } else {
+            switch lineBreakMode {
+            case .byTruncatingHead, .byTruncatingMiddle, .byTruncatingTail:
+                // TextKit performs the final truncation in the text
+                // container. The paragraph itself must remain wrappable.
+                wrappingMode = .byWordWrapping
+            default:
+                wrappingMode = lineBreakMode
+            }
+        }
         mutable.enumerateAttribute(
             .paragraphStyle,
             in: .init(location: 0, length: mutable.length),
             options: .longestEffectiveRangeNotRequired
         ) { (value, range, stop) in
-            guard let old = value as? NSParagraphStyle else { return }
-            guard let new = old.mutableCopy() as? NSMutableParagraphStyle else { return }
-            new.lineBreakMode = numberOfLines == 1 ? .byCharWrapping : .byWordWrapping
+            let new: NSMutableParagraphStyle
+            if let old = value as? NSParagraphStyle,
+               let copy = old.mutableCopy() as? NSMutableParagraphStyle {
+                new = copy
+            } else {
+                new = NSMutableParagraphStyle()
+                new.alignment = textAlignment
+            }
+            if new.alignment == .natural {
+                new.alignment = textAlignment
+            }
+            new.lineBreakMode = wrappingMode
             if #available(iOS 11.0, *) {
                 new.setValue(1, forKey: "lineBreakStrategy")
             }
